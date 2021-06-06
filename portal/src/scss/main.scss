@@ -1,0 +1,50 @@
+body {
+  background-color: $body-bg;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  width: 6.9rem;
+  margin: 0 auto;
+}
+ul,
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+
+  color: $anchor-color;
+
+  &:active {
+    color: darken($anchor-color, 5%);
+  }
+}
+
+.text-muted {
+  color: $muted-color;
+}
+
+.text-warning {
+  color: $warning-color;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.copyright {
+  margin: 12px 0;
+  font-size: 14px;
+  text-align: center;
+  color: $muted-color;
+}
+
+.start-date-cell.van-cell {
+  &:after {
+    left: 90px;
+  }
+}

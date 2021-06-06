@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.youruan.dentistry.core.banner.mapper.BannerMapper">
+    <resultMap id="BASE_RESULT" type="com.youruan.dentistry.core.banner.domain.Banner">
+        <id property="id" column="id"/>
+        <result property="createdDate" column="createdDate"/>
+        <result property="lastModifiedDate" column="lastModifiedDate"/>
+        <result property="version" column="version"/>
+        <result property="bannerName" column="bannerName"/>
+        <result property="imageUrl" column="imageUrl"/>
+        <result property="linkUrl" column="linkUrl"/>
+        <result property="no" column="no"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <sql id="BASE_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.no,b.status</sql>
+    <sql id="QUERY_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.no,b.status</sql>
+    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.banner.vo.ExtendedBanner" extends="BASE_RESULT"/>
+    <sql id="JOIN_COLUMNS"/>
+    <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
+        <include refid="BASE_COLUMNS"/> FROM Banner en WHERE id = #{id }
+    </select>
+    <delete id="delete" parameterType="java.lang.Long">DELETE FROM Banner WHERE id = #{id}</delete>
+
+    <insert id="add" parameterType="com.youruan.dentistry.core.banner.domain.Banner" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO Banner(id,createdDate,version,bannerName,imageUrl,linkUrl,`no`,status)
+        VALUES(#{id },#{createdDate},0,#{bannerName},#{imageUrl},#{linkUrl},#{no},#{status})
+    </insert>
+
+    <update id="update" parameterType="com.youruan.dentistry.core.banner.domain.Banner">
+        UPDATE Banner
+        <set>
+            lastModifiedDate = now(),
+            version = version + 1,
+            bannerName = #{bannerName},
+            imageUrl = #{imageUrl},
+            linkUrl = #{linkUrl},
+            `no` = #{no},
+            status = #{status}
+        </set>
+        <where>id = #{id} AND version = #{version}</where>
+    </update>
+
+    <sql id="QUERY_JOIN"/>
+    <sql id="QUERY_WHERE_SQL">
+        <if test="ids != null">AND b.id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
+        </if>
+        <if test="startCreatedDate != null">AND b.createdDate &gt;= #{startCreatedDate }</if>
+        <if test="endCreatedDate != null">AND b.createdDate &lt;= #{endCreatedDate }</if>
+        <if test="bannerName != null">AND b.bannerName = #{bannerName}</if>
+        <if test="likeBannerName != null">AND b.bannerName LIKE CONCAT('%', #{likeBannerName} ,'%')</if>
+        <if test="status != null">AND b.status = #{status}</if>
+    </sql>
+    <sql id="QUERY_WHERE">
+        <where>
+            <include refid="QUERY_WHERE_SQL"/>
+        </where>
+    </sql>
+    <sql id="QUERY_ORDER_BY">
+        <if test="orderBys.size() &gt; 0">
+            ORDER BY
+            <foreach collection="orderBys" item="value" index="key" separator=", ">b.${key} ${value}</foreach>
+        </if>
+    </sql>
+    <sql id="QUERY_LIMIT">
+        <if test="pageSize &gt; 0">LIMIT ${start}, ${pageSize}</if>
+    </sql>
+    <select id="count" parameterType="com.youruan.dentistry.core.banner.query.BannerQuery" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Banner AS b
+        <include refid="QUERY_JOIN"/>
+        <include refid="QUERY_WHERE"/>
+    </select>
+    <select id="query" parameterType="com.youruan.dentistry.core.banner.query.BannerQuery" resultMap="VO_RESULT">
+        SELECT
+        <include refid="QUERY_COLUMNS"/>
+        <include refid="JOIN_COLUMNS"/> FROM Banner AS b
+        <include refid="QUERY_JOIN"/>
+        <include refid="QUERY_WHERE"/>
+        <include refid="QUERY_ORDER_BY"/>
+        <include refid="QUERY_LIMIT"/>
+    </select>
+</mapper>

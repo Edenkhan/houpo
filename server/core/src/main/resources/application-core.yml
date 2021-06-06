@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql:///dentistry?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    name: dentistry
+    username: root
+    password: 123456
+
+dentistry:
+  core:
+    message:
+      sms:
+        verification:
+          maxRetryCount: 5
+          dailyMaximumEachIp: 50
+          intervalInSeconds: 60
+          defaultValidityInMinutes: 5
+          defaultTemplate: message/sms/verification/default.mustache
+          types:
+            login:
+              template: message/sms/verification/login.mustache
+            borrowRequest:
+              template: message/sms/verification/borrowRequest.mustache
+              

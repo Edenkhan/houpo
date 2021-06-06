@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.youruan.dentistry.core.enroll.mapper.EnrollMapper">
+    <resultMap id="BASE_RESULT" type="com.youruan.dentistry.core.enroll.domain.Enroll">
+        <id property="id" column="id"/>
+        <result property="createdDate" column="createdDate"/>
+        <result property="lastModifiedDate" column="lastModifiedDate"/>
+        <result property="version" column="version"/>
+        <result property="orderNo" column="orderNo"/>
+        <result property="type" column="type"/>
+        <result property="realName" column="realName"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <result property="orderStatus" column="orderStatus"/>
+    </resultMap>
+    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.realName,en.phoneNumber,en.orderStatus</sql>
+    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.realName,en.phoneNumber,en.orderStatus</sql>
+    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT"/>
+    <sql id="JOIN_COLUMNS"/>
+    <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
+        <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE id = #{id }
+    </select>
+    <delete id="delete" parameterType="java.lang.Long">DELETE FROM Enroll WHERE id = #{id}</delete>
+
+    <insert id="add" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO Enroll(id,createdDate,version,orderNo,`type`,realName,phoneNumber,orderStatus)
+        VALUES(#{id },#{createdDate},0,#{orderNo},#{type},#{realName},#{phoneNumber},#{orderStatus})
+    </insert>
+
+    <update id="update" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll">
+        UPDATE Enroll
+        <set>
+            lastModifiedDate = now(),
+            version = version + 1,
+            orderNo = #{orderNo},
+            `type` = #{type},
+            realName = #{realName},
+            phoneNumber = #{phoneNumber},
+            orderStatus = #{orderStatus}
+        </set>
+        <where>id = #{id} AND version = #{version}</where>
+    </update>
+
+    <sql id="QUERY_JOIN"/>
+    <sql id="QUERY_WHERE_SQL">
+        <if test="ids != null">AND en.id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
+        </if>
+        <if test="startCreatedDate != null">AND en.createdDate &gt;= #{startCreatedDate }</if>
+        <if test="endCreatedDate != null">AND en.createdDate &lt;= #{endCreatedDate }</if>
+        <if test="orderNo != null">AND en.orderNo = #{orderNo}</if>
+        <if test="likeOrderNo != null">AND en.orderNo LIKE CONCAT('%', #{likeOrderNo} ,'%')</if>
+        <if test="type != null">AND en.type = #{type}</if>
+        <if test="phoneNumber != null">AND en.phoneNumber = #{phoneNumber}</if>
+        <if test="orderStatus != null">AND en.orderStatus = #{orderStatus}</if>
+    </sql>
+    <sql id="QUERY_WHERE">
+        <where>
+            <include refid="QUERY_WHERE_SQL"/>
+        </where>
+    </sql>
+    <sql id="QUERY_ORDER_BY">
+        <if test="orderBys.size() &gt; 0">
+            ORDER BY
+            <foreach collection="orderBys" item="value" index="key" separator=", ">en.${key} ${value}</foreach>
+        </if>
+    </sql>
+    <sql id="QUERY_LIMIT">
+        <if test="pageSize &gt; 0">LIMIT ${start}, ${pageSize}</if>
+    </sql>
+    <select id="count" parameterType="com.youruan.dentistry.core.enroll.query.EnrollQuery" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Enroll AS en
+        <include refid="QUERY_JOIN"/>
+        <include refid="QUERY_WHERE"/>
+    </select>
+    <select id="query" parameterType="com.youruan.dentistry.core.enroll.query.EnrollQuery" resultMap="VO_RESULT">
+        SELECT
+        <include refid="QUERY_COLUMNS"/>
+        <include refid="JOIN_COLUMNS"/> FROM Enroll AS en
+        <include refid="QUERY_JOIN"/>
+        <include refid="QUERY_WHERE"/>
+        <include refid="QUERY_ORDER_BY"/>
+        <include refid="QUERY_LIMIT"/>
+    </select>
+</mapper>
