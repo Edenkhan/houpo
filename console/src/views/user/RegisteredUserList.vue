@@ -70,18 +70,25 @@
         <a-tag color="#f5222d" v-if="locked">已锁定</a-tag>
         <a-tag color="#87d068" v-else>未锁定</a-tag>
       </template>
+
       <template slot="operation" slot-scope="record">
-        <p>
-          <a-button  @click="changeLocked(record.id,false)">
+        <a-popconfirm
+          title="确定要改变锁定状态？"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="changeLocked(record.id,record.locked)"
+        >
+          <a-button v-if="record.locked" >
             <a-icon type="unlock"/>
             启用
           </a-button>
-        </p>
-        <a-button  @click="changeLocked(record.id,true)">
-          <a-icon type="lock"/>
-          停用
-        </a-button>
+          <a-button v-else >
+            <a-icon type="lock"/>
+            停用
+          </a-button>
+        </a-popconfirm>
       </template>
+
     </a-table>
   </div>
 </template>
@@ -225,7 +232,7 @@
         })
       },
       changeLocked(id,locked) {
-        editUser({id: id,locked: locked})
+        editUser({id: id,locked: !locked})
           .then(() => {
             this.fetch()
           })

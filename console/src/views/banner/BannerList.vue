@@ -72,9 +72,9 @@
         <router-link :to="`/banner/edit?id=${record.id}`">修改</router-link>
         <a-divider type="vertical" />
         <a-popconfirm
-          title="Are you sure？"
-          ok-text="Yes"
-          cancel-text="No"
+          title="确定要改变状态？"
+          ok-text="是"
+          cancel-text="否"
           @confirm="changeStatus(record.id,record.status)"
         >
           <a href="javascript:" v-if="record.status===0" >启用</a>

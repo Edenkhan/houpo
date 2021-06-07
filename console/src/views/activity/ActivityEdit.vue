@@ -15,7 +15,7 @@
           :before-upload="beforeUpload"
           @change="handleChange"
         >
-          <img v-if="activityForm.eventImage" :src="activityForm.eventImage" alt="avatar" />
+          <img v-if="activityForm.eventImage" :src="activityForm.eventImage" alt="picture" />
           <div v-else>
             <a-icon :type="loading ? 'loading' : 'plus'" />
             <div class="ant-upload-text">
