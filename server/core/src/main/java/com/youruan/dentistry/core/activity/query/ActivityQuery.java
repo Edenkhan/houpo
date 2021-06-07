@@ -1,4 +1,4 @@
-package com.youruan.dentistry.core.banner.query;
+package com.youruan.dentistry.core.activity.query;
 
 import com.youruan.dentistry.core.base.query.QueryCondition;
 import lombok.Getter;
@@ -7,18 +7,18 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * 轮播图条件查询
+ * 活动条件查询
  */
 @Getter
 @Setter
-public class BannerQuery extends QueryCondition {
+public class ActivityQuery extends QueryCondition {
 
 
     protected Long[] ids;
     protected Date startCreatedDate;
     protected Date endCreatedDate;
-    protected String bannerName;
-    protected String likeBannerName;
+    protected String activityName;
+    protected String likeActivityName;
     protected Integer status;
 
     public void setOrderById(int keyword) {

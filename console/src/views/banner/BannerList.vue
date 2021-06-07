@@ -19,10 +19,10 @@
           <a-select-option value="">
             全部
           </a-select-option>
-          <a-select-option :value="true">
+          <a-select-option :value="1">
             启用
           </a-select-option>
-          <a-select-option :value="false">
+          <a-select-option :value="0">
             停用
           </a-select-option>
         </a-select>
@@ -59,15 +59,27 @@
         {{createdDate | filterDate('YYYY-MM-DD HH:mm:ss')}}
       </template>
 
+      <template slot="image" slot-scope="text,record">
+        <img :src="record.imageUrl" style="width: 50px;height: 50px"/>
+      </template>
+
       <template slot="status" slot-scope="status">
-        <a-tag color="#87d068" v-if="status">启用</a-tag>
+        <a-tag color="#87d068" v-if="status === 1">启用</a-tag>
         <a-tag color="#f5222d" v-else>停用</a-tag>
       </template>
 
       <template slot="operation" slot-scope="record">
         <router-link :to="`/banner/edit?id=${record.id}`">修改</router-link>
         <a-divider type="vertical" />
-        <a href="javascript:" >启用/停用</a>
+        <a-popconfirm
+          title="Are you sure？"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="changeStatus(record.id,record.status)"
+        >
+          <a href="javascript:" v-if="record.status===0" >启用</a>
+          <a href="javascript:" v-else >停用</a>
+        </a-popconfirm>
         <a-divider type="vertical" />
         <a href="javascript:" >删除</a>
       </template>
@@ -79,7 +91,7 @@
 </template>
 
 <script>
-import {listBanner} from "../../api/banner";
+import {listBanner,editBanner} from "../../api/banner";
 import moment from "moment";
 
 const columns = [
@@ -96,16 +108,12 @@ const columns = [
   },
   {
     title: '缩略图',
-    dataIndex: 'image',
+    dataIndex: 'imageUrl',
     scopedSlots: {customRender: 'image'}
   },
   {
     title: '链接',
     dataIndex: 'linkUrl'
-  },
-  {
-    title: '序号',
-    dataIndex: 'no'
   },
   {
     title: '状态',
@@ -177,6 +185,7 @@ export default {
       this.loading = true
       listBanner(this.bannerListForm).then(({data, rows}) => {
         this.data = data
+        console.log(this.data)
         this.pagination = Object.assign({}, this.pagination, {
           total: rows
         });
@@ -185,7 +194,16 @@ export default {
       }).then(() => {
         this.loading = false
       });
+    },
+
+    changeStatus(id,status) {
+      status = status===1?0:1
+      editBanner({id: id, status: status})
+        .then(() => {
+          this.fetch()
+        })
     }
+
   }
 }
 </script>

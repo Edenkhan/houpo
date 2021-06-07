@@ -11,6 +11,7 @@ import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
 import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
+import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,9 +53,13 @@ public class UserController {
     @RequiresPermission(value = "user.user.list", description = "用户-列表")
     public ResponseEntity<?> list(UserListForm form) {
         RegisteredUserQuery qo = form.buildQuery();
-        Pagination<ExtendedRegisteredUser> pagination = registeredUserService.query(qo);
+        Pagination<UserAllInfoVo> pagination = registeredUserService.query(qo);
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("data", BeanMapUtils.pick(pagination.getData(), "id", "no", "createdDate", "phoneNumber", "locked"))
+                .put("data", BeanMapUtils.pick(pagination.getData(),
+                        "id", "createdDate","realName",
+                        "age","gender", "phoneNumber", "locked",
+                        "graduatedCollege","major","education","expectedOccupation","expectedAddress"
+                        ))
                 .put("rows", pagination.getRows())
                 .build());
     }

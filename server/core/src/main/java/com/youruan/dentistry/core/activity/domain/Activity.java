@@ -1,20 +1,20 @@
-package com.youruan.dentistry.core.banner.domain;
+package com.youruan.dentistry.core.activity.domain;
 
 import com.youruan.dentistry.core.base.domain.BasicDomain;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 轮播图
+ * 活动
  */
 @Getter
 @Setter
-public class Banner extends BasicDomain {
+public class Activity extends BasicDomain {
 
     /**
-     * 轮播图名称
+     * 活动名称
      */
-    private String bannerName;
+    private String activityName;
     /**
      * 缩略图
      */

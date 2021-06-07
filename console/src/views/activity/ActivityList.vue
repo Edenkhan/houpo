@@ -2,45 +2,28 @@
   <div>
     <a-form-model @submit.prevent="handleSubmit" layout="inline" >
 
-      <a-form-model-item label='创建时间' class="date-start">
-        <a-date-picker v-model="enrollListForm.startCreatedDate" style="width: 120px"></a-date-picker>
+      <a-form-model-item label='创建时间：' class="date-start">
+        <a-date-picker v-model="activityListForm.startCreatedDate" style="width: 120px"></a-date-picker>
       </a-form-model-item>
 
       <a-form-model-item label='-' :colon="false">
-        <a-date-picker v-model="enrollListForm.endCreatedDate" style="width: 120px"></a-date-picker>
+        <a-date-picker v-model="activityListForm.endCreatedDate" style="width: 120px"></a-date-picker>
       </a-form-model-item>
 
-      <a-form-model-item label='订单编号'>
-        <a-input v-model="enrollListForm.orderNo" style="width: 120px"/>
-      </a-form-model-item>
-
-      <a-form-model-item label='类型'>
-        <a-select v-model="enrollListForm.type"  style="width: 120px">
-          <a-select-option value="">
-            全部
-          </a-select-option>
-          <a-select-option :value="0">
-            职场百分百
-          </a-select-option>
-          <a-select-option :value="1">
-            就业直通车
-          </a-select-option>
-          <a-select-option :value="2">
-            普通活动
-          </a-select-option>
-        </a-select>
+      <a-form-model-item label='名称'>
+        <a-input v-model="activityListForm.activityName" style="width: 180px"/>
       </a-form-model-item>
 
       <a-form-model-item label='状态'>
-        <a-select v-model="enrollListForm.orderStatus" style="width: 120px" >
+        <a-select v-model="activityListForm.status" style="width: 120px" >
           <a-select-option value="">
             全部
           </a-select-option>
-          <a-select-option :value="0">
-            待支付
-          </a-select-option>
           <a-select-option :value="1">
-            已支付
+            启用
+          </a-select-option>
+          <a-select-option :value="0">
+            停用
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -52,6 +35,15 @@
         </a-button>
       </a-form-model-item>
     </a-form-model>
+
+    <div class="actions">
+      <router-link to="/activity/add">
+        <a-button type="primary">
+          <a-icon type="plus-circle"/>
+          添加活动
+        </a-button>
+      </router-link>
+    </div>
 
 
     <a-table
@@ -67,20 +59,27 @@
         {{createdDate | filterDate('YYYY-MM-DD HH:mm:ss')}}
       </template>
 
-      <template slot="phoneNumber" slot-scope="phoneNumber">
-        <PhoneNumber :value="phoneNumber"/>
+      <template slot="status" slot-scope="status">
+        <a-tag color="#87d068" v-if="status === 1">启用</a-tag>
+        <a-tag color="#f5222d" v-else>停用</a-tag>
       </template>
 
-      <template slot="orderStatus" slot-scope="orderStatus">
-        <span v-if="orderStatus">已支付</span>
-        <span v-else>待支付</span>
+      <template slot="operation" slot-scope="record">
+        <router-link :to="`/activity/edit?id=${record.id}`">修改</router-link>
+        <a-divider type="vertical" />
+        <a-popconfirm
+          title="Are you sure？"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="changeStatus(record.id,record.status)"
+        >
+          <a href="javascript:" v-if="record.status===0" >启用</a>
+          <a href="javascript:" v-else >停用</a>
+        </a-popconfirm>
+        <a-divider type="vertical" />
+        <a href="javascript:" >删除</a>
       </template>
 
-      <template slot="type" slot-scope="type">
-        <span v-if="type==0">职场百分百</span>
-        <span v-if="type==1">就业直通车</span>
-        <span v-if="type==2">普通活动</span>
-      </template>
 
 
     </a-table>
@@ -88,9 +87,8 @@
 </template>
 
 <script>
-import {listEnroll} from "../../api/enroll";
+import {listActivity,editActivity} from "../../api/activity";
 import moment from "moment";
-import PhoneNumber from "../user/PhoneNumber";
 
 const columns = [
   {
@@ -101,35 +99,32 @@ const columns = [
     scopedSlots: {customRender: 'createdDate'}
   },
   {
-    title: '订单编号',
-    dataIndex: 'orderNo'
+    title: '最近编辑时间',
+    dataIndex: 'lastModifiedDate'
   },
   {
-    title: '类型',
-    dataIndex: 'type',
-    scopedSlots: {customRender: 'type'}
+    title: '最近编辑人',
+    dataIndex: 'lastModifiedPerson'
   },
   {
-    title: '姓名',
-    dataIndex: 'realName'
+    title: '活动标题',
+    dataIndex: 'eventTitle'
   },
   {
-    title: '电话',
-    dataIndex: 'phoneNumber',
-    scopedSlots: {customRender: 'phoneNumber'}
+    title: '报名人数',
+    dataIndex: 'numberOfEntries'
   },
   {
-    title: '订单状态',
-    dataIndex: 'orderStatus',
-    scopedSlots: {customRender: 'orderStatus'}
+    title: '发布状态',
+    dataIndex: 'published'
+  },
+  {
+    title: '操作',
+    scopedSlots: {customRender: 'operation'}
   }
 ];
 
 export default {
-
-  components: {
-    PhoneNumber
-  },
 
   data() {
     return {
@@ -144,7 +139,7 @@ export default {
         }
       },
       loading: false,
-      enrollListForm: {
+      activityListForm: {
         sortField: 'createdDate',
         sortOrder: 'descend'
       },
@@ -179,15 +174,16 @@ export default {
     },
 
     fetch() {
-      const {startCreatedDate,endCreatedDate} = this.enrollListForm
-      this.enrollListForm = Object.assign({}, this.enrollListForm, {
+      const {startCreatedDate,endCreatedDate} = this.activityListForm
+      this.activityListForm = Object.assign({}, this.activityListForm, {
         page: this.pagination.current,
         startCreatedDate: startCreatedDate && moment(startCreatedDate).format('YYYY-MM-DD 00:00:00'),
         endCreatedDate: endCreatedDate && moment(endCreatedDate).format('YYYY-MM-DD 23:59:59')
       })
       this.loading = true
-      listEnroll(this.enrollListForm).then(({data, rows}) => {
+      listActivity(this.activityListForm).then(({data, rows}) => {
         this.data = data
+        console.log(this.data)
         this.pagination = Object.assign({}, this.pagination, {
           total: rows
         });
@@ -196,7 +192,16 @@ export default {
       }).then(() => {
         this.loading = false
       });
+    },
+
+    changeStatus(id,status) {
+      status = status===1?0:1
+      editActivity({id: id, status: status})
+        .then(() => {
+          this.fetch()
+        })
     }
+
   }
 }
 </script>

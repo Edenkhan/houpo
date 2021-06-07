@@ -1,9 +1,11 @@
 package com.youruan.dentistry.core.user.vo;
 
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
+import lombok.Getter;
 import lombok.Setter;
 
 @Setter
+@Getter
 public class UserAllInfoVo extends RegisteredUser {
 
     /**

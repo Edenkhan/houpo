@@ -13,10 +13,10 @@
         <result property="phoneNumber" column="phoneNumber"/>
         <result property="orderStatus" column="orderStatus"/>
     </resultMap>
-    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.realName,en.phoneNumber,en.orderStatus</sql>
-    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.realName,en.phoneNumber,en.orderStatus</sql>
+    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
+    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
     <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT"/>
-    <sql id="JOIN_COLUMNS"/>
+    <sql id="JOIN_COLUMNS">,ru.realName,ru.phoneNumber</sql>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
         <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE id = #{id }
     </select>
@@ -41,7 +41,7 @@
         <where>id = #{id} AND version = #{version}</where>
     </update>
 
-    <sql id="QUERY_JOIN"/>
+    <sql id="QUERY_JOIN">left join registereduser AS ru on en.userId = ru.id</sql>
     <sql id="QUERY_WHERE_SQL">
         <if test="ids != null">AND en.id IN
             <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
@@ -69,7 +69,7 @@
         <if test="pageSize &gt; 0">LIMIT ${start}, ${pageSize}</if>
     </sql>
     <select id="count" parameterType="com.youruan.dentistry.core.enroll.query.EnrollQuery" resultType="java.lang.Integer">
-        SELECT COUNT(id) FROM Enroll AS en
+        SELECT COUNT(en.id) FROM Enroll AS en
         <include refid="QUERY_JOIN"/>
         <include refid="QUERY_WHERE"/>
     </select>

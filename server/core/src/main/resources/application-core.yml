@@ -7,6 +7,11 @@ spring:
 
 dentistry:
   core:
+    base:
+      storage:
+        disk:
+          base-directory: C:/image
+          base-url: /api/bannerImg
     message:
       sms:
         verification:
@@ -20,4 +25,3 @@ dentistry:
               template: message/sms/verification/login.mustache
             borrowRequest:
               template: message/sms/verification/borrowRequest.mustache
-              

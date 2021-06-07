@@ -1,16 +1,15 @@
-package com.youruan.dentistry.console.banner.form;
+package com.youruan.dentistry.console.activity.form;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 修改轮播图表单对象
+ * 添加轮播图表单对象
  */
 @Setter
 @Getter
-public class BannerEditForm {
+public class ActivityAddForm {
 
-    private Long id;
     private String bannerName;
     private String linkUrl;
     private Integer status;

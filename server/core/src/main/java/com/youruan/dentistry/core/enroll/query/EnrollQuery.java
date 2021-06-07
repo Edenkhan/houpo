@@ -21,7 +21,7 @@ public class EnrollQuery extends QueryCondition {
     protected String likeOrderNo;
     protected String phoneNumber;
     protected Integer type;
-    protected Boolean orderStatus;
+    protected Integer orderStatus;
 
     public void setOrderById(int keyword) {
         setOrderBy("id", keyword);

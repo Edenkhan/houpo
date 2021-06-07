@@ -6,17 +6,18 @@ import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
+import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 
 public interface RegisteredUserService {
 
 
     public RegisteredUser get(Long id);
 
-    public ExtendedRegisteredUser queryOne(RegisteredUserQuery qo);
+    public UserAllInfoVo queryOne(RegisteredUserQuery qo);
 
-    public List<ExtendedRegisteredUser> list(RegisteredUserQuery qo);
+    public List<UserAllInfoVo> list(RegisteredUserQuery qo);
 
-    public Pagination<ExtendedRegisteredUser> query(RegisteredUserQuery qo);
+    public Pagination<UserAllInfoVo> query(RegisteredUserQuery qo);
 
     public int count(RegisteredUserQuery qo);
 

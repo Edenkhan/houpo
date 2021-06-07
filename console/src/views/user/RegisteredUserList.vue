@@ -50,40 +50,44 @@
       <template slot="createdDate" slot-scope="createdDate">
         {{createdDate | filterDate('YYYY-MM-DD HH:mm:ss')}}
       </template>
-      <template slot="gender" slot-scope="gender">
-        <Gender :value="gender"/>
+      <template slot="userBasicInfo" slot-scope="userBasicInfo">
+        <p>姓名：{{userBasicInfo.realName}}</p>
+        <p>年龄：{{userBasicInfo.age}}</p>
+        <p>性别：{{userBasicInfo.gender}}</p>
+        <p>手机号：<PhoneNumber :value="userBasicInfo.phoneNumber"/></p>
       </template>
-      <template slot="idCardNumber" slot-scope="idCardNumber">
-        <IdCardNumber :value="idCardNumber"/>
+      <template slot="userProfessionInfo" slot-scope="userProfessionInfo">
+        <p>毕业院校：{{userProfessionInfo.graduatedCollege}}</p>
+        <p>所学专业：{{userProfessionInfo.major}}</p>
+        <p>学历水平：{{userProfessionInfo.education}}</p>
+        <p>期望从事职业：{{userProfessionInfo.expectedOccupation}}</p>
+        <p>期望就业地址：{{userProfessionInfo.expectedAddress}}</p>
       </template>
-      <template slot="phoneNumber" slot-scope="phoneNumber">
-        <PhoneNumber :value="phoneNumber"/>
-      </template>
-      <template slot="type" slot-scope="type">
-        <UserType :value="type"/>
+      <template slot="status" slot-scope="status">
+
       </template>
       <template slot="locked" slot-scope="locked">
-        <a-tag color="#87d068" v-if="!locked">未锁定</a-tag>
         <a-tag color="#f5222d" v-if="locked">已锁定</a-tag>
+        <a-tag color="#87d068" v-else>未锁定</a-tag>
       </template>
       <template slot="operation" slot-scope="record">
-        <a-radio-group @click="changeLocked(record.id,value)">
-          <a-radio-button :value="false">
+        <p>
+          <a-button  @click="changeLocked(record.id,false)">
             <a-icon type="unlock"/>
             启用
-          </a-radio-button>
-          <a-radio-button :value="true">
-            <a-icon type="lock"/>
-            停用
-          </a-radio-button>
-        </a-radio-group>
+          </a-button>
+        </p>
+        <a-button  @click="changeLocked(record.id,true)">
+          <a-icon type="lock"/>
+          停用
+        </a-button>
       </template>
     </a-table>
   </div>
 </template>
 
 <script>
-  import {listUsers} from "../../api/user"
+  import {listUsers,editUser} from "../../api/user"
   import moment from "moment"
   import Gender from "./Gender"
   import PhoneNumber from "./PhoneNumber"
@@ -144,6 +148,8 @@
           sortField: 'createdDate',
           sortOrder: 'descend'
         },
+        userBasicInfo: {},
+
         filters: {},
 
         profileUserId: null,
@@ -175,6 +181,7 @@
       },
 
       fetch() {
+        this.data = []
         const {startCreatedDate,endCreatedDate} = this.userListForm
         this.userListForm = Object.assign({}, this.userListForm, {
           page: this.pagination.current,
@@ -183,7 +190,31 @@
         })
         this.loading = true
         listUsers(this.userListForm).then(({data, rows}) => {
-          this.data = data
+
+          data.map((item) =>{
+            this.data.push(
+              {
+                id:item.id,
+                createdDate:item.createdDate,
+                userBasicInfo: {
+                  realName: item.realName,
+                  age: item.age,
+                  gender: item.gender,
+                  phoneNumber: item.phoneNumber
+                },
+                userProfessionInfo: {
+                  graduatedCollege: item.graduatedCollege,
+                  major: item.major,
+                  education: item.education,
+                  expectedOccupation: item.expectedOccupation,
+                  expectedAddress: item.expectedAddress,
+                },
+                locked: item.locked
+              }
+            )
+          })
+
+          console.log('this.data'+this.data);
           this.pagination = Object.assign({}, this.pagination, {
             total: rows
           })
@@ -192,6 +223,12 @@
         }).then(() => {
           this.loading = false
         })
+      },
+      changeLocked(id,locked) {
+        editUser({id: id,locked: locked})
+          .then(() => {
+            this.fetch()
+          })
       }
     }
   }

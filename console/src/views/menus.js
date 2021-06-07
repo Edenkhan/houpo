@@ -75,6 +75,18 @@ const allMenus = [
         permission: 'banner.banner.list'
       }
     ]
+  },
+  {
+    title: '活动管理',
+    key: 'activity',
+    icon: 'setting',
+    subMenus: [
+      {
+        key: '/activity/list',
+        title: '活动列表',
+        permission: 'activity.activity.list'
+      }
+    ]
   }
 ];
 

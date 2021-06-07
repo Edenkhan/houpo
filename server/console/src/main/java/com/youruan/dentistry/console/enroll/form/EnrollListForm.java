@@ -25,9 +25,9 @@ public class EnrollListForm extends ListForm {
      */
     private Integer type;
     /**
-     * 订单状态
+     * 订单状态 0-未支付 1-已支付
      */
-    private Boolean orderStatus;
+    private Integer orderStatus;
 
 
     @Override

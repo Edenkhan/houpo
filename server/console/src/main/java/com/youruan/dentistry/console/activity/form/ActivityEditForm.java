@@ -1,4 +1,4 @@
-package com.youruan.dentistry.console.banner.form;
+package com.youruan.dentistry.console.activity.form;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class BannerEditForm {
+public class ActivityEditForm {
 
     private Long id;
     private String bannerName;

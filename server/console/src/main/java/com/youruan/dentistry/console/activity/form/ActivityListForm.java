@@ -1,15 +1,15 @@
-package com.youruan.dentistry.console.banner.form;
+package com.youruan.dentistry.console.activity.form;
 
 import com.youruan.dentistry.console.base.form.ListForm;
-import com.youruan.dentistry.core.base.query.QueryCondition;
 import com.youruan.dentistry.core.banner.query.BannerQuery;
+import com.youruan.dentistry.core.base.query.QueryCondition;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Setter
-public class BannerListForm extends ListForm {
+public class ActivityListForm extends ListForm {
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

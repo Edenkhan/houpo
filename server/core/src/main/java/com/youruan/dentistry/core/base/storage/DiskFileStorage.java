@@ -33,6 +33,7 @@ public class DiskFileStorage implements FileStorage {
         FileOutputStream os = new FileOutputStream(destFile);
         IOUtils.copy(file.getInputStream(), os);
         os.close();
+        System.out.println("*******"+diskFileStorageProperties.getBaseUrl());
         return diskFileStorageProperties.getBaseUrl() + "/" + directory + "/" + filenameWithExtension;
     }
 

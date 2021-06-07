@@ -8,6 +8,7 @@ import com.youruan.dentistry.core.user.mapper.RegisteredUserMapper;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
 import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
+import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -47,22 +48,22 @@ public class BasicRegisteredUserService
     }
 
     @Override
-    public List<ExtendedRegisteredUser> list(RegisteredUserQuery qo) {
+    public List<UserAllInfoVo> list(RegisteredUserQuery qo) {
         return registeredUserMapper.query(qo);
     }
 
     @Override
-    public ExtendedRegisteredUser queryOne(RegisteredUserQuery qo) {
+    public UserAllInfoVo queryOne(RegisteredUserQuery qo) {
         qo.setPageSize(1);
-        List<ExtendedRegisteredUser> data = registeredUserMapper.query(qo);
+        List<UserAllInfoVo> data = registeredUserMapper.query(qo);
         return (((data == null)||data.isEmpty())?null:data.get(0));
     }
 
     @Override
-    public Pagination<ExtendedRegisteredUser> query(RegisteredUserQuery qo) {
+    public Pagination<UserAllInfoVo> query(RegisteredUserQuery qo) {
         int rows = registeredUserMapper.count(qo);
-        List<ExtendedRegisteredUser> data = ((rows == 0)?new ArrayList<ExtendedRegisteredUser>():registeredUserMapper.query(qo));
-        return new Pagination<ExtendedRegisteredUser>(rows, data);
+        List<UserAllInfoVo> data = ((rows == 0)?new ArrayList<>():registeredUserMapper.query(qo));
+        return new Pagination<>(rows, data);
     }
 
     @Override

@@ -13,7 +13,7 @@ export function editBanner(params) {
   return post('/banner/edit',stringify(params))
 }
 
-export function getBanner(params) {
-  return get('/banner/get?' + stringify(params));
+export function getBanner(id) {
+  return get(`/banner/get?id=${id}`)
 }
 

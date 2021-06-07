@@ -1,14 +1,14 @@
-package com.youruan.dentistry.console.banner;
+package com.youruan.dentistry.console.activity;
 
 import com.google.common.collect.ImmutableMap;
-import com.youruan.dentistry.console.banner.form.BannerAddForm;
-import com.youruan.dentistry.console.banner.form.BannerEditForm;
-import com.youruan.dentistry.console.banner.form.BannerListForm;
+import com.youruan.dentistry.console.activity.form.activityAddForm;
+import com.youruan.dentistry.console.activity.form.activityEditForm;
+import com.youruan.dentistry.console.activity.form.activityListForm;
 import com.youruan.dentistry.console.base.interceptor.RequiresPermission;
-import com.youruan.dentistry.core.banner.domain.Banner;
-import com.youruan.dentistry.core.banner.query.BannerQuery;
-import com.youruan.dentistry.core.banner.service.BannerService;
-import com.youruan.dentistry.core.banner.vo.ExtendedBanner;
+import com.youruan.dentistry.core.activity.domain.activity;
+import com.youruan.dentistry.core.activity.query.activityQuery;
+import com.youruan.dentistry.core.activity.service.activityService;
+import com.youruan.dentistry.core.activity.vo.Extendedactivity;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.UploadFile;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
@@ -25,77 +25,77 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/banner")
-public class BannerController {
+@RequestMapping("/activity")
+public class ActivityController {
 
-    private final BannerService bannerService;
+    private final activityService activityService;
 
     @Value("${dentistry.core.base.storage.disk.base-directory}")
     private String baseDirectory;
 
 
-    public BannerController(BannerService bannerService) {
-        this.bannerService = bannerService;
+    public ActivityController(activityService activityService) {
+        this.activityService = activityService;
     }
 
     @PostMapping("/add")
-    @RequiresPermission(value = "banner.banner.add", description = "轮播图-添加")
-    public ResponseEntity<?> add(BannerAddForm form) {
-        Banner banner = bannerService.create(
-                form.getBannerName(),
+    @RequiresPermission(value = "activity.activity.add", description = "轮播图-添加")
+    public ResponseEntity<?> add(activityAddForm form) {
+        activity activity = activityService.create(
+                form.getactivityName(),
                 form.getImageUrl(),
                 form.getLinkUrl(),
                 form.getStatus());
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("id", banner.getId())
+                .put("id", activity.getId())
                 .build());
     }
 
     @PostMapping("/edit")
-    @RequiresPermission(value = "banner.banner.edit", description = "轮播图-修改")
-    public ResponseEntity<?> edit(BannerEditForm form) {
-        Banner banner = bannerService.get(form.getId());
-        bannerService.update(
-                banner,
-                form.getBannerName(),
+    @RequiresPermission(value = "activity.activity.edit", description = "轮播图-修改")
+    public ResponseEntity<?> edit(activityEditForm form) {
+        activity activity = activityService.get(form.getId());
+        activityService.update(
+                activity,
+                form.getactivityName(),
                 form.getImageUrl(),
                 form.getLinkUrl(),
                 form.getStatus());
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("id", banner.getId())
+                .put("id", activity.getId())
                 .build());
     }
     
 
     @GetMapping("/list")
-    @RequiresPermission(value = "banner.banner.list",description = "轮播图-列表")
-    public ResponseEntity<?> list(BannerListForm form) {
-        BannerQuery qo = form.buildQuery();
-        Pagination<ExtendedBanner> pagination = bannerService.query(qo);
+    @RequiresPermission(value = "activity.activity.list",description = "轮播图-列表")
+    public ResponseEntity<?> list(activityListForm form) {
+        activityQuery qo = form.buildQuery();
+        Pagination<Extendedactivity> pagination = activityService.query(qo);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("data", BeanMapUtils.pick(pagination.getData(),
-                        "id","createdDate","bannerName","imageUrl","linkUrl","status"))
+                        "id","createdDate","activityName","imageUrl","linkUrl","status"))
                 .put("rows",pagination.getRows())
                 .build());
     }
 
     @GetMapping("/get")
-    @RequiresPermission(value = "banner.banner.get", description = "轮播图-获取")
+    @RequiresPermission(value = "activity.activity.get", description = "轮播图-获取")
     public ResponseEntity<?> get(Long id) {
-        Banner banner = bannerService.get(id);
-        return ResponseEntity.ok(BeanMapUtils.pick(banner,
-                "bannerName","linkUrl","status","imageUrl"));
+        activity activity = activityService.get(id);
+        return ResponseEntity.ok(BeanMapUtils.pick(activity,
+                "activityName","linkUrl","status","imageUrl"));
     }
 
 
     @PostMapping("/upload")
-    @RequiresPermission(value = "banner.banner.upload",description = "轮播图-上传")
+    @RequiresPermission(value = "activity.activity.upload",description = "轮播图-上传")
     public ResponseEntity<?> upload(MultipartFile file) throws IOException {
         UploadFile uploadFile = new UploadFile();
         uploadFile.setOriginalFilename(file.getOriginalFilename());
         uploadFile.setInputStream(file.getInputStream());
         uploadFile.setSize(file.getSize());
-        String imageUrl = bannerService.upload(uploadFile);
+        String imageUrl = activityService.upload(uploadFile);
         Map<String,String> resultMap = new HashMap<>();
         System.out.println("imageUrl = "+imageUrl);
         resultMap.put("imageUrl",imageUrl);

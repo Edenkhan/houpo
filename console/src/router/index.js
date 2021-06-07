@@ -9,6 +9,7 @@ import message from "./message";
 import enroll from "./enroll"
 import banner from "./banner";
 import {everyPermissions, loadPermissions} from "../api/permission";
+import activity from "./activity";
 
 const AccessDenied = () => import(/* webpackChunkName: "platform" */ '../views/platform/AccessDenied');
 const Index = () => import(/* webpackChunkName: "platform" */ '../views/platform/Index');
@@ -32,7 +33,8 @@ const routes = [
       ...platform,
       ...message,
       ...enroll,
-      ...banner
+      ...banner,
+      ...activity
     ]
   },
   {
