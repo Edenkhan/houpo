@@ -10,7 +10,6 @@
         <result property="bannerName" column="bannerName"/>
         <result property="imageUrl" column="imageUrl"/>
         <result property="linkUrl" column="linkUrl"/>
-        <result property="no" column="no"/>
         <result property="status" column="status"/>
     </resultMap>
     <sql id="BASE_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.status</sql>

@@ -12,7 +12,6 @@ import com.youruan.dentistry.core.banner.vo.ExtendedBanner;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.UploadFile;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +28,6 @@ import java.util.Map;
 public class BannerController {
 
     private final BannerService bannerService;
-
-    @Value("${dentistry.core.base.storage.disk.base-directory}")
-    private String baseDirectory;
-
 
     public BannerController(BannerService bannerService) {
         this.bannerService = bannerService;

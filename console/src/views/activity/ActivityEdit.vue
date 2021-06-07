@@ -1,36 +1,21 @@
 <template>
   <div class="edit-container">
     <a-form-model @submit="handleSubmit" :loading="loading" :label-col="{ span: 4 }" :wrapper-col="{ span: 8 }">
-      <a-form-model-item autocomplete="off" label="名称" >
-        <a-input autofocus v-model="bannerForm.bannerName" />
+      <a-form-model-item autocomplete="off" label="活动标题" >
+        <a-input autofocus v-model="activityForm.eventTitle" />
       </a-form-model-item>
-      <a-form-model-item autocomplete="off" label="链接地址">
-        <a-input v-model="bannerForm.linkUrl"/>
-      </a-form-model-item>
-      <a-form-model-item label="是否启用" >
-        <a-radio-group v-model="bannerForm.status">
-          <a-radio-button :value="1">
-            <a-icon type="unlock"/>
-            启用
-          </a-radio-button>
-          <a-radio-button :value="0">
-            <a-icon type="lock"/>
-            停用
-          </a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
-      <a-form-model-item label="上传轮播图">
 
+      <a-form-model-item label="活动图片">
         <a-upload
           name="file"
           list-type="picture-card"
           class="avatar-uploader"
           :show-upload-list="false"
-          action="/api/banner/upload"
+          action="/api/activity/upload"
           :before-upload="beforeUpload"
           @change="handleChange"
         >
-          <img v-if="bannerForm.imageUrl" :src="bannerForm.imageUrl" alt="avatar" />
+          <img v-if="activityForm.eventImage" :src="activityForm.eventImage" alt="avatar" />
           <div v-else>
             <a-icon :type="loading ? 'loading' : 'plus'" />
             <div class="ant-upload-text">
@@ -38,8 +23,38 @@
             </div>
           </div>
         </a-upload>
-
       </a-form-model-item>
+
+      <a-form-model-item autocomplete="off" label="活动内容">
+        <div id="editor" style="height: 400px;width: 650px"></div>
+      </a-form-model-item>
+
+      <a-form-model-item label="是否开启报名" >
+        <a-radio-group v-model="activityForm.enrollStatus">
+          <a-radio-button :value="1">
+            <a-icon type="unlock"/>
+            开启
+          </a-radio-button>
+          <a-radio-button :value="0">
+            <a-icon type="lock"/>
+            关闭
+          </a-radio-button>
+        </a-radio-group>
+      </a-form-model-item>
+
+      <a-form-model-item label="是否发布" >
+        <a-radio-group v-model="activityForm.releaseStatus">
+          <a-radio-button :value="1">
+            <a-icon type="unlock"/>
+            发布
+          </a-radio-button>
+          <a-radio-button :value="0">
+            <a-icon type="lock"/>
+            不发布
+          </a-radio-button>
+        </a-radio-group>
+      </a-form-model-item>
+
       <a-form-model-item :wrapper-col="{ offset: 4, span: 8 }">
         <a-button html-type="submit" type="primary" :disabled="fetching" :loading="loading">保存</a-button>
       </a-form-model-item>
@@ -52,6 +67,7 @@
 
 
 <script>
+
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
@@ -59,31 +75,40 @@ function getBase64(img, callback) {
 }
 
 
-  import {addBanner, editBanner, getBanner} from "../../api/banner.js"
+import {addActivity, editActivity, getActivity} from "../../api/activity"
+import E from 'wangeditor'
 
   export default {
     data() {
       return {
         id: this.$route.query.id,
-        bannerForm: {},
+        activityForm: {},
         loading: false,
-        fetching: false
+        fetching: false,
+        editor: {}
       }
     },
 
     created() {
       if (this.id != null) {
-        this.fetchBanner()
+        this.fetchActivity()
       }
     },
 
+    mounted() {
+      this.editor = new E('#editor')
+      // 创建一个富文本编辑器
+      this.editor.create()
+    },
+
     methods: {
-      fetchBanner() {
+      fetchActivity() {
         this.fetching = true
-        getBanner(this.id)
+        getActivity(this.id)
           .then(data => {
-            this.bannerForm = data
-            console.log(this.bannerForm)
+            this.activityForm = data
+            //回顯富文本
+            this.editor.txt.html(data.eventContent)
             this.fetching = false
           })
           .catch(({message}) => {
@@ -95,10 +120,10 @@ function getBase64(img, callback) {
         this.loading = true
 
         if (this.id == null) {
-          return addBanner(values)
+          return addActivity(values)
             .then(() => {
               this.$message.success('添加成功')
-              this.$router.push('/banner/list')
+              this.$router.push('/activity/list')
             })
             .catch(({message}) => {
               this.$message.error('添加失败。' + message)
@@ -108,12 +133,12 @@ function getBase64(img, callback) {
             })
         }
 
-        return editBanner({
+        return editActivity({
           id: this.id,
           ...values
         }).then(() => {
           this.$message.success('修改成功')
-          this.$router.push('/banner/list')
+          this.$router.push('/activity/list')
         }).catch(({message}) => {
           this.$message.error('修改失败。' + message)
         }).then(() => {
@@ -123,15 +148,19 @@ function getBase64(img, callback) {
 
       handleSubmit(e) {
         e.preventDefault()
-        if(this.bannerForm == null) {
+        if(this.activityForm == null) {
           return
         }
-        this.save(this.bannerForm)
+        this.activityForm = Object.assign({},this.activityForm,{
+          // 富文本内容
+          eventContent: this.editor.txt.html()
+        })
+        this.save(this.activityForm)
       },
 
       handleChange(info) {
         if (info.file.status === 'done') {
-          this.bannerForm.imageUrl = info.file.response.imageUrl
+          this.activityForm.eventImage = info.file.response.eventImage
         }
 
       },
@@ -145,7 +174,10 @@ function getBase64(img, callback) {
           this.$message.error('Image must smaller than 2MB!')
         }
         return isJpgOrPng && isLt2M
-      },
+      }
+
+
+
     }
     
   }

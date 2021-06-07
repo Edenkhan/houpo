@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.youruan.dentistry.core.banner.mapper.BannerMapper">
-    <resultMap id="BASE_RESULT" type="com.youruan.dentistry.core.banner.domain.Banner">
+<mapper namespace="com.youruan.dentistry.core.activity.mapper.ActivityMapper">
+    <resultMap id="BASE_RESULT" type="com.youruan.dentistry.core.activity.domain.Activity">
         <id property="id" column="id"/>
         <result property="createdDate" column="createdDate"/>
         <result property="lastModifiedDate" column="lastModifiedDate"/>
         <result property="version" column="version"/>
-        <result property="bannerName" column="bannerName"/>
-        <result property="imageUrl" column="imageUrl"/>
-        <result property="linkUrl" column="linkUrl"/>
-        <result property="no" column="no"/>
-        <result property="status" column="status"/>
+        <result property="eventTitle" column="eventTitle"/>
+        <result property="eventImage" column="eventImage"/>
+        <result property="eventContent" column="eventContent"/>
+        <result property="numberOfEntries" column="numberOfEntries"/>
+        <result property="releaseStatus" column="releaseStatus"/>
+        <result property="enrollStatus" column="enrollStatus"/>
+        <result property="recentEditor" column="recentEditor"/>
     </resultMap>
-    <sql id="BASE_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.status</sql>
-    <sql id="QUERY_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.status</sql>
-    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.banner.vo.ExtendedBanner" extends="BASE_RESULT"/>
+    <sql id="BASE_COLUMNS">a.id, a.createdDate, a.lastModifiedDate, a.version,a.eventTitle,a.eventImage,a.eventContent,a.numberOfEntries,a.releaseStatus,a.enrollStatus,a.recentEditor</sql>
+    <sql id="QUERY_COLUMNS">a.id, a.createdDate, a.lastModifiedDate, a.version,a.eventTitle,a.eventImage,a.eventContent,a.numberOfEntries,a.releaseStatus,a.enrollStatus,a.recentEditor</sql>
+    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.activity.vo.ExtendedActivity" extends="BASE_RESULT"/>
     <sql id="JOIN_COLUMNS"/>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
-        <include refid="BASE_COLUMNS"/> FROM Banner b WHERE id = #{id }
+        <include refid="BASE_COLUMNS"/> FROM Activity a WHERE id = #{id }
     </select>
-    <delete id="delete" parameterType="java.lang.Long">DELETE FROM Banner WHERE id = #{id}</delete>
+    <delete id="delete" parameterType="java.lang.Long">DELETE FROM Activity WHERE id = #{id}</delete>
 
-    <insert id="add" parameterType="com.youruan.dentistry.core.banner.domain.Banner" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO Banner(createdDate,version,bannerName,imageUrl,linkUrl,status)
-        VALUES(#{createdDate},0,#{bannerName},#{imageUrl},#{linkUrl},#{status})
+    <insert id="add" parameterType="com.youruan.dentistry.core.activity.domain.Activity" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO Activity(createdDate,version,eventTitle,eventImage,eventContent,numberOfEntries,releaseStatus,enrollStatus,recentEditor)
+        VALUES(#{createdDate},0,#{eventTitle},#{eventImage},#{eventContent},#{numberOfEntries},#{releaseStatus},#{enrollStatus},#{recentEditor})
     </insert>
 
-    <update id="update" parameterType="com.youruan.dentistry.core.banner.domain.Banner">
-        UPDATE Banner
+    <update id="update" parameterType="com.youruan.dentistry.core.activity.domain.Activity">
+        UPDATE Activity
         <set>
             lastModifiedDate = now(),
             version = version + 1,
-            <if test="bannerName != null">bannerName = #{bannerName},</if>
-            <if test="imageUrl != null">imageUrl = #{imageUrl},</if>
-            <if test="linkUrl != null">linkUrl = #{linkUrl},</if>
-            <if test="status != null">status = #{status}</if>
+            <if test="eventTitle != null">eventTitle = #{eventTitle},</if>
+            <if test="eventImage != null">eventImage = #{eventImage},</if>
+            <if test="eventContent != null">eventContent = #{eventContent},</if>
+            <if test="numberOfEntries != null">numberOfEntries = #{numberOfEntries},</if>
+            <if test="releaseStatus != null">releaseStatus = #{releaseStatus},</if>
+            <if test="enrollStatus != null">enrollStatus = #{enrollStatus},</if>
+            <if test="recentEditor != null">recentEditor = #{recentEditor}</if>
         </set>
         <where>id = #{id} AND version = #{version}</where>
     </update>
 
     <sql id="QUERY_JOIN"/>
     <sql id="QUERY_WHERE_SQL">
-        <if test="ids != null">AND b.id IN
+        <if test="ids != null">AND a.id IN
             <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
         </if>
-        <if test="startCreatedDate != null">AND b.createdDate &gt;= #{startCreatedDate }</if>
-        <if test="endCreatedDate != null">AND b.createdDate &lt;= #{endCreatedDate }</if>
-        <if test="bannerName != null">AND b.bannerName = #{bannerName}</if>
-        <if test="likeBannerName != null">AND b.bannerName LIKE CONCAT('%', #{likeBannerName} ,'%')</if>
-        <if test="status != null">AND b.status = #{status}</if>
+        <if test="startCreatedDate != null">AND a.createdDate &gt;= #{startCreatedDate }</if>
+        <if test="endCreatedDate != null">AND a.createdDate &lt;= #{endCreatedDate }</if>
+        <if test="eventTitle != null">AND a.eventTitle = #{eventTitle}</if>
+        <if test="likeEventTitle != null">AND a.eventTitle LIKE CONCAT('%', #{likeEventTitle} ,'%')</if>
+        <if test="enrollStatus != null">AND a.enrollStatus = #{enrollStatus}</if>
+        <if test="releaseStatus != null">AND a.releaseStatus = #{releaseStatus}</if>
     </sql>
     <sql id="QUERY_WHERE">
         <where>
@@ -59,21 +65,21 @@
     <sql id="QUERY_ORDER_BY">
         <if test="orderBys.size() &gt; 0">
             ORDER BY
-            <foreach collection="orderBys" item="value" index="key" separator=", ">b.${key} ${value}</foreach>
+            <foreach collection="orderBys" item="value" index="key" separator=", ">a.${key} ${value}</foreach>
         </if>
     </sql>
     <sql id="QUERY_LIMIT">
         <if test="pageSize &gt; 0">LIMIT ${start}, ${pageSize}</if>
     </sql>
-    <select id="count" parameterType="com.youruan.dentistry.core.banner.query.BannerQuery" resultType="java.lang.Integer">
-        SELECT COUNT(id) FROM Banner AS b
+    <select id="count" parameterType="com.youruan.dentistry.core.activity.query.ActivityQuery" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Activity AS a
         <include refid="QUERY_JOIN"/>
         <include refid="QUERY_WHERE"/>
     </select>
-    <select id="query" parameterType="com.youruan.dentistry.core.banner.query.BannerQuery" resultMap="VO_RESULT">
+    <select id="query" parameterType="com.youruan.dentistry.core.activity.query.ActivityQuery" resultMap="VO_RESULT">
         SELECT
         <include refid="QUERY_COLUMNS"/>
-        <include refid="JOIN_COLUMNS"/> FROM Banner AS b
+        <include refid="JOIN_COLUMNS"/> FROM Activity AS a
         <include refid="QUERY_JOIN"/>
         <include refid="QUERY_WHERE"/>
         <include refid="QUERY_ORDER_BY"/>

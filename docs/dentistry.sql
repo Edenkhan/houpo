@@ -11,7 +11,7 @@
  Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 06/06/2021 18:26:01
+ Date: 07/06/2021 17:59:09
 */
 
 SET NAMES utf8mb4;
@@ -26,18 +26,20 @@ CREATE TABLE `activity`  (
   `createdDate` datetime NULL DEFAULT NULL,
   `lastModifiedDate` datetime NULL DEFAULT NULL,
   `version` int(11) NULL DEFAULT NULL,
-  `recentEditorId` bigint(20) NULL DEFAULT NULL COMMENT '最近编辑人',
   `eventTitle` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动标题',
   `eventImage` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动图片',
+  `eventContent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '活动内容',
   `numberOfEntries` int(11) NULL DEFAULT NULL COMMENT '报名人数',
-  `published` bit(1) NULL DEFAULT NULL COMMENT '发布状态 0-未发布 1-已发布',
-  `enrollOpened` bit(1) NULL DEFAULT NULL COMMENT '是否开启报名 0-关闭 1-开启',
+  `releaseStatus` tinyint(1) NULL DEFAULT NULL COMMENT '发布状态 0-未发布 1-已发布',
+  `enrollStatus` tinyint(1) NULL DEFAULT NULL COMMENT '报名状态 0-关闭 1-开启',
+  `recentEditor` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最近编辑人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
+INSERT INTO `activity` VALUES (1, '2021-06-07 14:30:30', '2021-06-07 17:51:56', 6, '922活動', '/api/img/activity/f13527b6-da77-4d7f-b7cd-b77f10f38724.png', '<p>秒殺全場</p>', 12, 1, 1, 'admin');
 
 -- ----------------------------
 -- Table structure for banner
@@ -53,13 +55,14 @@ CREATE TABLE `banner`  (
   `linkUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接地址',
   `status` bit(1) NULL DEFAULT NULL COMMENT '状态 0-停用 1-启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of banner
 -- ----------------------------
-INSERT INTO `banner` VALUES (1, '2021-06-03 18:00:56', '2021-06-06 18:15:03', 6, 'banner02', '/banner/69da176a-208c-457b-9c2c-cc53a89f83ed.png', 'aaa', b'1');
-INSERT INTO `banner` VALUES (2, '2021-06-06 16:08:25', '2021-06-06 17:38:20', 23, 'banner03', NULL, 'http://www.baidu.com', b'1');
+INSERT INTO `banner` VALUES (1, '2021-06-03 18:00:56', '2021-06-07 17:25:46', 9, 'banner02', '/api/img/banner/6920e19e-8788-47ec-b5ad-04afd4b1fd3d.png', 'https://github.com', b'1');
+INSERT INTO `banner` VALUES (2, '2021-06-06 16:08:25', '2021-06-07 17:25:36', 39, 'banner03', '/api/img/banner/ce60d7ad-c5a1-42b9-90ab-064d2502597c.png', 'http://www.baidu.com', b'0');
+INSERT INTO `banner` VALUES (3, '2021-06-07 11:17:35', '2021-06-07 17:25:28', 15, 'banner01', '/api/img/banner/a70aae84-a287-4d04-8c4b-5c596dc2b34a.png', 'xxx', b'1');
 
 -- ----------------------------
 -- Table structure for employee

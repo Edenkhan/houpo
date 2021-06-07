@@ -21,15 +21,15 @@ public interface ActivityService {
     /**
      * 添加活动
      */
-    Activity create(String bannerName, String imageUrl, String linkUrl, Integer status);
+    Activity create(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus);
 
     /**
      * 修改活动
      */
-    void update(Activity banner, String bannerName, String imageUrl, String linkUrl, Integer status);
-
+    void update(Activity activity, String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus, String recentEditor);
     /**
      * 上传活动
      */
     String upload(UploadFile uploadFile);
+
 }

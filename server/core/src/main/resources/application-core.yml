@@ -11,7 +11,7 @@ dentistry:
       storage:
         disk:
           base-directory: C:/image
-          base-url: /api/bannerImg
+          base-url: /api/img
     message:
       sms:
         verification:

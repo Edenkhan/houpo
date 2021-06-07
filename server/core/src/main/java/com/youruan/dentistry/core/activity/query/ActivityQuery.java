@@ -17,9 +17,10 @@ public class ActivityQuery extends QueryCondition {
     protected Long[] ids;
     protected Date startCreatedDate;
     protected Date endCreatedDate;
-    protected String activityName;
-    protected String likeActivityName;
-    protected Integer status;
+    protected String eventTitle;
+    protected String likeEventTitle;
+    protected Integer enrollStatus;
+    protected Integer releaseStatus;
 
     public void setOrderById(int keyword) {
         setOrderBy("id", keyword);

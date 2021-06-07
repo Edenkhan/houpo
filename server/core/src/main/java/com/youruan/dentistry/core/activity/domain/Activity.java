@@ -10,27 +10,34 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Activity extends BasicDomain {
-
     /**
-     * 活动名称
+     * 活动标题
      */
-    private String activityName;
+    private String eventTitle;
     /**
-     * 缩略图
+     * 活动图片
      */
-    private String imageUrl;
+    private String eventImage;
     /**
-     * 链接
+     * 活动内容
      */
-    private String linkUrl;
+    private String eventContent;
     /**
-     * 序号
+     * 报名人数
      */
-    private Integer no;
+    private Integer numberOfEntries;
     /**
-     * 状态 0-停用 1-启用
+     * 发布状态 0-未发布 1-已发布
      */
-    private Integer status;
+    private Integer releaseStatus;
+    /**
+     * 报名状态 0-关闭 1-开启
+     */
+    private Integer enrollStatus;
+    /**
+     * 最近编辑人
+     */
+    private String recentEditor;
 
 
 }

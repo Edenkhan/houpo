@@ -10,20 +10,34 @@
         <a-date-picker v-model="activityListForm.endCreatedDate" style="width: 120px"></a-date-picker>
       </a-form-model-item>
 
-      <a-form-model-item label='名称'>
-        <a-input v-model="activityListForm.activityName" style="width: 180px"/>
+      <a-form-model-item label='活动名称'>
+        <a-input v-model="activityListForm.eventTitle" style="width: 120px"/>
       </a-form-model-item>
 
-      <a-form-model-item label='状态'>
-        <a-select v-model="activityListForm.status" style="width: 120px" >
+      <a-form-model-item label='报名状态'>
+        <a-select v-model="activityListForm.enrollStatus" style="width: 80px" >
           <a-select-option value="">
             全部
           </a-select-option>
           <a-select-option :value="1">
-            启用
+            开启
           </a-select-option>
           <a-select-option :value="0">
-            停用
+            关闭
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
+
+      <a-form-model-item label='发布状态'>
+        <a-select v-model="activityListForm.releaseStatus" style="width: 80px" >
+          <a-select-option value="">
+            全部
+          </a-select-option>
+          <a-select-option :value="1">
+            已发布
+          </a-select-option>
+          <a-select-option :value="0">
+            未发布
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -59,28 +73,27 @@
         {{createdDate | filterDate('YYYY-MM-DD HH:mm:ss')}}
       </template>
 
-      <template slot="status" slot-scope="status">
-        <a-tag color="#87d068" v-if="status === 1">启用</a-tag>
-        <a-tag color="#f5222d" v-else>停用</a-tag>
+      <template slot="lastModifiedDate" slot-scope="lastModifiedDate">
+        {{lastModifiedDate | filterDate('YYYY-MM-DD HH:mm:ss')}}
+      </template>
+
+      <template slot="enrollStatus" slot-scope="enrollStatus">
+        <a-tag color="#87d068" v-if="enrollStatus === 1">开启</a-tag>
+        <a-tag color="#f5222d" v-else>关闭</a-tag>
+      </template>
+
+      <template slot="releaseStatus" slot-scope="releaseStatus">
+        <a-tag color="#87d068" v-if="releaseStatus === 1">已发布</a-tag>
+        <a-tag color="#f5222d" v-else>未发布</a-tag>
       </template>
 
       <template slot="operation" slot-scope="record">
-        <router-link :to="`/activity/edit?id=${record.id}`">修改</router-link>
+        <a href="javascript:" >查看</a>
         <a-divider type="vertical" />
-        <a-popconfirm
-          title="Are you sure？"
-          ok-text="Yes"
-          cancel-text="No"
-          @confirm="changeStatus(record.id,record.status)"
-        >
-          <a href="javascript:" v-if="record.status===0" >启用</a>
-          <a href="javascript:" v-else >停用</a>
-        </a-popconfirm>
+        <router-link :to="`/activity/edit?id=${record.id}`">编辑</router-link>
         <a-divider type="vertical" />
         <a href="javascript:" >删除</a>
       </template>
-
-
 
     </a-table>
   </div>
@@ -100,11 +113,14 @@ const columns = [
   },
   {
     title: '最近编辑时间',
-    dataIndex: 'lastModifiedDate'
+    dataIndex: 'lastModifiedDate',
+    sorter: true,
+    defaultSortOrder: 'descend',
+    scopedSlots: {customRender: 'lastModifiedDate'}
   },
   {
     title: '最近编辑人',
-    dataIndex: 'lastModifiedPerson'
+    dataIndex: 'recentEditor'
   },
   {
     title: '活动标题',
@@ -115,8 +131,14 @@ const columns = [
     dataIndex: 'numberOfEntries'
   },
   {
+    title: '报名状态',
+    dataIndex: 'enrollStatus',
+    scopedSlots: {customRender: 'enrollStatus'}
+  },
+  {
     title: '发布状态',
-    dataIndex: 'published'
+    dataIndex: 'releaseStatus',
+    scopedSlots: {customRender: 'releaseStatus'}
   },
   {
     title: '操作',

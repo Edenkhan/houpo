@@ -1,7 +1,7 @@
 package com.youruan.dentistry.console.activity.form;
 
 import com.youruan.dentistry.console.base.form.ListForm;
-import com.youruan.dentistry.core.banner.query.BannerQuery;
+import com.youruan.dentistry.core.activity.query.ActivityQuery;
 import com.youruan.dentistry.core.base.query.QueryCondition;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,23 +17,29 @@ public class ActivityListForm extends ListForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endCreatedDate;
     /**
-     * 轮播图名称
+     * 活动标题
      */
-    private String bannerName;
+    private String eventTitle;
     /**
-     * 状态 0-停用 1-启用
+     * 报名状态 0-关闭 1-开启
      */
-    private Integer status;
+    private Integer enrollStatus;
+
+    /**
+     * 发布状态 0-未发布 1-已发布
+     */
+    private Integer releaseStatus;
 
 
     @Override
-    public BannerQuery buildQuery() {
-        BannerQuery qo = new BannerQuery();
+    public ActivityQuery buildQuery() {
+        ActivityQuery qo = new ActivityQuery();
         qo.setPage(getPage());
         qo.setStartCreatedDate(startCreatedDate);
         qo.setEndCreatedDate(endCreatedDate);
-        qo.setLikeBannerName(bannerName);
-        qo.setStatus(status);
+        qo.setLikeEventTitle(eventTitle);
+        qo.setEnrollStatus(enrollStatus);
+        qo.setReleaseStatus(releaseStatus);
         if ("createdDate".equals(getSortField())) {
             qo.setOrderByCreatedDate(getSortOrder().equalsIgnoreCase("descend")
                     ? QueryCondition.ORDER_BY_KEYWORD_DESC

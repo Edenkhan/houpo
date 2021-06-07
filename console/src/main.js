@@ -46,6 +46,7 @@ import 'moment/locale/zh-cn';
 import './main.scss';
 import {everyPermissions, somePermissions} from "./api/permission";
 
+
 Vue.filter('filterAmount', function (amount) {
   amount = Number(amount);
   return '¥' + amount.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -111,6 +112,8 @@ Vue.use(Transfer);
 Vue.use(Popconfirm);
 Vue.use(Switch);
 Vue.use(FormModel);
+
+
 
 Vue.prototype.$message = message;
 Vue.prototype.$confirm = Modal.confirm;

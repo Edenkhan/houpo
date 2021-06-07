@@ -41,31 +41,35 @@ public class BasicActivityService implements ActivityService {
     }
 
     @Override
-    public Activity create(String activityName, String imageUrl, String linkUrl, Integer status) {
+    public Activity create(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus) {
         Activity activity = new Activity();
-        activity.setActivityName(activityName);
-        activity.setImageUrl(imageUrl);
-        activity.setLinkUrl(linkUrl);
-        activity.setStatus(status);
-        checkactivity(activity);
-        if(checkactivityName(activityName)) {
-            throw new RuntimeException("添加失败,活动名称重复");
+        activity.setEventTitle(eventTitle);
+        activity.setEventImage(eventImage);
+        activity.setEventContent(eventContent);
+        activity.setEnrollStatus(enrollStatus);
+        activity.setReleaseStatus(releaseStatus);
+        checkActivity(activity);
+        if(checkEventTitle(eventTitle)) {
+            throw new RuntimeException("添加失败,活动标题重复");
         }
         return add(activity);
     }
 
-    private boolean checkactivityName(String activityName) {
+
+    private boolean checkEventTitle(String eventTitle) {
         ActivityQuery qo = new ActivityQuery();
-        qo.setActivityName(activityName);
+        qo.setEventTitle(eventTitle);
         int count = activityMapper.count(qo);
         return count > 0;
     }
 
-    private void checkactivity(Activity activity) {
-        Assert.notNull(activity.getActivityName(),"活动名称不能为空");
-        Assert.notNull(activity.getImageUrl(),"图片不能为空");
-        Assert.notNull(activity.getLinkUrl(),"链接地址不能为空");
-        Assert.notNull(activity.getStatus(),"活动状态不能为空");
+    private void checkActivity(Activity activity) {
+        Assert.notNull(activity.getEventTitle(),"活动标题不能为空");
+        Assert.notNull(activity.getEventImage(),"活动图片不能为空");
+        Assert.notNull(activity.getEventContent(),"活动内容不能为空");
+        Assert.notNull(activity.getEnrollStatus(),"报名状态不能为空");
+        Assert.notNull(activity.getReleaseStatus(),"发布状态不能为空");
+        Assert.notNull(activity.getRecentEditor(),"最近編輯人不能为空");
     }
 
     private Activity add(Activity activity) {
@@ -75,12 +79,15 @@ public class BasicActivityService implements ActivityService {
     }
 
     @Override
-    public void update(Activity activity, String activityName, String imageUrl, String linkUrl, Integer status) {
+    public void update(Activity activity, String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus, String recentEditor) {
         Assert.notNull(activity, "必须提供活动");
-        activity.setActivityName(activityName);
-        activity.setImageUrl(imageUrl);
-        activity.setLinkUrl(linkUrl);
-        activity.setStatus(status);
+        activity.setEventTitle(eventTitle);
+        activity.setEventImage(eventImage);
+        activity.setEventContent(eventContent);
+        activity.setEnrollStatus(enrollStatus);
+        activity.setReleaseStatus(releaseStatus);
+        activity.setRecentEditor(recentEditor);
+        checkActivity(activity);
         update(activity);
     }
 
