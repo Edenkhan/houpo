@@ -31,7 +31,7 @@ public class BasicOAuthService implements OAuthService {
     @Override
     public void callback(String code, String state) {
         if(state==null || !state.equals("GHOST")) {
-            throw new RuntimeException("回调错误");
+            throw new RuntimeException("回調錯誤");
         }
         String getAuthAccessTokenUrl = String.format(WxConstant.BASIC_OAUTH_ACCESS_TOKEN_URL,code);
         String json = HttpClientUtils.doGet(getAuthAccessTokenUrl);
