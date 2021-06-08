@@ -20,11 +20,8 @@ public class BasicOAuthService implements OAuthService {
     @Override
     public void auth() {
         try {
-            String uri = domain + WxConstant.REDIRECT_URI;
-            System.out.println("uri = "+uri);
             String encodeUrl = URLEncoder.encode(domain + WxConstant.REDIRECT_URI, "UTF-8");
             String oauthUrl = String.format(WxConstant.BASIC_OAUTH_URL,encodeUrl);
-            System.out.println("oauthUrl = " + oauthUrl);
             HttpClientUtils.doGet(oauthUrl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
