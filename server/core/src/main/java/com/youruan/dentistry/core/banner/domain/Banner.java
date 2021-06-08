@@ -31,6 +31,13 @@ public class Banner extends BasicDomain {
      * 状态 0-停用 1-启用
      */
     private Integer status;
-
+    /**
+     * 轮播图状态[关闭]
+     */
+    public static final int BANNER_STATUS_CLOSE = 0;
+    /**
+     * 轮播图状态[开启]
+     */
+    public static final int BANNER_STATUS_OPEN = (BANNER_STATUS_CLOSE + 1);
 
 }

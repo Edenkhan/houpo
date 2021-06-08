@@ -94,6 +94,13 @@
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.rover12421</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.47</version>
+    </dependency>
+
   </dependencies>
 
   <build>

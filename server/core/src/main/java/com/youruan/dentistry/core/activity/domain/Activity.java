@@ -31,9 +31,25 @@ public class Activity extends BasicDomain {
      */
     private Integer releaseStatus;
     /**
+     * 发布状态[未发布]
+     */
+    public static final int RELEASE_STATUS_CLOSE = 0;
+    /**
+     * 发布状态[已发布]
+     */
+    public static final int RELEASE_STATUS_OPEN = (RELEASE_STATUS_CLOSE + 1);
+    /**
      * 报名状态 0-关闭 1-开启
      */
     private Integer enrollStatus;
+    /**
+     * 报名状态[关闭]
+     */
+    public static final int ENROLL_STATUS_CLOSE = 0;
+    /**
+     * 报名状态[开启]
+     */
+    public static final int ENROLL_STATUS_OPEN = (ENROLL_STATUS_CLOSE + 1);
     /**
      * 最近编辑人
      */

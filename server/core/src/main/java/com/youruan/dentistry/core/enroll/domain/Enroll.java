@@ -31,6 +31,13 @@ public class Enroll extends BasicDomain {
      * 订单状态
      */
     private Boolean orderStatus;
-
+    /**
+     * 订单状态[未支付]
+     */
+    public static final int ORDER_STATUS_NOT = 0;
+    /**
+     * 订单状态[已支付]
+     */
+    public static final int ORDER_STATUS_OK = (ORDER_STATUS_NOT + 1);
 
 }

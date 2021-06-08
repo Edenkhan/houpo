@@ -42,34 +42,39 @@ public class BasicActivityService implements ActivityService {
 
     @Override
     public Activity create(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus) {
+        checkActivity(eventTitle,eventImage,eventContent,enrollStatus,releaseStatus);
+        if(checkAddEventTitle(eventTitle)) {
+            throw new RuntimeException("添加失败,活动标题重复");
+        }
         Activity activity = new Activity();
         activity.setEventTitle(eventTitle);
         activity.setEventImage(eventImage);
         activity.setEventContent(eventContent);
         activity.setEnrollStatus(enrollStatus);
         activity.setReleaseStatus(releaseStatus);
-        checkActivity(activity);
-        if(checkEventTitle(eventTitle)) {
-            throw new RuntimeException("添加失败,活动标题重复");
-        }
         return add(activity);
     }
 
-
-    private boolean checkEventTitle(String eventTitle) {
+    /**
+     * 检查添加活动时，活动标题是否重复
+     * 重复返回 true
+     */
+    private boolean checkAddEventTitle(String eventTitle) {
         ActivityQuery qo = new ActivityQuery();
         qo.setEventTitle(eventTitle);
         int count = activityMapper.count(qo);
         return count > 0;
     }
 
-    private void checkActivity(Activity activity) {
-        Assert.notNull(activity.getEventTitle(),"活动标题不能为空");
-        Assert.notNull(activity.getEventImage(),"活动图片不能为空");
-        Assert.notNull(activity.getEventContent(),"活动内容不能为空");
-        Assert.notNull(activity.getEnrollStatus(),"报名状态不能为空");
-        Assert.notNull(activity.getReleaseStatus(),"发布状态不能为空");
-        Assert.notNull(activity.getRecentEditor(),"最近編輯人不能为空");
+    /**
+     * 判断活动属性是否为空
+     */
+    private void checkActivity(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus) {
+        Assert.notNull(eventTitle,"活动标题不能为空");
+        Assert.notNull(eventImage,"活动图片不能为空");
+        Assert.notNull(eventContent,"活动内容不能为空");
+        Assert.notNull(enrollStatus,"报名状态不能为空");
+        Assert.notNull(releaseStatus,"发布状态不能为空");
     }
 
     private Activity add(Activity activity) {
@@ -80,15 +85,29 @@ public class BasicActivityService implements ActivityService {
 
     @Override
     public void update(Activity activity, String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus, String recentEditor) {
+        checkActivity(eventTitle,eventImage,eventContent,enrollStatus,releaseStatus);
         Assert.notNull(activity, "必须提供活动");
+        if(checkUpdateEventTitle(activity,eventTitle)) {
+            throw new RuntimeException("修改失败,活动标题重复");
+        }
         activity.setEventTitle(eventTitle);
         activity.setEventImage(eventImage);
         activity.setEventContent(eventContent);
         activity.setEnrollStatus(enrollStatus);
         activity.setReleaseStatus(releaseStatus);
         activity.setRecentEditor(recentEditor);
-        checkActivity(activity);
         update(activity);
+    }
+
+    /**
+     * 检查修改活动时，活动标题是否重复
+     * 重复返回 true
+     */
+    private boolean checkUpdateEventTitle(Activity activity, String eventTitle) {
+        ActivityQuery qo = new ActivityQuery();
+        qo.setEventTitle(eventTitle);
+        int count = activityMapper.count(qo);
+        return count > 0 && !activity.getEventTitle().equals(eventTitle);
     }
 
     @Override

@@ -114,11 +114,9 @@ public class BasicEmployeeService
     public List<ExtendedPermission> listPermissions(Employee employee) {
         List<ExtendedPermission> permissions = new ArrayList<>();
         List<ExtendedRole> roles = roleService.listAll(employee);
-        System.out.println("rolerolerolerolerolerolerolerolerolerolerolerolerolerole:"+roles.size());
         for (ExtendedRole role : roles) {
             permissions.addAll(permissionService.listAll(role));
         }
-        System.out.println("permission::"+permissions.size());
         return permissions;
     }
 
