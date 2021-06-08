@@ -20,6 +20,8 @@ public class BasicOAuthService implements OAuthService {
     @Override
     public void auth() {
         try {
+            String uri = domain + WxConstant.REDIRECT_URI;
+            System.out.println("uri = "+uri);
             String encodeUrl = URLEncoder.encode(domain + WxConstant.REDIRECT_URI, "UTF-8");
             String oauthUrl = String.format(WxConstant.BASIC_OAUTH_URL,encodeUrl);
             System.out.println("oauthUrl = " + oauthUrl);
@@ -31,7 +33,7 @@ public class BasicOAuthService implements OAuthService {
 
     @Override
     public void callback(String code, String state) {
-        if(!state.equals("GHOST")) {
+        if(state==null || !state.equals("GHOST")) {
             throw new RuntimeException("回调错误");
         }
         String getAuthAccessTokenUrl = String.format(WxConstant.BASIC_OAUTH_ACCESS_TOKEN_URL,code);
