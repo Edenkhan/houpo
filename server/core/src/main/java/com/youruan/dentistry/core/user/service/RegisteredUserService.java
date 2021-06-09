@@ -1,12 +1,12 @@
 
 package com.youruan.dentistry.core.user.service;
 
-import java.util.List;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
-import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
+
+import java.util.List;
 
 public interface RegisteredUserService {
 
@@ -24,4 +24,9 @@ public interface RegisteredUserService {
     RegisteredUser create(String phoneNumber, Boolean locked);
 
     void update(RegisteredUser user, String phoneNumber, Boolean locked);
+
+    /**
+     * 获取登录用户的个人信息
+     */
+    RegisteredUser profile();
 }

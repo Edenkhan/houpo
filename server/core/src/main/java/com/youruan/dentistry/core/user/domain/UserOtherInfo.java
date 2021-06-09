@@ -5,16 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 用户职业信息实体类
+ * 用户其它信息实体类
  */
 @Getter
 @Setter
-public class UserProfessionInfo extends BasicDomain {
+public class UserOtherInfo extends BasicDomain {
 
     /**
      * 毕业院校
      */
-    private String graduatedCollege;
+    private String school;
     /**
      * 所学专业
      */
@@ -26,10 +26,10 @@ public class UserProfessionInfo extends BasicDomain {
     /**
      * 期望从事职业
      */
-    private String expectedOccupation;
+    private String job;
     /**
      * 期望就业地址
      */
-    private String expectedAddress;
+    private String area;
 
 }

@@ -1,10 +1,11 @@
 
 package com.youruan.dentistry.core.user.query;
 
-import java.util.Date;
 import com.youruan.dentistry.core.base.query.QueryCondition;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Setter
 @Getter
@@ -20,6 +21,8 @@ public class RegisteredUserQuery extends QueryCondition {
     protected Boolean locked;
     protected Integer[] includeGenders;
     protected Integer[] excludeGenders;
+    protected String openid;
+    protected String nickname;
 
     public boolean hasIds() {
         return (this.ids.length!= 0);

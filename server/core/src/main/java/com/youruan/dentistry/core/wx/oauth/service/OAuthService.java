@@ -1,13 +1,17 @@
 package com.youruan.dentistry.core.wx.oauth.service;
 
+import com.youruan.dentistry.core.wx.oauth.domain.WxUserInfo;
+
 public interface OAuthService {
-    /**
-     * 用户授权登录
-     */
-    void auth();
 
     /**
      * 用户授权，回调地址
      */
-    void callback(String code, String state);
+    WxUserInfo callback(String code, String state);
+
+    /**
+     * 微信用户注册
+     * 返回用户id
+     */
+    Long register(WxUserInfo wxUserInfo);
 }

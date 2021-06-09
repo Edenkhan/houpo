@@ -9,7 +9,7 @@
         <div class="user-message" v-if="logined" style="margin-left: -1.9em">
           <!--          <span>默认微信昵称，可更改</span>-->
           <!--          <span>199****6415</span>-->
-          <span>{{ user.nikeName }}</span>
+          <span>{{ user.nickname }}</span>
           <span>{{ user.phoneNumber }}</span>
         </div>
         <div class="user-message untext" v-else>
@@ -134,7 +134,7 @@ export default {
       loginAuthUrl: '/user/login.html',
       user: {
         avatar: "https://img.yzcdn.cn/vant/cat.jpeg",
-        nikeName: "",
+        nickname: "",
         phoneNumber: ""
       },
       error: {

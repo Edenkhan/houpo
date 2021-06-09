@@ -19,7 +19,7 @@ public class BasicAccessService implements AccessService {
         /**
          * 验证微信签名
          */
-        String token = "ghost";
+        String token = "GHOST";
         List<String> strList = CommonUtil.dictSort(token, timestamp, nonce);
         String s = CommonUtil.listToString(strList);
         String finalStr = CommonUtil.sha1(s, "utf-8");

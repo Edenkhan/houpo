@@ -35,7 +35,7 @@ export default {
       areaList:areaList,
       accountinfo:
       [
-        {title:"昵称",value:"nikeName"},
+        {title:"昵称",value:"nikename"},
         {title:"姓名",value:"realName"},
         {title:"年龄",value:"age"},
         {title:"性别",value:"gender"},

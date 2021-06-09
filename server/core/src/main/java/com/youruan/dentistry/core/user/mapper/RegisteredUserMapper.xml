@@ -12,6 +12,9 @@
     <result property="phoneNumber" column="phoneNumber"/>
     <result property="locked" column="locked"/>
     <result property="gender" column="gender"/>
+    <result property="openid" column="openid"/>
+    <result property="nickname" column="nickname"/>
+    <result property="avatar" column="avatar"/>
   </resultMap>
   <resultMap id="ALL_RESULT" type="com.youruan.dentistry.core.user.vo.UserAllInfoVo" >
     <id property="id" column="id"/>
@@ -23,24 +26,27 @@
     <result property="phoneNumber" column="phoneNumber"/>
     <result property="locked" column="locked"/>
     <result property="gender" column="gender"/>
-    <result property="graduatedCollege" column="graduatedCollege"/>
+    <result property="school" column="school"/>
     <result property="major" column="major"/>
     <result property="education" column="education"/>
-    <result property="expectedOccupation" column="expectedOccupation"/>
-    <result property="expectedAddress" column="expectedAddress"/>
+    <result property="job" column="job"/>
+    <result property="area" column="area"/>
+    <result property="openid" column="openid"/>
+    <result property="nickname" column="nickname"/>
+    <result property="avatar" column="avatar"/>
   </resultMap>
-  <sql id="BASE_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender</sql>
-  <sql id="QUERY_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender</sql>
+  <sql id="BASE_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender,ru.openid,ru.nickname,ru.avatar</sql>
+  <sql id="QUERY_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender,ru.openid,ru.nickname,ru.avatar</sql>
   <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser" extends="BASE_RESULT"/>
-    <sql id="JOIN_COLUMNS">,upi.graduatedCollege,upi.major,upi.education,upi.expectedOccupation,upi.expectedAddress</sql>
+    <sql id="JOIN_COLUMNS">,upi.school,upi.major,upi.education,upi.job,upi.area</sql>
   <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT 
     <include refid="BASE_COLUMNS"/> FROM RegisteredUser ru WHERE id = #{id }
   </select>
   <delete id="delete" parameterType="java.lang.Long">DELETE FROM RegisteredUser WHERE id = #{id}</delete>
 
   <insert id="add" parameterType="com.youruan.dentistry.core.user.domain.RegisteredUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-    INSERT INTO RegisteredUser(id,createdDate,version,no,phoneNumber,avatar,visitor,counselor,locked,gender)
-    VALUES (#{id },#{createdDate},0,#{no},#{phoneNumber},#{avatar},#{visitor},#{counselor},#{locked},#{gender})
+    INSERT INTO RegisteredUser(id,createdDate,version,realName,age,phoneNumber,gender,locked,openid,nickname,avatar)
+    VALUES (#{id },#{createdDate},0,#{realName},#{age},#{phoneNumber},#{gender},#{locked},#{openid},#{nickname},#{avatar})
     </insert>
 
   <update id="update" parameterType="com.youruan.dentistry.core.user.domain.RegisteredUser">
@@ -67,6 +73,8 @@
     <if test="phoneNumber != null">AND ru.phoneNumber = #{phoneNumber}</if>
     <if test="likePhoneNumber != null">AND ru.phoneNumber LIKE CONCAT('%', #{likePhoneNumber} ,'%')</if>
     <if test="locked != null">AND ru.locked = #{locked}</if>
+    <if test="openid != null">AND ru.openid = #{openid}</if>
+    <if test="nickname != null">AND ru.nickname = #{nickname}</if>
     <if test="excludeGenders != null">AND ru.gender NOT IN
       <foreach collection="excludeGenders" item="gender" open="(" close=")" separator=", ">#{gender}</foreach>
     </if>

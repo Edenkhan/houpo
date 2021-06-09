@@ -48,7 +48,18 @@ public class RegisteredUser extends BasicDomain {
      * 
      */
     protected Boolean locked;
-
+    /**
+     * 微信用户唯一id
+     */
+    protected String openid;
+    /**
+     * 微信用户昵称
+     */
+    protected String nickname;
+    /**
+     * 头像
+     */
+    protected String avatar;
     /**
      * 设置性别
      * 

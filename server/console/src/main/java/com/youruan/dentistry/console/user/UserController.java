@@ -10,7 +10,6 @@ import com.youruan.dentistry.core.base.utils.BeanMapUtils;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
-import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
