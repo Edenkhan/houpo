@@ -11,7 +11,7 @@
  Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 07/06/2021 17:59:09
+ Date: 09/06/2021 18:24:28
 */
 
 SET NAMES utf8mb4;
@@ -187,15 +187,20 @@ CREATE TABLE `registereduser`  (
   `gender` tinyint(4) NULL DEFAULT NULL COMMENT '性别',
   `phoneNumber` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
   `locked` bit(1) NULL DEFAULT NULL COMMENT '是否锁定 0-未锁定 1-已锁定',
+  `openid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信用户唯一id',
+  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信用户昵称',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of registereduser
 -- ----------------------------
-INSERT INTO `registereduser` VALUES (1, '2021-06-01 14:53:32', '2021-06-06 14:36:39', 5, '甘乐', 17, 1, '15228943505', b'0');
-INSERT INTO `registereduser` VALUES (2, '2021-06-06 11:50:19', '2021-06-06 14:36:38', 5, 'aaa', 12, 1, '14252415263', b'0');
-INSERT INTO `registereduser` VALUES (3, '2021-06-06 12:02:50', '2021-06-06 15:05:50', 73, 'bbb', 15, 0, '15674859685', b'0');
+INSERT INTO `registereduser` VALUES (1, '2021-06-01 14:53:32', '2021-06-06 14:36:39', 5, '甘乐', 17, 1, '15228943505', b'0', NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (2, '2021-06-06 11:50:19', '2021-06-06 14:36:38', 5, 'aaa', 12, 1, '14252415263', b'0', NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (3, '2021-06-06 12:02:50', '2021-06-06 15:05:50', 73, 'bbb', 15, 0, '15674859685', b'0', NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (8, '2021-06-09 16:28:11', NULL, 0, NULL, NULL, NULL, NULL, NULL, 'o94oc5gI4p4hcPLDBNtflB_w1jKQ', '甘乐', 'https://thirdwx.qlogo.cn/mmopen/vi_32/TMAQqcP5mIFIniagwQ4gxECWiapxvEbibwEQiazIicXpCDiaSGib85NJORIX5vH1we8SufjPOTu9DGicphibrLVhBY8CnibQ/132');
+INSERT INTO `registereduser` VALUES (9, '2021-06-09 16:40:48', NULL, 0, NULL, NULL, NULL, NULL, NULL, 'o94oc5gq7jxxe8ksCl8YYZ1m7BpM', 'Tomas', 'https://thirdwx.qlogo.cn/mmopen/vi_32/vXOazibrfHXk0YR6IAP7MXPMRUscZr0Iicrv9sV8VK9yCX6W7Z1tTZzNZqbRxnegwSdick8ClPE6KfOkc469dgiaicw/132');
 
 -- ----------------------------
 -- Table structure for role
@@ -290,27 +295,27 @@ CREATE TABLE `smsverification`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for userprofessioninfo
+-- Table structure for userotherinfo
 -- ----------------------------
-DROP TABLE IF EXISTS `userprofessioninfo`;
-CREATE TABLE `userprofessioninfo`  (
+DROP TABLE IF EXISTS `userotherinfo`;
+CREATE TABLE `userotherinfo`  (
   `id` bigint(20) NOT NULL COMMENT 'id',
   `createdDate` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `lastModifiedDate` datetime NULL DEFAULT NULL COMMENT '最后一次修改时间',
   `version` int(11) NULL DEFAULT NULL COMMENT '版本',
-  `graduatedCollege` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '毕业学院',
+  `school` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '毕业学院',
   `major` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所学专业',
   `education` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '学历水平',
-  `expectedOccupation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '期望从事职业',
-  `expectedAddress` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '期望就业地址',
+  `job` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '期望从事职业',
+  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '期望就业地址',
   `userId` int(11) NULL DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of userprofessioninfo
+-- Records of userotherinfo
 -- ----------------------------
-INSERT INTO `userprofessioninfo` VALUES (1, '2021-06-06 10:45:05', NULL, 0, '家里蹲大学', '计算机', '本科', 'java', '成都', 1);
-INSERT INTO `userprofessioninfo` VALUES (2, '2021-06-06 11:57:44', NULL, 0, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 2);
+INSERT INTO `userotherinfo` VALUES (1, '2021-06-06 10:45:05', NULL, 0, '家里蹲大学', '计算机', '本科', 'java', '成都', 1);
+INSERT INTO `userotherinfo` VALUES (2, '2021-06-06 11:57:44', NULL, 0, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 2);
 
 SET FOREIGN_KEY_CHECKS = 1;
