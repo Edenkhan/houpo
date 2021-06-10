@@ -105,12 +105,12 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8081',
+        target: 'http://127.0.0.1:8083',
         changeOrigin: false,
         pathRewrite: {'^/api': ''}
       },
       '/files': {
-        target: 'http://127.0.0.1:8081',
+        target: 'http://127.0.0.1:8083',
         changeOrigin: false
       }
     }

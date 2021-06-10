@@ -23,6 +23,16 @@ public class WxUserInfo {
      */
     private Integer sex;
     /**
+     * 性别：「男」
+     *
+     */
+    public final static int SEX_MALE = 1;
+    /**
+     * 性别：「女」
+     *
+     */
+    public final static int SEX_FEMALE = (SEX_MALE + 1);
+    /**
      * 用户个人资料填写的省份
      */
     private String province;

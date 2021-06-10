@@ -4,9 +4,12 @@ package com.youruan.dentistry.core.user.service.impl;
 import com.youruan.dentistry.core.base.exception.OptimismLockingException;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
+import com.youruan.dentistry.core.user.domain.UserOtherInfo;
 import com.youruan.dentistry.core.user.mapper.RegisteredUserMapper;
+import com.youruan.dentistry.core.user.mapper.UserOtherInfoMapper;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
+import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +25,11 @@ public class BasicRegisteredUserService
 {
 
     private final RegisteredUserMapper registeredUserMapper;
+    private final UserOtherInfoMapper userOtherInfoMapper;
 
-    public BasicRegisteredUserService(RegisteredUserMapper registeredUserMapper) {
+    public BasicRegisteredUserService(RegisteredUserMapper registeredUserMapper, UserOtherInfoMapper userOtherInfoMapper) {
         this.registeredUserMapper = registeredUserMapper;
+        this.userOtherInfoMapper = userOtherInfoMapper;
     }
 
     @Override
@@ -47,21 +52,21 @@ public class BasicRegisteredUserService
     }
 
     @Override
-    public List<UserAllInfoVo> list(RegisteredUserQuery qo) {
+    public List<ExtendedRegisteredUser> list(RegisteredUserQuery qo) {
         return registeredUserMapper.query(qo);
     }
 
     @Override
-    public UserAllInfoVo queryOne(RegisteredUserQuery qo) {
+    public ExtendedRegisteredUser queryOne(RegisteredUserQuery qo) {
         qo.setPageSize(1);
-        List<UserAllInfoVo> data = registeredUserMapper.query(qo);
+        List<ExtendedRegisteredUser> data = registeredUserMapper.query(qo);
         return (((data == null)||data.isEmpty())?null:data.get(0));
     }
 
     @Override
-    public Pagination<UserAllInfoVo> query(RegisteredUserQuery qo) {
+    public Pagination<ExtendedRegisteredUser> query(RegisteredUserQuery qo) {
         int rows = registeredUserMapper.count(qo);
-        List<UserAllInfoVo> data = ((rows == 0)?new ArrayList<>():registeredUserMapper.query(qo));
+        List<ExtendedRegisteredUser> data = ((rows == 0)?new ArrayList<>():registeredUserMapper.query(qo));
         return new Pagination<>(rows, data);
     }
 
@@ -88,8 +93,30 @@ public class BasicRegisteredUserService
     }
 
     @Override
-    public RegisteredUser profile() {
-        return null;
+    public void modify(RegisteredUser user, String major, String school, Integer education, String job, String area) {
+        registeredUserMapper.update(user);
+        UserOtherInfo other = userOtherInfoMapper.get(user.getId());
+        if(other == null) {
+            other = new UserOtherInfo();
+            other.setMajor(major);
+            other.setSchool(school);
+            other.setEducation(education);
+            other.setJob(job);
+            other.setArea(area);
+            other.setUserId(user.getId());
+            userOtherInfoMapper.add(other);
+        }else{
+            userOtherInfoMapper.update(other);
+        }
+
+
+    }
+
+    @Override
+    public Pagination<UserAllInfoVo> queryAll(RegisteredUserQuery qo) {
+        int rows = registeredUserMapper.count(qo);
+        List<UserAllInfoVo> data = ((rows == 0)?new ArrayList<>():registeredUserMapper.queryAll(qo));
+        return new Pagination<>(rows, data);
     }
 
 }

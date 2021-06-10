@@ -17,8 +17,8 @@ public class ActivityQuery extends QueryCondition {
     protected Long[] ids;
     protected Date startCreatedDate;
     protected Date endCreatedDate;
-    protected String eventTitle;
-    protected String likeEventTitle;
+    protected String title;
+    protected String likeTitle;
     protected Integer enrollStatus;
     protected Integer releaseStatus;
 

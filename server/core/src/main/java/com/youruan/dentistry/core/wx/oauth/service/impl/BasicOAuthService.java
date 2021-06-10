@@ -3,18 +3,15 @@ package com.youruan.dentistry.core.wx.oauth.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.mapper.RegisteredUserMapper;
-import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
-import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import com.youruan.dentistry.core.wx.base.constant.WxConstant;
 import com.youruan.dentistry.core.wx.base.utils.HttpClientUtils;
 import com.youruan.dentistry.core.wx.oauth.domain.WxResult;
 import com.youruan.dentistry.core.wx.oauth.domain.WxUserInfo;
 import com.youruan.dentistry.core.wx.oauth.service.OAuthService;
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class BasicOAuthService implements OAuthService {
@@ -24,19 +21,24 @@ public class BasicOAuthService implements OAuthService {
         this.registeredUserMapper = registeredUserMapper;
     }
 
+    @Value("${wx.app_id}")
+    private String appId;
+    @Value("${wx.app_secret}")
+    private String appSecret;
+
     @Override
     public WxUserInfo callback(String code, String state) {
         if(state==null || !state.equals("GHOST")) {
             throw new RuntimeException("回調錯誤");
         }
-        String json = HttpClientUtils.doGet(String.format(WxConstant.BASIC_OAUTH_ACCESS_TOKEN_URL,code));
+        String json = HttpClientUtils.doGet(String.format(WxConstant.BASIC_OAUTH_ACCESS_TOKEN_URL,appId,appSecret,code));
         WxResult wxResult = JSON.parseObject(json, WxResult.class);
         return getWxUserInfo(wxResult.getAccessToken(),wxResult.getOpenid());
     }
 
     @Override
     public Long register(WxUserInfo wxUserInfo) {
-        RegisteredUser registeredUser = this.getByOpenid(wxUserInfo.getOpenid());
+        RegisteredUser registeredUser = registeredUserMapper.getByOpenid(wxUserInfo.getOpenid());
         if(registeredUser == null) {
             registeredUser = new RegisteredUser();
             registeredUser.setOpenid(wxUserInfo.getOpenid());
@@ -48,22 +50,6 @@ public class BasicOAuthService implements OAuthService {
         }
 
         return registeredUser.getId();
-    }
-
-    /**
-     * 根据openid查询用户 并返回
-     */
-    private RegisteredUser getByOpenid(String openid) {
-        RegisteredUserQuery qo = new RegisteredUserQuery();
-        qo.setOpenid(openid);
-        List<UserAllInfoVo> list = registeredUserMapper.query(qo);
-        if(list != null && list.size() > 0) {
-            UserAllInfoVo userAllInfoVo = list.get(0);
-            RegisteredUser registeredUser = new RegisteredUser();
-            BeanUtils.copyProperties(userAllInfoVo,registeredUser);
-            return registeredUser;
-        }
-        return null;
     }
 
 

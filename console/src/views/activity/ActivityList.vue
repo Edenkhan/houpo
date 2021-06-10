@@ -11,7 +11,7 @@
       </a-form-model-item>
 
       <a-form-model-item label='活动名称'>
-        <a-input v-model="activityListForm.eventTitle" style="width: 120px"/>
+        <a-input v-model="activityListForm.title" style="width: 120px"/>
       </a-form-model-item>
 
       <a-form-model-item label='报名状态'>
@@ -87,6 +87,10 @@
         <a-tag color="#f5222d" v-else>未发布</a-tag>
       </template>
 
+      <template slot="recentEditor" slot-scope="recentId">
+        {{recentId}}
+      </template>
+
       <template slot="operation" slot-scope="record">
         <a href="javascript:" >查看</a>
         <a-divider type="vertical" />
@@ -120,11 +124,12 @@ const columns = [
   },
   {
     title: '最近编辑人',
-    dataIndex: 'recentEditor'
+    dataIndex: 'recentId',
+    scopedSlots: {customRender: 'recentEditor'}
   },
   {
     title: '活动标题',
-    dataIndex: 'eventTitle'
+    dataIndex: 'title'
   },
   {
     title: '报名人数',

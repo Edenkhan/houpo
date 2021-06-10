@@ -16,7 +16,7 @@
     <result property="nickname" column="nickname"/>
     <result property="avatar" column="avatar"/>
   </resultMap>
-  <resultMap id="ALL_RESULT" type="com.youruan.dentistry.core.user.vo.UserAllInfoVo" >
+  <resultMap id="ALL_RESULT" type="com.youruan.dentistry.core.user.vo.UserAllInfoVo">
     <id property="id" column="id"/>
     <result property="createdDate" column="createdDate"/>
     <result property="lastModifiedDate" column="lastModifiedDate"/>
@@ -26,21 +26,24 @@
     <result property="phoneNumber" column="phoneNumber"/>
     <result property="locked" column="locked"/>
     <result property="gender" column="gender"/>
+    <result property="openid" column="openid"/>
+    <result property="nickname" column="nickname"/>
+    <result property="avatar" column="avatar"/>
     <result property="school" column="school"/>
     <result property="major" column="major"/>
     <result property="education" column="education"/>
-    <result property="job" column="job"/>
     <result property="area" column="area"/>
-    <result property="openid" column="openid"/>
-    <result property="nickname" column="nickname"/>
     <result property="avatar" column="avatar"/>
   </resultMap>
   <sql id="BASE_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender,ru.openid,ru.nickname,ru.avatar</sql>
   <sql id="QUERY_COLUMNS">ru.id, ru.createdDate, ru.lastModifiedDate, ru.version,ru.realName,ru.age,ru.phoneNumber,ru.locked,ru.gender,ru.openid,ru.nickname,ru.avatar</sql>
   <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser" extends="BASE_RESULT"/>
-    <sql id="JOIN_COLUMNS">,upi.school,upi.major,upi.education,upi.job,upi.area</sql>
-  <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT 
+    <sql id="JOIN_COLUMNS">,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area</sql>
+  <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
     <include refid="BASE_COLUMNS"/> FROM RegisteredUser ru WHERE id = #{id }
+  </select>
+  <select id="getByOpenid" resultMap="BASE_RESULT" parameterType="java.lang.String">SELECT
+    <include refid="BASE_COLUMNS"/> FROM RegisteredUser ru WHERE openid = #{openid}
   </select>
   <delete id="delete" parameterType="java.lang.Long">DELETE FROM RegisteredUser WHERE id = #{id}</delete>
 
@@ -61,7 +64,7 @@
     <where>id = #{id} AND version = #{version}</where>
   </update>
 
-  <sql id="QUERY_JOIN">left join userprofessioninfo upi on ru.id = upi.userId</sql>
+  <sql id="QUERY_JOIN">left join Userotherinfo uoi on ru.id = uoi.userId</sql>
   <sql id="QUERY_WHERE_SQL">
     <if test="ids != null">AND ru.id IN
       <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
@@ -73,8 +76,6 @@
     <if test="phoneNumber != null">AND ru.phoneNumber = #{phoneNumber}</if>
     <if test="likePhoneNumber != null">AND ru.phoneNumber LIKE CONCAT('%', #{likePhoneNumber} ,'%')</if>
     <if test="locked != null">AND ru.locked = #{locked}</if>
-    <if test="openid != null">AND ru.openid = #{openid}</if>
-    <if test="nickname != null">AND ru.nickname = #{nickname}</if>
     <if test="excludeGenders != null">AND ru.gender NOT IN
       <foreach collection="excludeGenders" item="gender" open="(" close=")" separator=", ">#{gender}</foreach>
     </if>
@@ -99,7 +100,13 @@
     <include refid="QUERY_JOIN"/>
     <include refid="QUERY_WHERE"/>
   </select>
-  <select id="query" parameterType="com.youruan.dentistry.core.user.query.RegisteredUserQuery" resultMap="ALL_RESULT">SELECT
+  <select id="query" parameterType="com.youruan.dentistry.core.user.query.RegisteredUserQuery" resultMap="VO_RESULT">SELECT
+    <include refid="QUERY_COLUMNS"/> FROM RegisteredUser AS ru
+    <include refid="QUERY_WHERE"/>
+    <include refid="QUERY_ORDER_BY"/>
+    <include refid="QUERY_LIMIT"/>
+  </select>
+  <select id="queryAll" parameterType="com.youruan.dentistry.core.user.query.RegisteredUserQuery" resultMap="ALL_RESULT">SELECT
     <include refid="QUERY_COLUMNS"/>
     <include refid="JOIN_COLUMNS"/> FROM RegisteredUser AS ru
     <include refid="QUERY_JOIN"/>

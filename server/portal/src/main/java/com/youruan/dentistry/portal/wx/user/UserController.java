@@ -9,11 +9,11 @@ import com.youruan.dentistry.core.user.service.UserOtherInfoService;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
 import com.youruan.dentistry.portal.base.utils.SessionUtils;
+import com.youruan.dentistry.portal.wx.user.form.UserEditForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -30,15 +30,16 @@ public class UserController {
 
     @GetMapping("/get")
     @RequiresAuthentication
-    public ResponseEntity<?> get() {
-        Long userId = SessionUtils.getAuthenticated();
-        RegisteredUser userBasicInfo = registeredUserService.get(userId);
-        UserOtherInfo userOtherInfo = userOtherInfoService.get(userId);
+    public ResponseEntity<?> get(RegisteredUser user) {
+        RegisteredUser userBasicInfo = registeredUserService.get(user.getId());
+        UserOtherInfo userOtherInfo = userOtherInfoService.get(user.getId());
         UserAllInfoVo userAllInfoVo = new UserAllInfoVo();
         BeanUtils.copyProperties(userBasicInfo,userAllInfoVo);
         BeanUtils.copyProperties(userOtherInfo,userAllInfoVo);
+        System.out.println("userAllInfoVo = "+userAllInfoVo);
         return ResponseEntity.ok(BeanMapUtils.pick(userAllInfoVo,
-                "id","avatar","nickname","phoneNumber"));
+                "id","avatar","nickname","realName","age",
+                "gender","major","school","education","job","area"));
     }
 
     /**
@@ -49,6 +50,27 @@ public class UserController {
     public ResponseEntity<?> profile() {
         Long userId = SessionUtils.getAuthenticated();
         RegisteredUser user = registeredUserService.get(userId);
+        return ResponseEntity.ok(ImmutableMap.builder()
+                .put("user", BeanMapUtils.pick(user,
+                        "id","avatar","nickname","phoneNumber"))
+                .build());
+    }
+
+    /**
+     * 修改用户个人信息
+     */
+    @PostMapping("/edit")
+    @RequiresAuthentication
+    public ResponseEntity<?> edit(@RequestBody UserEditForm form) {
+        RegisteredUser user = registeredUserService.get(form.getId());
+        Assert.notNull(user,"必须提供用户");
+        BeanUtils.copyProperties(form,user);
+        registeredUserService.modify(user,
+                form.getMajor(),
+                form.getSchool(),
+                form.getEducation(),
+                form.getJob(),
+                form.getArea());
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("user", BeanMapUtils.pick(user,
                         "id","avatar","nickname","phoneNumber"))

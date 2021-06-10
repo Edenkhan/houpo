@@ -21,12 +21,12 @@ public interface ActivityService {
     /**
      * 添加活动
      */
-    Activity create(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus);
+    Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId);
 
     /**
      * 修改活动
      */
-    void update(Activity activity, String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus, String recentEditor);
+    void update(Activity activity, String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId);
     /**
      * 上传活动
      */

@@ -57,11 +57,11 @@
         <p>手机号：<PhoneNumber :value="userBasicInfo.phoneNumber"/></p>
       </template>
       <template slot="userProfessionInfo" slot-scope="userProfessionInfo">
-        <p>毕业院校：{{userProfessionInfo.graduatedCollege}}</p>
+        <p>毕业院校：{{userProfessionInfo.school}}</p>
         <p>所学专业：{{userProfessionInfo.major}}</p>
         <p>学历水平：{{userProfessionInfo.education}}</p>
-        <p>期望从事职业：{{userProfessionInfo.expectedOccupation}}</p>
-        <p>期望就业地址：{{userProfessionInfo.expectedAddress}}</p>
+        <p>期望从事职业：{{userProfessionInfo.job}}</p>
+        <p>期望就业地址：{{userProfessionInfo.area}}</p>
       </template>
       <template slot="status" slot-scope="status">
 
@@ -210,11 +210,11 @@
                   phoneNumber: item.phoneNumber
                 },
                 userProfessionInfo: {
-                  graduatedCollege: item.graduatedCollege,
+                  school: item.school,
                   major: item.major,
                   education: item.education,
-                  expectedOccupation: item.expectedOccupation,
-                  expectedAddress: item.expectedAddress,
+                  job: item.job,
+                  area: item.area,
                 },
                 locked: item.locked
               }

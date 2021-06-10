@@ -41,17 +41,16 @@ public class BasicActivityService implements ActivityService {
     }
 
     @Override
-    public Activity create(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus) {
-        checkActivity(eventTitle,eventImage,eventContent,enrollStatus,releaseStatus);
-        if(checkAddEventTitle(eventTitle)) {
-            throw new RuntimeException("添加失败,活动标题重复");
-        }
+    public Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
+        checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
+        Assert.isTrue(!checkAddtitle(title),"活动标题重复");
         Activity activity = new Activity();
-        activity.setEventTitle(eventTitle);
-        activity.setEventImage(eventImage);
-        activity.setEventContent(eventContent);
+        activity.setTitle(title);
+        activity.setImageUrl(imageUrl);
+        activity.setContent(content);
         activity.setEnrollStatus(enrollStatus);
         activity.setReleaseStatus(releaseStatus);
+        activity.setRecentId(recentId);
         return add(activity);
     }
 
@@ -59,9 +58,9 @@ public class BasicActivityService implements ActivityService {
      * 检查添加活动时，活动标题是否重复
      * 重复返回 true
      */
-    private boolean checkAddEventTitle(String eventTitle) {
+    private boolean checkAddtitle(String title) {
         ActivityQuery qo = new ActivityQuery();
-        qo.setEventTitle(eventTitle);
+        qo.setTitle(title);
         int count = activityMapper.count(qo);
         return count > 0;
     }
@@ -69,12 +68,14 @@ public class BasicActivityService implements ActivityService {
     /**
      * 判断活动属性是否为空
      */
-    private void checkActivity(String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus) {
-        Assert.notNull(eventTitle,"活动标题不能为空");
-        Assert.notNull(eventImage,"活动图片不能为空");
-        Assert.notNull(eventContent,"活动内容不能为空");
+    private void checkActivity(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
+        Assert.notNull(title,"活动标题不能为空");
+        Assert.notNull(imageUrl,"活动图片不能为空");
+        Assert.notNull(content,"活动内容不能为空");
         Assert.notNull(enrollStatus,"报名状态不能为空");
         Assert.notNull(releaseStatus,"发布状态不能为空");
+        Assert.notNull(releaseStatus,"发布状态不能为空");
+        Assert.notNull(recentId,"最近编辑人id不能为空");
     }
 
     private Activity add(Activity activity) {
@@ -84,18 +85,16 @@ public class BasicActivityService implements ActivityService {
     }
 
     @Override
-    public void update(Activity activity, String eventTitle, String eventImage, String eventContent, Integer enrollStatus, Integer releaseStatus, String recentEditor) {
-        checkActivity(eventTitle,eventImage,eventContent,enrollStatus,releaseStatus);
+    public void update(Activity activity, String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
+        checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
         Assert.notNull(activity, "必须提供活动");
-        if(checkUpdateEventTitle(activity,eventTitle)) {
-            throw new RuntimeException("修改失败,活动标题重复");
-        }
-        activity.setEventTitle(eventTitle);
-        activity.setEventImage(eventImage);
-        activity.setEventContent(eventContent);
+        Assert.isTrue(!checkUpdatetitle(activity,content),"活动标题重复");
+        activity.setTitle(title);
+        activity.setImageUrl(imageUrl);
+        activity.setContent(content);
         activity.setEnrollStatus(enrollStatus);
         activity.setReleaseStatus(releaseStatus);
-        activity.setRecentEditor(recentEditor);
+        activity.setRecentId(recentId);
         update(activity);
     }
 
@@ -103,11 +102,11 @@ public class BasicActivityService implements ActivityService {
      * 检查修改活动时，活动标题是否重复
      * 重复返回 true
      */
-    private boolean checkUpdateEventTitle(Activity activity, String eventTitle) {
+    private boolean checkUpdatetitle(Activity activity, String title) {
         ActivityQuery qo = new ActivityQuery();
-        qo.setEventTitle(eventTitle);
+        qo.setTitle(title);
         int count = activityMapper.count(qo);
-        return count > 0 && !activity.getEventTitle().equals(eventTitle);
+        return count > 0 && !activity.getTitle().equals(title);
     }
 
     @Override

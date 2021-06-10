@@ -19,7 +19,7 @@ public class ActivityListForm extends ListForm {
     /**
      * 活动标题
      */
-    private String eventTitle;
+    private String title;
     /**
      * 报名状态 0-关闭 1-开启
      */
@@ -37,7 +37,7 @@ public class ActivityListForm extends ListForm {
         qo.setPage(getPage());
         qo.setStartCreatedDate(startCreatedDate);
         qo.setEndCreatedDate(endCreatedDate);
-        qo.setLikeEventTitle(eventTitle);
+        qo.setLikeTitle(title);
         qo.setEnrollStatus(enrollStatus);
         qo.setReleaseStatus(releaseStatus);
         if ("createdDate".equals(getSortField())) {

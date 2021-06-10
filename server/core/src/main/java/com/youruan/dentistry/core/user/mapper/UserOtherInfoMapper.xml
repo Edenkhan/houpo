@@ -17,14 +17,14 @@
   <sql id="QUERY_COLUMNS">uoi.id, uoi.createdDate, uoi.lastModifiedDate, uoi.version,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area</sql>
   <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.user.vo.ExtendedUserOtherInfo" extends="BASE_RESULT"/>
     <sql id="JOIN_COLUMNS"></sql>
-  <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT 
-    <include refid="BASE_COLUMNS"/> FROM UserOtherInfo uoi WHERE id = #{id }
+  <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
+    <include refid="BASE_COLUMNS"/> FROM UserOtherInfo uoi WHERE userId = #{userId}
   </select>
   <delete id="delete" parameterType="java.lang.Long">DELETE FROM UserOtherInfo WHERE id = #{id}</delete>
 
   <insert id="add" parameterType="com.youruan.dentistry.core.user.domain.UserOtherInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-    INSERT INTO UserOtherInfo(id,createdDate,version,school,major,education,area,job)
-    VALUES (#{id },#{createdDate},0,#{school},#{major},#{education},#{area},#{job})
+    INSERT INTO UserOtherInfo(id,createdDate,version,school,major,education,area,job,userId)
+    VALUES (#{id },#{createdDate},0,#{school},#{major},#{education},#{area},#{job},#{userId})
     </insert>
 
   <update id="update" parameterType="com.youruan.dentistry.core.user.domain.UserOtherInfo">
@@ -36,43 +36,7 @@
         <if test="job != null">job = #{job},</if>
         <if test="area != null">area = #{area},</if>
     </set>
-    <where>id = #{id} AND version = #{version}</where>
+    <where>userId = #{userId} AND version = #{version}</where>
   </update>
 
-  <sql id="QUERY_JOIN"></sql>
-  <sql id="QUERY_WHERE_SQL">
-    <if test="ids != null">AND uoi.id IN
-      <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
-    </if>
-    <if test="startCreatedDate != null">AND uoi.createdDate &gt;= #{startCreatedDate }</if>
-    <if test="endCreatedDate != null">AND uoi.createdDate &lt;= #{endCreatedDate }</if>
-    <if test="school != null">AND uoi.school = #{school}</if>
-    <if test="education != null">AND uoi.education = #{education}</if>
-    <if test="job != null">AND uoi.job = #{job}</if>
-  </sql>
-  <sql id="QUERY_WHERE">
-    <where>
-      <include refid="QUERY_WHERE_SQL"/>
-    </where>
-  </sql>
-  <sql id="QUERY_ORDER_BY">
-    <if test="orderBys.size() &gt; 0">ORDER BY
-      <foreach collection="orderBys" item="value" index="key" separator=", ">uoi.${key} ${value}</foreach>
-    </if>
-  </sql>
-  <sql id="QUERY_LIMIT">
-    <if test="pmajorSize &gt; 0">LIMIT ${start}, ${pmajorSize}</if>
-  </sql>
-  <select id="count" parameterType="com.youruan.dentistry.core.user.query.UserOtherInfoQuery" resultType="java.lang.Integer">SELECT COUNT(*) FROM UserOtherInfo AS ru
-    <include refid="QUERY_JOIN"/>
-    <include refid="QUERY_WHERE"/>
-  </select>
-  <select id="query" parameterType="com.youruan.dentistry.core.user.query.UserOtherInfoQuery" resultMap="ALL_RESULT">SELECT
-    <include refid="QUERY_COLUMNS"/>
-    <include refid="JOIN_COLUMNS"/> FROM UserOtherInfo AS uoi
-    <include refid="QUERY_JOIN"/>
-    <include refid="QUERY_WHERE"/>
-    <include refid="QUERY_ORDER_BY"/>
-    <include refid="QUERY_LIMIT"/>
-  </select>
 </mapper>

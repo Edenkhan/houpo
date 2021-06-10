@@ -23,8 +23,8 @@ public class BasicUserOtherInfoService
     }
 
     @Override
-    public UserOtherInfo get(Long id) {
-        return userOtherInfoMapper.get(id);
+    public UserOtherInfo get(Long userId) {
+        return userOtherInfoMapper.get(userId);
     }
 
     @Override

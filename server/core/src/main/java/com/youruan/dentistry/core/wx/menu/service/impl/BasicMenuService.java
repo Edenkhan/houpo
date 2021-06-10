@@ -19,25 +19,29 @@ public class BasicMenuService implements MenuService {
 
     @Value("${wx.domain}")
     private String domain;
+    @Value("${wx.app_id}")
+    private String appId;
+    @Value("${wx.app_secret}")
+    private String appSecret;
 
     @Override
     public void define() {
 
         try {
             //获取响应内容
-            String json = HttpClientUtils.doGet(WxConstant.ACCESS_TOKEN_URL);
+            String json = HttpClientUtils.doGet(String.format(WxConstant.ACCESS_TOKEN_URL,appId,appSecret));
             Map<String, String> resultMap = JSON.parseObject(json, Map.class);
             //定义click类型菜单
-//            ClickButton clickButton = new ClickButton();
-//            clickButton.setType("click");
-//            clickButton.setName("测试click");
-//            clickButton.setKey("rselfmenu_0_0");
+            /*ClickButton clickButton = new ClickButton();
+            clickButton.setType("click");
+            clickButton.setName("测试click");
+            clickButton.setKey("rselfmenu_0_0");*/
             //定义view类型菜单
             ViewButton viewButton = new ViewButton();
             viewButton.setType("view");
             viewButton.setName("授权登录");
             String encodeUrl = URLEncoder.encode(domain + WxConstant.REDIRECT_URI, "UTF-8");
-            viewButton.setUrl(String.format(WxConstant.BASIC_OAUTH_URL,encodeUrl));
+            viewButton.setUrl(String.format(WxConstant.BASIC_OAUTH_URL,appId,encodeUrl));
             //定义1级菜单
             OneMenu oneMenu = new OneMenu();
             oneMenu.setName("厚朴人才");

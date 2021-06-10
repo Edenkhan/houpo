@@ -5,7 +5,6 @@ import com.youruan.dentistry.console.activity.form.ActivityAddForm;
 import com.youruan.dentistry.console.activity.form.ActivityEditForm;
 import com.youruan.dentistry.console.activity.form.ActivityListForm;
 import com.youruan.dentistry.console.base.interceptor.RequiresPermission;
-import com.youruan.dentistry.console.base.utils.SessionUtils;
 import com.youruan.dentistry.core.activity.domain.Activity;
 import com.youruan.dentistry.core.activity.query.ActivityQuery;
 import com.youruan.dentistry.core.activity.service.ActivityService;
@@ -13,6 +12,7 @@ import com.youruan.dentistry.core.activity.vo.ExtendedActivity;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.UploadFile;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
+import com.youruan.dentistry.core.platform.domain.Employee;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/activity")
@@ -36,13 +34,14 @@ public class ActivityController {
 
     @PostMapping("/add")
     @RequiresPermission(value = "activity.activity.add", description = "活动-添加")
-    public ResponseEntity<?> add(ActivityAddForm form) {
+    public ResponseEntity<?> add(ActivityAddForm form,Employee employee) {
         Activity activity = activityService.create(
-                form.getEventTitle(),
-                form.getEventImage(),
-                form.getEventContent(),
+                form.getTitle(),
+                form.getImageUrl(),
+                form.getContent(),
                 form.getEnrollStatus(),
-                form.getReleaseStatus());
+                form.getReleaseStatus(),
+                employee.getId());
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id", activity.getId())
                 .build());
@@ -50,16 +49,16 @@ public class ActivityController {
 
     @PostMapping("/edit")
     @RequiresPermission(value = "activity.activity.edit", description = "活动-修改")
-    public ResponseEntity<?> edit(ActivityEditForm form) {
+    public ResponseEntity<?> edit(ActivityEditForm form, Employee employee) {
         Activity activity = activityService.get(form.getId());
         activityService.update(
                 activity,
-                form.getEventTitle(),
-                form.getEventImage(),
-                form.getEventContent(),
+                form.getTitle(),
+                form.getImageUrl(),
+                form.getContent(),
                 form.getEnrollStatus(),
                 form.getReleaseStatus(),
-                SessionUtils.getAuthenticated());
+                employee.getId());
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id", activity.getId())
                 .build());
@@ -73,7 +72,7 @@ public class ActivityController {
         Pagination<ExtendedActivity> pagination = activityService.query(qo);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("data", BeanMapUtils.pick(pagination.getData(),
-                        "id","createdDate","lastModifiedDate","recentEditor","eventTitle","numberOfEntries","enrollStatus","releaseStatus"))
+                        "id","createdDate","lastModifiedDate","recentId","title","numberOfEntries","enrollStatus","releaseStatus"))
                 .put("rows",pagination.getRows())
                 .build());
     }
@@ -83,7 +82,7 @@ public class ActivityController {
     public ResponseEntity<?> get(Long id) {
         Activity activity = activityService.get(id);
         return ResponseEntity.ok(BeanMapUtils.pick(activity,
-                "eventTitle","eventImage","eventContent","enrollStatus","releaseStatus"));
+                "title","imageUrl","content","enrollStatus","releaseStatus"));
     }
 
 
@@ -94,11 +93,8 @@ public class ActivityController {
         uploadFile.setOriginalFilename(file.getOriginalFilename());
         uploadFile.setInputStream(file.getInputStream());
         uploadFile.setSize(file.getSize());
-        String eventImage = activityService.upload(uploadFile);
-        Map<String,String> resultMap = new HashMap<>();
-        System.out.println("eventImage = "+eventImage);
-        resultMap.put("eventImage",eventImage);
-        return ResponseEntity.ok(resultMap);
+        String imageUrl = activityService.upload(uploadFile);
+        return ResponseEntity.ok(ImmutableMap.builder().put("imageUrl",imageUrl).build());
     }
     
 

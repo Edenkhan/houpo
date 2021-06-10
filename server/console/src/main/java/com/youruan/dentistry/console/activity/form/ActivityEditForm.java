@@ -11,9 +11,9 @@ import lombok.Setter;
 public class ActivityEditForm {
 
     private Long id;
-    private String eventTitle;
-    private String eventImage;
-    private String eventContent;
+    private String title;
+    private String imageUrl;
+    private String content;
     private Integer enrollStatus;
     private Integer releaseStatus;
 

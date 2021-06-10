@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/banner")
@@ -91,10 +89,7 @@ public class BannerController {
         uploadFile.setInputStream(file.getInputStream());
         uploadFile.setSize(file.getSize());
         String imageUrl = bannerService.upload(uploadFile);
-        Map<String,String> resultMap = new HashMap<>();
-        System.out.println("imageUrl = "+imageUrl);
-        resultMap.put("imageUrl",imageUrl);
-        return ResponseEntity.ok(resultMap);
+        return ResponseEntity.ok(ImmutableMap.builder().put("imageUrl",imageUrl).build());
     }
     
 

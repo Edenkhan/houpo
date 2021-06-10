@@ -32,7 +32,7 @@ export default {
       gender: { 0: "女",1: "男" },
       education: {0: "高中及以下", 1: "大专", 2: "本科", 3: "硕士", 4: "博士及以上"},
       accounts:{},
-      areaList:areaList,
+      areaList: areaList,
       accountinfo:
       [
         {title:"昵称",value:"nikename"},
@@ -53,8 +53,8 @@ export default {
             this.accounts.gender = this.gender[data.gender]
             this.accounts.education = this.education[data.education]
             if (data.area != null){
-                let province = this.areaList.province_list[data.area.substring(0,2)+"0000"];
-                this.accounts.area = province + "-" + this.areaList.city_list[data.area];
+              let province = this.areaList.province_list[data.area.substring(0,2)+"0000"];
+              this.accounts.area = province + "-" + this.areaList.city_list[data.area];
             }
 
             this.avatar = data["avatar"]

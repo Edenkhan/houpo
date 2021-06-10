@@ -15,10 +15,10 @@ public class BasicAccessService implements AccessService {
         return checkSignature(signature,timestamp,nonce) ? echostr : null;
     }
 
+    /**
+     * 验证微信签名
+     */
     private boolean checkSignature(String signature,String timestamp,String nonce){
-        /**
-         * 验证微信签名
-         */
         String token = "GHOST";
         List<String> strList = CommonUtil.dictSort(token, timestamp, nonce);
         String s = CommonUtil.listToString(strList);

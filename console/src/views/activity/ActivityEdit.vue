@@ -2,7 +2,7 @@
   <div class="edit-container">
     <a-form-model @submit="handleSubmit" :loading="loading" :label-col="{ span: 4 }" :wrapper-col="{ span: 8 }">
       <a-form-model-item autocomplete="off" label="活动标题" >
-        <a-input autofocus v-model="activityForm.eventTitle" />
+        <a-input autofocus v-model="activityForm.title" />
       </a-form-model-item>
 
       <a-form-model-item label="活动图片">
@@ -15,7 +15,7 @@
           :before-upload="beforeUpload"
           @change="handleChange"
         >
-          <img v-if="activityForm.eventImage" :src="activityForm.eventImage" alt="picture" />
+          <img v-if="activityForm.imageUrl" :src="activityForm.imageUrl" alt="picture" />
           <div v-else>
             <a-icon :type="loading ? 'loading' : 'plus'" />
             <div class="ant-upload-text">
@@ -108,7 +108,7 @@ import E from 'wangeditor'
           .then(data => {
             this.activityForm = data
             //回顯富文本
-            this.editor.txt.html(data.eventContent)
+            this.editor.txt.html(data.content)
             this.fetching = false
           })
           .catch(({message}) => {
@@ -153,14 +153,14 @@ import E from 'wangeditor'
         }
         this.activityForm = Object.assign({},this.activityForm,{
           // 富文本内容
-          eventContent: this.editor.txt.html()
+          content: this.editor.txt.html()
         })
         this.save(this.activityForm)
       },
 
       handleChange(info) {
         if (info.file.status === 'done') {
-          this.activityForm.eventImage = info.file.response.eventImage
+          this.activityForm.imageUrl = info.file.response.imageUrl
         }
 
       },

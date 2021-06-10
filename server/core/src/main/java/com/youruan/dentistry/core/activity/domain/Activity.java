@@ -13,15 +13,15 @@ public class Activity extends BasicDomain {
     /**
      * 活动标题
      */
-    private String eventTitle;
+    private String title;
     /**
      * 活动图片
      */
-    private String eventImage;
+    private String imageUrl;
     /**
      * 活动内容
      */
-    private String eventContent;
+    private String content;
     /**
      * 报名人数
      */
@@ -51,9 +51,9 @@ public class Activity extends BasicDomain {
      */
     public static final int ENROLL_STATUS_OPEN = (ENROLL_STATUS_CLOSE + 1);
     /**
-     * 最近编辑人
+     * 最近编辑人id
      */
-    private String recentEditor;
+    private Long recentId;
 
 
 }

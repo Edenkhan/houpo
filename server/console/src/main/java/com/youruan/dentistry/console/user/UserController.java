@@ -52,12 +52,13 @@ public class UserController {
     @RequiresPermission(value = "user.user.list", description = "用户-列表")
     public ResponseEntity<?> list(UserListForm form) {
         RegisteredUserQuery qo = form.buildQuery();
-        Pagination<UserAllInfoVo> pagination = registeredUserService.query(qo);
+        Pagination<UserAllInfoVo> pagination = registeredUserService.queryAll(qo);
+        System.out.println("all = "+pagination.getData());
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("data", BeanMapUtils.pick(pagination.getData(),
                         "id", "createdDate","realName",
                         "age","gender", "phoneNumber", "locked",
-                        "graduatedCollege","major","education","expectedOccupation","expectedAddress"
+                        "school","major","education","job","area"
                         ))
                 .put("rows", pagination.getRows())
                 .build());

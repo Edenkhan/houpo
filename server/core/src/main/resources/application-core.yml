@@ -27,4 +27,6 @@ dentistry:
               template: message/sms/verification/borrowRequest.mustache
 
 wx:
-  domain: http://7yh27d.natappfree.cc
+  domain: http://portalx.ymys.usooft.com
+  app_id: wxfcffb0d00f2da17b
+  app_secret: 2fcf880c2503141e09bb0a55623f82f1
