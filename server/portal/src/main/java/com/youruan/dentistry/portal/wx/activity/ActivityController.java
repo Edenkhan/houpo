@@ -29,7 +29,7 @@ public class ActivityController {
         ActivityQuery query = new ActivityQuery();
         query.setReleaseStatus(Activity.RELEASE_STATUS_OPEN);
         Pagination<ExtendedActivity> pagination = activityService.query(query);
-        return ResponseEntity.ok(ImmutableMap.builder().put("data", BeanMapUtils.pick(pagination,
+        return ResponseEntity.ok(ImmutableMap.builder().put("data", BeanMapUtils.pick(pagination.getData(),
                 "id","title","imageUrl","opened","registered")).build());
     }
 
