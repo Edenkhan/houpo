@@ -72,7 +72,7 @@ public class ActivityController {
         Pagination<ExtendedActivity> pagination = activityService.query(qo);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("data", BeanMapUtils.pick(pagination.getData(),
-                        "id","createdDate","lastModifiedDate","recentId","title","numberOfEntries","enrollStatus","releaseStatus"))
+                        "id","createdDate","lastModifiedDate","recentEditor","title","numberOfEntries","enrollStatus","releaseStatus"))
                 .put("rows",pagination.getRows())
                 .build());
     }

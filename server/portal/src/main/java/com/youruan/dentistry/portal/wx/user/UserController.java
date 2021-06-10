@@ -36,7 +36,6 @@ public class UserController {
         UserAllInfoVo userAllInfoVo = new UserAllInfoVo();
         BeanUtils.copyProperties(userBasicInfo,userAllInfoVo);
         BeanUtils.copyProperties(userOtherInfo,userAllInfoVo);
-        System.out.println("userAllInfoVo = "+userAllInfoVo);
         return ResponseEntity.ok(BeanMapUtils.pick(userAllInfoVo,
                 "id","avatar","nickname","realName","age",
                 "gender","major","school","education","job","area"));
@@ -61,7 +60,7 @@ public class UserController {
      */
     @PostMapping("/edit")
     @RequiresAuthentication
-    public ResponseEntity<?> edit(@RequestBody UserEditForm form) {
+    public ResponseEntity<?> edit(UserEditForm form) {
         RegisteredUser user = registeredUserService.get(form.getId());
         Assert.notNull(user,"必须提供用户");
         BeanUtils.copyProperties(form,user);

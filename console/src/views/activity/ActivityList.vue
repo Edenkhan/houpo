@@ -124,8 +124,7 @@ const columns = [
   },
   {
     title: '最近编辑人',
-    dataIndex: 'recentId',
-    scopedSlots: {customRender: 'recentEditor'}
+    dataIndex: 'recentEditor'
   },
   {
     title: '活动标题',
@@ -210,7 +209,7 @@ export default {
       this.loading = true
       listActivity(this.activityListForm).then(({data, rows}) => {
         this.data = data
-        console.log(this.data)
+        console.log(data)
         this.pagination = Object.assign({}, this.pagination, {
           total: rows
         });

@@ -14,11 +14,12 @@
         <result property="releaseStatus" column="releaseStatus"/>
         <result property="enrollStatus" column="enrollStatus"/>
         <result property="recentId" column="recentId"/>
+        <result property="recentEditor" column="recentEditor"/>
     </resultMap>
     <sql id="BASE_COLUMNS">a.id, a.createdDate, a.lastModifiedDate, a.version,a.title,a.imageUrl,a.content,a.numberOfEntries,a.releaseStatus,a.enrollStatus,a.recentId</sql>
     <sql id="QUERY_COLUMNS">a.id, a.createdDate, a.lastModifiedDate, a.version,a.title,a.imageUrl,a.content,a.numberOfEntries,a.releaseStatus,a.enrollStatus,a.recentId</sql>
     <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.activity.vo.ExtendedActivity" extends="BASE_RESULT"/>
-    <sql id="JOIN_COLUMNS"/>
+    <sql id="JOIN_COLUMNS">,e.realName AS recentEditor</sql>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
         <include refid="BASE_COLUMNS"/> FROM Activity a WHERE id = #{id }
     </select>
@@ -45,7 +46,7 @@
         <where>id = #{id} AND version = #{version}</where>
     </update>
 
-    <sql id="QUERY_JOIN"/>
+    <sql id="QUERY_JOIN">left join employee e on a.recentId = e.id</sql>
     <sql id="QUERY_WHERE_SQL">
         <if test="ids != null">AND a.id IN
             <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
@@ -73,7 +74,6 @@
     </sql>
     <select id="count" parameterType="com.youruan.dentistry.core.activity.query.ActivityQuery" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM Activity AS a
-        <include refid="QUERY_JOIN"/>
         <include refid="QUERY_WHERE"/>
     </select>
     <select id="query" parameterType="com.youruan.dentistry.core.activity.query.ActivityQuery" resultMap="VO_RESULT">

@@ -56,12 +56,12 @@
         <p>性别：{{userBasicInfo.gender}}</p>
         <p>手机号：<PhoneNumber :value="userBasicInfo.phoneNumber"/></p>
       </template>
-      <template slot="userProfessionInfo" slot-scope="userProfessionInfo">
-        <p>毕业院校：{{userProfessionInfo.school}}</p>
-        <p>所学专业：{{userProfessionInfo.major}}</p>
-        <p>学历水平：{{userProfessionInfo.education}}</p>
-        <p>期望从事职业：{{userProfessionInfo.job}}</p>
-        <p>期望就业地址：{{userProfessionInfo.area}}</p>
+      <template slot="userOtherInfo" slot-scope="userOtherInfo">
+        <p>毕业院校：{{userOtherInfo.school}}</p>
+        <p>所学专业：{{userOtherInfo.major}}</p>
+        <p>学历水平：{{userOtherInfo.education}}</p>
+        <p>期望从事职业：{{userOtherInfo.job}}</p>
+        <p>期望就业地址：{{userOtherInfo.area}}</p>
       </template>
       <template slot="status" slot-scope="status">
 
@@ -114,8 +114,8 @@
     },
     {
       title: '职业信息',
-      dataIndex: 'userProfessionInfo',
-      scopedSlots: {customRender: 'userProfessionInfo'}
+      dataIndex: 'userOtherInfo',
+      scopedSlots: {customRender: 'userOtherInfo'}
     },
     {
       title: '状态',
@@ -209,7 +209,7 @@
                   gender: item.gender,
                   phoneNumber: item.phoneNumber
                 },
-                userProfessionInfo: {
+                userOtherInfo: {
                   school: item.school,
                   major: item.major,
                   education: item.education,
