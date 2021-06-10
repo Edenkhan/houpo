@@ -11,7 +11,7 @@ import lombok.Setter;
 public class BannerEditForm {
 
     private Long id;
-    private String bannerName;
+    private String name;
     private String linkUrl;
     private Integer status;
     private String imageUrl;

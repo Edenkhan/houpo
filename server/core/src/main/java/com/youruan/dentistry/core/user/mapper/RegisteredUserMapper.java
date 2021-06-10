@@ -17,9 +17,9 @@ public interface RegisteredUserMapper {
 
     public RegisteredUser get(Long id);
 
-    public int update(RegisteredUser registeredUser);
+    public int update(RegisteredUser user);
 
-    public int add(RegisteredUser registeredUser);
+    public int add(RegisteredUser user);
 
     public int delete(Long id);
 

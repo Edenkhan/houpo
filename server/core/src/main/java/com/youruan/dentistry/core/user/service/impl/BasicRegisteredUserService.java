@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service("registeredUserService")
+@Service
 public class BasicRegisteredUserService
     implements RegisteredUserService
 {
@@ -93,24 +93,31 @@ public class BasicRegisteredUserService
     }
 
     @Override
+    @Transactional
     public void modify(RegisteredUser user, String major, String school, Integer education, String job, String area) {
         registeredUserMapper.update(user);
         UserOtherInfo other = userOtherInfoMapper.get(user.getId());
         if(other == null) {
             other = new UserOtherInfo();
-            other.setMajor(major);
-            other.setSchool(school);
-            other.setEducation(education);
-            other.setJob(job);
-            other.setArea(area);
+            setProperties(major, school, education, job, area, other);
             other.setUserId(user.getId());
             userOtherInfoMapper.add(other);
         }else{
+            setProperties(major, school, education, job, area, other);
+            System.out.println("other.getUserID = "+other.getUserId());
             userOtherInfoMapper.update(other);
         }
 
-
     }
+
+    private void setProperties(String major, String school, Integer education, String job, String area, UserOtherInfo other) {
+        other.setMajor(major);
+        other.setSchool(school);
+        other.setEducation(education);
+        other.setJob(job);
+        other.setArea(area);
+    }
+
 
     @Override
     public Pagination<UserAllInfoVo> queryAll(RegisteredUserQuery qo) {

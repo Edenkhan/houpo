@@ -57,6 +57,8 @@
     <set>
         lastModifiedDate = now(),
         version = version + 1,
+        <if test="realName != null">realName = #{realName},</if>
+        <if test="age != null">age = #{age},</if>
         <if test="phoneNumber != null">phoneNumber = #{phoneNumber},</if>
         <if test="locked != null">locked = #{locked},</if>
         <if test="gender != null">gender = #{gender},</if>

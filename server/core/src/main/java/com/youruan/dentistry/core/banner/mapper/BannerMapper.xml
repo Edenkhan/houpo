@@ -7,13 +7,13 @@
         <result property="createdDate" column="createdDate"/>
         <result property="lastModifiedDate" column="lastModifiedDate"/>
         <result property="version" column="version"/>
-        <result property="bannerName" column="bannerName"/>
+        <result property="name" column="name"/>
         <result property="imageUrl" column="imageUrl"/>
         <result property="linkUrl" column="linkUrl"/>
         <result property="status" column="status"/>
     </resultMap>
-    <sql id="BASE_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.status</sql>
-    <sql id="QUERY_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.bannerName,b.imageUrl,b.linkUrl,b.status</sql>
+    <sql id="BASE_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.name,b.imageUrl,b.linkUrl,b.status</sql>
+    <sql id="QUERY_COLUMNS">b.id, b.createdDate, b.lastModifiedDate, b.version,b.name,b.imageUrl,b.linkUrl,b.status</sql>
     <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.banner.vo.ExtendedBanner" extends="BASE_RESULT"/>
     <sql id="JOIN_COLUMNS"/>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
@@ -22,8 +22,8 @@
     <delete id="delete" parameterType="java.lang.Long">DELETE FROM Banner WHERE id = #{id}</delete>
 
     <insert id="add" parameterType="com.youruan.dentistry.core.banner.domain.Banner" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO Banner(createdDate,version,bannerName,imageUrl,linkUrl,status)
-        VALUES(#{createdDate},0,#{bannerName},#{imageUrl},#{linkUrl},#{status})
+        INSERT INTO Banner(createdDate,version,name,imageUrl,linkUrl,status)
+        VALUES(#{createdDate},0,#{name},#{imageUrl},#{linkUrl},#{status})
     </insert>
 
     <update id="update" parameterType="com.youruan.dentistry.core.banner.domain.Banner">
@@ -31,7 +31,7 @@
         <set>
             lastModifiedDate = now(),
             version = version + 1,
-            <if test="bannerName != null">bannerName = #{bannerName},</if>
+            <if test="name != null">name = #{name},</if>
             <if test="imageUrl != null">imageUrl = #{imageUrl},</if>
             <if test="linkUrl != null">linkUrl = #{linkUrl},</if>
             <if test="status != null">status = #{status}</if>
@@ -46,8 +46,8 @@
         </if>
         <if test="startCreatedDate != null">AND b.createdDate &gt;= #{startCreatedDate }</if>
         <if test="endCreatedDate != null">AND b.createdDate &lt;= #{endCreatedDate }</if>
-        <if test="bannerName != null">AND b.bannerName = #{bannerName}</if>
-        <if test="likeBannerName != null">AND b.bannerName LIKE CONCAT('%', #{likeBannerName} ,'%')</if>
+        <if test="name != null">AND b.name = #{name}</if>
+        <if test="likeName != null">AND b.name LIKE CONCAT('%', #{likeName} ,'%')</if>
         <if test="status != null">AND b.status = #{status}</if>
     </sql>
     <sql id="QUERY_WHERE">

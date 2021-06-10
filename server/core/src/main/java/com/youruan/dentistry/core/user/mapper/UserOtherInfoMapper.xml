@@ -12,9 +12,10 @@
     <result property="education" column="education"/>
     <result property="job" column="job"/>
     <result property="area" column="area"/>
+    <result property="userId" column="userId"/>
   </resultMap>
-  <sql id="BASE_COLUMNS">uoi.id, uoi.createdDate, uoi.lastModifiedDate, uoi.version,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area</sql>
-  <sql id="QUERY_COLUMNS">uoi.id, uoi.createdDate, uoi.lastModifiedDate, uoi.version,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area</sql>
+  <sql id="BASE_COLUMNS">uoi.id, uoi.createdDate, uoi.lastModifiedDate, uoi.version,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area,uoi.userId</sql>
+  <sql id="QUERY_COLUMNS">uoi.id, uoi.createdDate, uoi.lastModifiedDate, uoi.version,uoi.school,uoi.major,uoi.education,uoi.job,uoi.area,uoi.userId</sql>
   <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.user.vo.ExtendedUserOtherInfo" extends="BASE_RESULT"/>
     <sql id="JOIN_COLUMNS"></sql>
   <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
@@ -32,6 +33,8 @@
     <set>
         lastModifiedDate = now(),
         version = version + 1,
+        <if test="school != null">school = #{school},</if>
+        <if test="major != null">major = #{major},</if>
         <if test="education != null">education = #{education},</if>
         <if test="job != null">job = #{job},</if>
         <if test="area != null">area = #{area},</if>

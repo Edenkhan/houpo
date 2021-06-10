@@ -41,28 +41,28 @@ public class BasicBannerService implements BannerService {
     }
 
     @Override
-    public Banner create(String bannerName, String imageUrl, String linkUrl, Integer status) {
+    public Banner create(String name, String imageUrl, String linkUrl, Integer status) {
         Banner banner = new Banner();
-        banner.setBannerName(bannerName);
+        banner.setName(name);
         banner.setImageUrl(imageUrl);
         banner.setLinkUrl(linkUrl);
         banner.setStatus(status);
         checkBanner(banner);
-        if(checkBannerName(bannerName)) {
+        if(checkname(name)) {
             throw new RuntimeException("添加失败,轮播图名称重复");
         }
         return add(banner);
     }
 
-    private boolean checkBannerName(String bannerName) {
+    private boolean checkname(String name) {
         BannerQuery qo = new BannerQuery();
-        qo.setBannerName(bannerName);
+        qo.setName(name);
         int count = bannerMapper.count(qo);
         return count > 0;
     }
 
     private void checkBanner(Banner banner) {
-        Assert.notNull(banner.getBannerName(),"轮播图名称不能为空");
+        Assert.notNull(banner.getName(),"轮播图名称不能为空");
         Assert.notNull(banner.getImageUrl(),"图片不能为空");
         Assert.notNull(banner.getLinkUrl(),"链接地址不能为空");
         Assert.notNull(banner.getStatus(),"轮播图状态不能为空");
@@ -75,9 +75,9 @@ public class BasicBannerService implements BannerService {
     }
 
     @Override
-    public void update(Banner banner, String bannerName, String imageUrl, String linkUrl, Integer status) {
+    public void update(Banner banner, String name, String imageUrl, String linkUrl, Integer status) {
         Assert.notNull(banner, "必须提供轮播图");
-        banner.setBannerName(bannerName);
+        banner.setName(name);
         banner.setImageUrl(imageUrl);
         banner.setLinkUrl(linkUrl);
         banner.setStatus(status);

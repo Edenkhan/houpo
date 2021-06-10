@@ -14,7 +14,7 @@ public class Banner extends BasicDomain {
     /**
      * 轮播图名称
      */
-    private String bannerName;
+    private String name;
     /**
      * 缩略图
      */

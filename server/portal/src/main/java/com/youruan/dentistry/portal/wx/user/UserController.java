@@ -34,8 +34,8 @@ public class UserController {
         RegisteredUser userBasicInfo = registeredUserService.get(user.getId());
         UserOtherInfo userOtherInfo = userOtherInfoService.get(user.getId());
         UserAllInfoVo userAllInfoVo = new UserAllInfoVo();
-        BeanUtils.copyProperties(userBasicInfo,userAllInfoVo);
         BeanUtils.copyProperties(userOtherInfo,userAllInfoVo);
+        BeanUtils.copyProperties(userBasicInfo,userAllInfoVo);
         return ResponseEntity.ok(BeanMapUtils.pick(userAllInfoVo,
                 "id","avatar","nickname","realName","age",
                 "gender","major","school","education","job","area"));

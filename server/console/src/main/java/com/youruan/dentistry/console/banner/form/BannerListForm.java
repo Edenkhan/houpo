@@ -19,7 +19,7 @@ public class BannerListForm extends ListForm {
     /**
      * 轮播图名称
      */
-    private String bannerName;
+    private String name;
     /**
      * 状态 0-停用 1-启用
      */
@@ -32,7 +32,7 @@ public class BannerListForm extends ListForm {
         qo.setPage(getPage());
         qo.setStartCreatedDate(startCreatedDate);
         qo.setEndCreatedDate(endCreatedDate);
-        qo.setLikeBannerName(bannerName);
+        qo.setLikeName(name);
         qo.setStatus(status);
         if ("createdDate".equals(getSortField())) {
             qo.setOrderByCreatedDate(getSortOrder().equalsIgnoreCase("descend")

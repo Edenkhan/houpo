@@ -3,8 +3,8 @@
     <div class="banner">
       <van-swipe class="my-swipe" :autoplay="6000" indicator-color="white">
         <van-swipe-item v-for="im in pic" :key="im.index">
-          <a :href="im.url">
-            <img :src="im.address" alt />
+          <a :href="im.linkUrl">
+            <img :src="im.imageUrl" alt />
           </a>
         </van-swipe-item>
       </van-swipe>
@@ -74,12 +74,12 @@ export default {
                   if(data.code == 200){
                     location.href = "/onlyThirty/index.html";
                   }else if(data.code == 201){
-                    window.location.href = data.url;
+                    window.location.href = data.linkUrl;
                   }
                 })
                 .catch(data => {
                   createAssess().then(res => {
-                    window.location.href = res.url;
+                    window.location.href = res.linkUrl;
                   });
                 });
             }else {
@@ -97,7 +97,7 @@ export default {
     },
     fetch(){
       getBannerOnindex().then(data=>{
-        this.pic=data.data;
+        this.pic = data;
       })
     },
   },

@@ -21,12 +21,12 @@ public interface BannerService {
     /**
      * 添加轮播图
      */
-    Banner create(String bannerName, String imageUrl, String linkUrl, Integer status);
+    Banner create(String name, String imageUrl, String linkUrl, Integer status);
 
     /**
      * 修改轮播图
      */
-    void update(Banner banner, String bannerName, String imageUrl, String linkUrl, Integer status);
+    void update(Banner banner, String name, String imageUrl, String linkUrl, Integer status);
 
     /**
      * 上传轮播图

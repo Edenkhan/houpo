@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     updating() {
-
+      console.log(this.accounts)
       if (!this.userVerify()){
           return;
       }

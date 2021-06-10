@@ -8,7 +8,7 @@ import lombok.Setter;
 public class UserEditForm {
     private Long id;
     private String realName;
-    private String age;
+    private Integer age;
     private Integer gender;
     private String school;
     private String major;

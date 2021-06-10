@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 public class BannerAddForm {
 
-    private String bannerName;
+    private String name;
     private String linkUrl;
     private Integer status;
     private String imageUrl;

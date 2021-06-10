@@ -17,8 +17,8 @@ public class BannerQuery extends QueryCondition {
     protected Long[] ids;
     protected Date startCreatedDate;
     protected Date endCreatedDate;
-    protected String bannerName;
-    protected String likeBannerName;
+    protected String name;
+    protected String likeName;
     protected Integer status;
 
     public void setOrderById(int keyword) {

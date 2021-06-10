@@ -35,7 +35,7 @@ export default {
       areaList: areaList,
       accountinfo:
       [
-        {title:"昵称",value:"nikename"},
+        {title:"昵称",value:"nickname"},
         {title:"姓名",value:"realName"},
         {title:"年龄",value:"age"},
         {title:"性别",value:"gender"},
@@ -49,15 +49,15 @@ export default {
   },
   created() {
         getUser().then((data)=>{
-            this.accounts = data;
-            this.accounts.gender = this.gender[data.gender]
-            this.accounts.education = this.education[data.education]
-            if (data.area != null){
-              let province = this.areaList.province_list[data.area.substring(0,2)+"0000"];
-              this.accounts.area = province + "-" + this.areaList.city_list[data.area];
-            }
+          this.accounts = data;
+          this.accounts.gender = this.gender[data.gender]
+          this.accounts.education = this.education[data.education]
+          if (data.area != null){
+            let province = this.areaList.province_list[data.area.substring(0,2)+"0000"];
+            this.accounts.area = province + "-" + this.areaList.city_list[data.area];
+          }
 
-            this.avatar = data["avatar"]
+          this.avatar = data["avatar"]
         }).catch(({message})=>{
             Toast(message)
         });

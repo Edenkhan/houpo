@@ -21,7 +21,7 @@ public class UserAllInfoVo extends BasicDomain {
     /**
      * 年龄
      */
-    private String age;
+    private Integer age;
     /**
      * 性别
      */

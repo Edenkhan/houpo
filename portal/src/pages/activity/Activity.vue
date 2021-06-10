@@ -13,7 +13,7 @@
           <div class="content">
 
             <a :href= "`article.html?id=${item.id}`">
-              <img :src="item.headerImg" style="width: 100%;height: 170px" />
+              <img :src="item.imageUrl" style="width: 100%;height: 170px" />
               <span class="triangle" v-if="item.opened && item.registered">已报名</span>
               <div class="info">
 

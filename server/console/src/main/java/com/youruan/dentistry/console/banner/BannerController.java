@@ -35,7 +35,7 @@ public class BannerController {
     @RequiresPermission(value = "banner.banner.add", description = "轮播图-添加")
     public ResponseEntity<?> add(BannerAddForm form) {
         Banner banner = bannerService.create(
-                form.getBannerName(),
+                form.getName(),
                 form.getImageUrl(),
                 form.getLinkUrl(),
                 form.getStatus());
@@ -50,7 +50,7 @@ public class BannerController {
         Banner banner = bannerService.get(form.getId());
         bannerService.update(
                 banner,
-                form.getBannerName(),
+                form.getName(),
                 form.getImageUrl(),
                 form.getLinkUrl(),
                 form.getStatus());
