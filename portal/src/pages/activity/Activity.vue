@@ -14,11 +14,11 @@
 
             <a :href= "`article.html?id=${item.id}`">
               <img :src="item.imageUrl" style="width: 100%;height: 170px" />
-              <span class="triangle" v-if="item.opened && item.registered">已报名</span>
+              <span class="triangle" v-if="item.releaseStatus==1 && item.enrollStatus==1">已报名</span>
               <div class="info">
 
-                <span v-if="!item.opened">【公告】</span>
-                <span v-if="item.opened">【活动】</span>
+                <span v-if="item.releaseStatus==1">【活动】</span>
+                <span v-else>【公告】</span>
                 <span>{{item.title}}</span>
               </div>
             </a>

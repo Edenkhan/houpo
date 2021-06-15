@@ -35,4 +35,9 @@ public interface ActivityMapper {
      */
     int update(Activity banner);
 
+    /**
+     * 活动表更新报名人数
+     */
+    int updateNumberOfEntries(Activity activity);
+
 }

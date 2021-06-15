@@ -67,7 +67,7 @@ public class BannerController {
         Pagination<ExtendedBanner> pagination = bannerService.query(qo);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("data", BeanMapUtils.pick(pagination.getData(),
-                        "id","createdDate","bannerName","imageUrl","linkUrl","status"))
+                        "id","createdDate","name","imageUrl","linkUrl","status"))
                 .put("rows",pagination.getRows())
                 .build());
     }

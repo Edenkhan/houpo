@@ -8,7 +8,7 @@
       {{this.activityManage.content}}
     </div>
     <div class="button">
-      <div v-if="this.activityManage.opened" >
+      <div v-if="this.activityManage.enrollStatus===1" >
         <div class="signo" v-if="this.entrance" >已报名</div>
         <div class="sign" v-else @click="signUp">我要报名</div>
       </div>
@@ -29,7 +29,7 @@
         createdDate: null,
         name: null,
         entrance: false,
-        opened: false,
+        enrollStatus: 0,
         content: null
       };
     },
@@ -40,16 +40,16 @@
       getActivity(this.id).then((data) => {
         this.activityManage = data.activityManage;
         this.activitySignUp = data.activitySignUp;
-        this.entrance = this.activitySignUp.state === 0;
+        this.entrance = this.activitySignUp.state === 1;
       }).catch(({message}) => {
         Toast.fail(message);
       })
     },
     methods: {
       signUp() {
-        addSignUp({activityManageId: this.id}).then((data) => {
+        addSignUp({id: this.id}).then((data) => {
           Toast.success("报名成功");
-          this.activitySignUp.state = 0;
+          this.activitySignUp.state = 1;
           this.entrance = true;
         }).catch(({message}) => {
           Toast.fail(message);

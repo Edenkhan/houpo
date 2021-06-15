@@ -23,8 +23,8 @@
     <delete id="delete" parameterType="java.lang.Long">DELETE FROM Enroll WHERE id = #{id}</delete>
 
     <insert id="add" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO Enroll(id,createdDate,version,orderNo,`type`,realName,phoneNumber,orderStatus)
-        VALUES(#{id },#{createdDate},0,#{orderNo},#{type},#{realName},#{phoneNumber},#{orderStatus})
+        INSERT INTO Enroll(createdDate,version,orderNo,`type`,orderStatus,userId,activityId)
+        VALUES(#{createdDate},0,#{orderNo},#{type},#{orderStatus},#{userId},#{activityId})
     </insert>
 
     <update id="update" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll">
@@ -53,6 +53,8 @@
         <if test="type != null">AND en.type = #{type}</if>
         <if test="phoneNumber != null">AND en.phoneNumber = #{phoneNumber}</if>
         <if test="orderStatus != null">AND en.orderStatus = #{orderStatus}</if>
+        <if test="userId != null">AND en.userId = #{userId}</if>
+        <if test="activityId != null">AND en.activityId = #{activityId}</if>
     </sql>
     <sql id="QUERY_WHERE">
         <where>
@@ -72,6 +74,10 @@
         SELECT COUNT(en.id) FROM Enroll AS en
         <include refid="QUERY_JOIN"/>
         <include refid="QUERY_WHERE"/>
+    </select>
+    <select id="countByUserIdAndActivityId" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Enroll AS en
+        where userId = #{userId} and activityId = #{activityId}
     </select>
     <select id="query" parameterType="com.youruan.dentistry.core.enroll.query.EnrollQuery" resultMap="VO_RESULT">
         SELECT

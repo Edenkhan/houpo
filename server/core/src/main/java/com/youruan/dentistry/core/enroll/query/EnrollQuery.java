@@ -22,6 +22,8 @@ public class EnrollQuery extends QueryCondition {
     protected String phoneNumber;
     protected Integer type;
     protected Integer orderStatus;
+    protected Long userId;
+    protected Long activityId;
 
     public void setOrderById(int keyword) {
         setOrderBy("id", keyword);

@@ -42,12 +42,12 @@ public class BasicBannerService implements BannerService {
 
     @Override
     public Banner create(String name, String imageUrl, String linkUrl, Integer status) {
+        checkBanner(name,imageUrl,linkUrl,status);
         Banner banner = new Banner();
         banner.setName(name);
         banner.setImageUrl(imageUrl);
         banner.setLinkUrl(linkUrl);
         banner.setStatus(status);
-        checkBanner(banner);
         if(checkname(name)) {
             throw new RuntimeException("添加失败,轮播图名称重复");
         }
@@ -61,11 +61,11 @@ public class BasicBannerService implements BannerService {
         return count > 0;
     }
 
-    private void checkBanner(Banner banner) {
-        Assert.notNull(banner.getName(),"轮播图名称不能为空");
-        Assert.notNull(banner.getImageUrl(),"图片不能为空");
-        Assert.notNull(banner.getLinkUrl(),"链接地址不能为空");
-        Assert.notNull(banner.getStatus(),"轮播图状态不能为空");
+    private void checkBanner(String name, String imageUrl, String linkUrl, Integer status) {
+        Assert.notNull(name,"轮播图名称不能为空");
+        Assert.notNull(imageUrl,"图片不能为空");
+        Assert.notNull(linkUrl,"链接地址不能为空");
+        Assert.notNull(status,"轮播图状态不能为空");
     }
 
     private Banner add(Banner banner) {

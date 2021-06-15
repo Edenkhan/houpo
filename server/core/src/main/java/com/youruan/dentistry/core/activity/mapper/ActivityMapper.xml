@@ -45,6 +45,15 @@
         </set>
         <where>id = #{id} AND version = #{version}</where>
     </update>
+    <update id="updateNumberOfEntries" parameterType="com.youruan.dentistry.core.activity.domain.Activity">
+        UPDATE Activity
+        <set>
+            lastModifiedDate = now(),
+            version = version + 1,
+            numberOfEntries = #{numberOfEntries}
+        </set>
+        <where>id = #{id} AND version = #{version}</where>
+    </update>
 
     <sql id="QUERY_JOIN">left join employee e on a.recentId = e.id</sql>
     <sql id="QUERY_WHERE_SQL">
