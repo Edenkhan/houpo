@@ -103,7 +103,7 @@ public class BasicEnrollService implements EnrollService {
         param.setNonceStr(WxAPIV3SignUtils.generateNonceStr());
         param.setPackageValue(prepayId);
         param.setSignType("RSA");
-        String paySign = WxAPIV3SignUtils.getSign(param.getAppId(),
+        String paySign = WxAPIV3SignUtils.getPaySign(param.getAppId(),
                 param.getTimeStamp(),
                 param.getNonceStr(),
                 param.getPackageValue(),

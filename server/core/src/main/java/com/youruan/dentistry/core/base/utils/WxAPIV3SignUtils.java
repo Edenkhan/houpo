@@ -31,7 +31,7 @@ public class WxAPIV3SignUtils {
      * @return
      * @throws Exception
      */
-    public static String getSign(String appId, long timestamp,String nonceStr, String packageValue, String privateKey) {
+    public static String getPaySign(String appId, long timestamp,String nonceStr, String packageValue, String privateKey) {
         try {
             String message = buildMessage(appId, timestamp, nonceStr, packageValue);
             PrivateKey privateKey1 = getPrivateKey(privateKey);
