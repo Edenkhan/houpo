@@ -1,5 +1,6 @@
 package com.youruan.dentistry.portal.wx.enroll;
 
+import com.google.common.collect.ImmutableMap;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.domain.pay.PayParam;
@@ -34,7 +35,11 @@ public class EnrollController {
         Enroll enroll = enrollService.create(user.getId(), null,type);
         String prepayId = enrollService.placeOrder(enroll.getOrderNo(),user.getOpenid());
         PayParam param = enrollService.payHandle(prepayId);
-        return ResponseEntity.ok(enroll);
+        return ResponseEntity.ok(ImmutableMap.builder()
+                .put("id",enroll.getId())
+                .put("result",BeanMapUtils.pick(param,
+                        "appId","timeStamp","signType","nonceStr","packageValue","paySign"))
+                .build());
     }
 
 }

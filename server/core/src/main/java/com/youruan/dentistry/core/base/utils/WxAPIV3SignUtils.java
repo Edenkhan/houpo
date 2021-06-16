@@ -1,6 +1,5 @@
 package com.youruan.dentistry.core.base.utils;
 
-import okhttp3.HttpUrl;
 import sun.misc.BASE64Decoder;
 
 import java.security.KeyFactory;
@@ -24,27 +23,23 @@ public class WxAPIV3SignUtils {
 
     /**
      *
-     * @param method
-     * @param url
-     * @param body
-     * @param mchId 商户号
-     * @param privateKey 商户证书私钥
-     * @param serialNo 商户API证书序列号
+     * @param appId
+     * @param timestamp
+     * @param nonceStr
+     * @param packageValue
+     * @param privateKey
      * @return
      * @throws Exception
      */
-    public static String getToken(String method,HttpUrl url,String body,String mchId,String privateKey,String serialNo) throws Exception{
-        String nonceStr = generateNonceStr();
-        long timestamp = System.currentTimeMillis() / 1000;
-        String message = buildMessage(method, url, timestamp, nonceStr, body);
-        PrivateKey privateKey1 = getPrivateKey(privateKey);
-        String signature = sign(message.getBytes("utf-8"),privateKey1);
-
-        return schema + " " +"mchid=\"" + mchId + "\","
-                + "nonce_str=\"" + nonceStr + "\","
-                + "timestamp=\"" + timestamp + "\","
-                + "serial_no=\"" + serialNo + "\","
-                + "signature=\"" + signature + "\"";
+    public static String getSign(String appId, long timestamp,String nonceStr, String packageValue, String privateKey) {
+        try {
+            String message = buildMessage(appId, timestamp, nonceStr, packageValue);
+            PrivateKey privateKey1 = getPrivateKey(privateKey);
+            return sign(message.getBytes("utf-8"),privateKey1);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -57,21 +52,14 @@ public class WxAPIV3SignUtils {
         Signature sign = Signature.getInstance("SHA256withRSA");
         sign.initSign(privateKey);
         sign.update(message);
-
         return Base64.getEncoder().encodeToString(sign.sign());
     }
 
-    private static String buildMessage(String method, HttpUrl url, long timestamp, String nonceStr, String body) {
-        String canonicalUrl = url.encodedPath();
-        if (url.encodedQuery() != null) {
-            canonicalUrl += "?" + url.encodedQuery();
-        }
-
-        return method + "\n"
-                + canonicalUrl + "\n"
+    private static String buildMessage(String appId, long timestamp,String nonceStr, String packageValue) {
+        return appId + "\n"
                 + timestamp + "\n"
                 + nonceStr + "\n"
-                + body + "\n";
+                + packageValue + "\n";
     }
 
     /**
@@ -85,8 +73,7 @@ public class WxAPIV3SignUtils {
         keyBytes = (new BASE64Decoder()).decodeBuffer(key);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-        return privateKey;
+        return keyFactory.generatePrivate(keySpec);
     }
 
     /**

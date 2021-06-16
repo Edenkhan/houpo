@@ -43,6 +43,8 @@ public class BasicEnrollService implements EnrollService {
     private String appId;
     @Value("${wx.pay.mchid}")
     private String mchId;
+    @Value("${wx.pay.privateKey}")
+    private String privateKey;
 
     @Override
     public Pagination<ExtendedEnroll> query(EnrollQuery qo) {
@@ -95,16 +97,16 @@ public class BasicEnrollService implements EnrollService {
     public PayParam payHandle(String prepayId) {
         PayParam param = new PayParam();
         param.setAppId(appId);
-        param.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        param.setTimeStamp(System.currentTimeMillis());
         param.setNonceStr(WxAPIV3SignUtils.generateNonceStr());
         param.setPackageValue(prepayId);
         param.setSignType("RSA");
-        String data = param.getAppId() + "\n"
-                + param.getTimeStamp() + "\n"
-                + param.getNonceStr() + "\n"
-                + param.getPackageValue() + "\n";
-
-        param.setPaySign("");
+        String paySign = WxAPIV3SignUtils.getSign(param.getAppId(),
+                param.getTimeStamp(),
+                param.getNonceStr(),
+                param.getPackageValue(),
+                privateKey);
+        param.setPaySign(paySign);
         return param;
     }
 

@@ -17,7 +17,7 @@ public class PayParam {
     /**
      * 时间戳
      */
-    private String timeStamp;
+    private Long timeStamp;
     /**
      * 随机字符串
      */
