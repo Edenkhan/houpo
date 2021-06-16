@@ -30,4 +30,9 @@ public interface EnrollMapper {
      * 用户报名
      */
     int add(Enroll enroll);
+
+    /**
+     * 查询用户订单状态
+     */
+    Enroll queryOne(Long userId, Integer type);
 }

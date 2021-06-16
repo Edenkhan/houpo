@@ -6,9 +6,9 @@ import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.domain.UserOtherInfo;
 import com.youruan.dentistry.core.user.mapper.RegisteredUserMapper;
-import com.youruan.dentistry.core.user.mapper.UserOtherInfoMapper;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
+import com.youruan.dentistry.core.user.service.UserOtherInfoService;
 import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class BasicRegisteredUserService
 {
 
     private final RegisteredUserMapper registeredUserMapper;
-    private final UserOtherInfoMapper userOtherInfoMapper;
+    private final UserOtherInfoService userOtherInfoService;
 
-    public BasicRegisteredUserService(RegisteredUserMapper registeredUserMapper, UserOtherInfoMapper userOtherInfoMapper) {
+    public BasicRegisteredUserService(RegisteredUserMapper registeredUserMapper, UserOtherInfoService userOtherInfoService) {
         this.registeredUserMapper = registeredUserMapper;
-        this.userOtherInfoMapper = userOtherInfoMapper;
+        this.userOtherInfoService = userOtherInfoService;
     }
 
     @Override
@@ -96,16 +96,16 @@ public class BasicRegisteredUserService
     @Transactional
     public void modify(RegisteredUser user, String major, String school, Integer education, String job, String area) {
         registeredUserMapper.update(user);
-        UserOtherInfo other = userOtherInfoMapper.get(user.getId());
+        UserOtherInfo other = userOtherInfoService.get(user.getId());
         if(other == null) {
             other = new UserOtherInfo();
             setProperties(major, school, education, job, area, other);
             other.setUserId(user.getId());
-            userOtherInfoMapper.add(other);
+            userOtherInfoService.add(other);
         }else{
             setProperties(major, school, education, job, area, other);
             System.out.println("other.getUserID = "+other.getUserId());
-            userOtherInfoMapper.update(other);
+            userOtherInfoService.update(other);
         }
 
     }
@@ -124,6 +124,11 @@ public class BasicRegisteredUserService
         int rows = registeredUserMapper.count(qo);
         List<UserAllInfoVo> data = ((rows == 0)?new ArrayList<>():registeredUserMapper.queryAll(qo));
         return new Pagination<>(rows, data);
+    }
+
+    @Override
+    public boolean checkCompleteInfo(RegisteredUser user) {
+        return user.getRealName()!=null && userOtherInfoService.checkOtherInfo(user.getId());
     }
 
 }

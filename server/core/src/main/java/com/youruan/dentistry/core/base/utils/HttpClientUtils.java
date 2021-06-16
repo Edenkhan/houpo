@@ -1,4 +1,4 @@
-package com.youruan.dentistry.core.wx.base.utils;
+package com.youruan.dentistry.core.base.utils;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;

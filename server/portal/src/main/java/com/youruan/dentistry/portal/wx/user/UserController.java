@@ -8,12 +8,14 @@ import com.youruan.dentistry.core.user.service.RegisteredUserService;
 import com.youruan.dentistry.core.user.service.UserOtherInfoService;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
-import com.youruan.dentistry.portal.base.utils.SessionUtils;
 import com.youruan.dentistry.portal.wx.user.form.UserEditForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -46,11 +48,10 @@ public class UserController {
      */
     @GetMapping("/profile")
     @RequiresAuthentication
-    public ResponseEntity<?> profile() {
-        Long userId = SessionUtils.getAuthenticated();
-        RegisteredUser user = registeredUserService.get(userId);
+    public ResponseEntity<?> profile(RegisteredUser user) {
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("user", BeanMapUtils.pick(user,
+                .put("user", BeanMapUtils.pick(
+                        registeredUserService.get(user.getId()),
                         "id","avatar","nickname","phoneNumber"))
                 .build());
     }
@@ -74,6 +75,17 @@ public class UserController {
                 .put("user", BeanMapUtils.pick(user,
                         "id","avatar","nickname","phoneNumber"))
                 .build());
+    }
+
+    /**
+     * 检查用户资料是否完善
+     */
+    @PostMapping("/check")
+    @RequiresAuthentication
+    public ResponseEntity<?> check(RegisteredUser user) {
+        return ResponseEntity.ok(ImmutableMap.builder()
+        .put("check",registeredUserService.checkCompleteInfo(user))
+        .build());
     }
 
 }

@@ -19,7 +19,6 @@ public class EnrollQuery extends QueryCondition {
     protected Date endCreatedDate;
     protected String orderNo;
     protected String likeOrderNo;
-    protected String phoneNumber;
     protected Integer type;
     protected Integer orderStatus;
     protected Long userId;

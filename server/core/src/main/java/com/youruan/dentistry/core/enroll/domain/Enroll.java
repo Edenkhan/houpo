@@ -22,23 +22,15 @@ public class Enroll extends BasicDomain {
     /**
      * 类型【职场百分百】
      */
-    public static final int TYPE_JOB = 0;
+    public static final int TYPE_WORKPLACE = 0;
     /**
      * 类型【就业直通车】
      */
-    public static final int TYPE_DIRECT = TYPE_JOB + 1;
+    public static final int TYPE_EMPLOYMENT = TYPE_WORKPLACE + 1;
     /**
      * 类型【普通活动】
      */
-    public static final int TYPE_GENERAL = TYPE_JOB + 2;
-    /**
-     * 姓名
-     */
-    private String realName;
-    /**
-     * 电话
-     */
-    private String phoneNumber;
+    public static final int TYPE_GENERAL = TYPE_EMPLOYMENT + 1;
     /**
      * 订单状态
      */

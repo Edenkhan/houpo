@@ -2,7 +2,7 @@ package com.youruan.dentistry.core.wx.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.youruan.dentistry.core.wx.base.constant.WxConstant;
-import com.youruan.dentistry.core.wx.base.utils.HttpClientUtils;
+import com.youruan.dentistry.core.base.utils.HttpClientUtils;
 import com.youruan.dentistry.core.wx.menu.domain.OneMenu;
 import com.youruan.dentistry.core.wx.menu.domain.ViewButton;
 import com.youruan.dentistry.core.wx.menu.domain.WxMenu;
@@ -19,9 +19,9 @@ public class BasicMenuService implements MenuService {
 
     @Value("${wx.domain}")
     private String domain;
-    @Value("${wx.app_id}")
+    @Value("${wx.appId}")
     private String appId;
-    @Value("${wx.app_secret}")
+    @Value("${wx.appSecret}")
     private String appSecret;
 
     @Override

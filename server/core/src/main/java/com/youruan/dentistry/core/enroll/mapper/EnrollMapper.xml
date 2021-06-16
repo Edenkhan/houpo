@@ -9,13 +9,14 @@
         <result property="version" column="version"/>
         <result property="orderNo" column="orderNo"/>
         <result property="type" column="type"/>
-        <result property="realName" column="realName"/>
-        <result property="phoneNumber" column="phoneNumber"/>
         <result property="orderStatus" column="orderStatus"/>
     </resultMap>
     <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
     <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
-    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT"/>
+    <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT">
+        <result property="realName" column="realName"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+    </resultMap>
     <sql id="JOIN_COLUMNS">,ru.realName,ru.phoneNumber</sql>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
         <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE id = #{id }
@@ -34,8 +35,6 @@
             version = version + 1,
             orderNo = #{orderNo},
             `type` = #{type},
-            realName = #{realName},
-            phoneNumber = #{phoneNumber},
             orderStatus = #{orderStatus}
         </set>
         <where>id = #{id} AND version = #{version}</where>
@@ -51,7 +50,6 @@
         <if test="orderNo != null">AND en.orderNo = #{orderNo}</if>
         <if test="likeOrderNo != null">AND en.orderNo LIKE CONCAT('%', #{likeOrderNo} ,'%')</if>
         <if test="type != null">AND en.type = #{type}</if>
-        <if test="phoneNumber != null">AND en.phoneNumber = #{phoneNumber}</if>
         <if test="orderStatus != null">AND en.orderStatus = #{orderStatus}</if>
         <if test="userId != null">AND en.userId = #{userId}</if>
         <if test="activityId != null">AND en.activityId = #{activityId}</if>
@@ -87,5 +85,11 @@
         <include refid="QUERY_WHERE"/>
         <include refid="QUERY_ORDER_BY"/>
         <include refid="QUERY_LIMIT"/>
+    </select>
+    <select id="queryOne" resultMap="BASE_RESULT">
+        SELECT
+        <include refid="QUERY_COLUMNS"/>
+         FROM Enroll AS en
+        WHERE userId = #{userId} AND `type` = #{type}
     </select>
 </mapper>

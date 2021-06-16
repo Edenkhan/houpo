@@ -32,4 +32,8 @@ public interface ActivityService {
      */
     String upload(UploadFile uploadFile);
 
+    /**
+     * 活动表更新报名人数
+     */
+    void updateNumberOfEntries(Long activityId);
 }

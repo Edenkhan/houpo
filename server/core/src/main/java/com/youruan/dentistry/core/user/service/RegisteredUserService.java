@@ -36,4 +36,9 @@ public interface RegisteredUserService {
      * 查询用户所有信息
      */
     Pagination<UserAllInfoVo> queryAll(RegisteredUserQuery qo);
+
+    /**
+     * 检查用户资料是否完善
+     */
+    boolean checkCompleteInfo(RegisteredUser user);
 }

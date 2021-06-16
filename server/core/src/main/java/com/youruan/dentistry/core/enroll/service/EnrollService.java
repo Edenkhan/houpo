@@ -2,6 +2,7 @@ package com.youruan.dentistry.core.enroll.service;
 
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
+import com.youruan.dentistry.core.enroll.domain.pay.PayParam;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 
@@ -17,5 +18,23 @@ public interface EnrollService {
      */
     int countByUserIdAndActivityId(Long userId, Long activityId);
 
-    Enroll create(Long userId, Long activityId);
+    /**
+     * 用户报名
+     */
+    Enroll create(Long userId, Long activityId, Integer type);
+
+    /**
+     * 查询用户订单状态
+     */
+    Enroll queryOne(Long userId, Integer type);
+
+    /**
+     * 下单
+     */
+    String placeOrder(String orderNo, String openid);
+
+    /**
+     * 返回JSAPI调起支付所需参数
+     */
+    PayParam payHandle(String prepayId);
 }

@@ -34,20 +34,20 @@ export function serachOrder(params) {
   return post('/activity/list?' + stringify(params))
 }
 export function pay(params) {
-  return post('/activity/pay?' + stringify(params))
+  return post('/enroll/pay?' + stringify(params))
 }
 export function baseNotify(params) {
-  return post('/activity/baseNotify?' + stringify(params))
+  return post('/enroll/baseNotify?' + stringify(params))
 }
 
 export function handIn(params) {
-  return post('/activity/add?' + stringify(params))
+  return post('/enroll/add?' + stringify(params))
 }
 export function queryStatus(params) {
-  return post('/activity/query?' + stringify(params))
+  return post('/enroll/query?' + stringify(params))
 }
 export function deleteOrder(params) {
-  return post('/activity/delete?' + stringify(params))
+  return post('/enroll/delete?' + stringify(params))
 }
 export function send(phone) {
   return post('/user/sendLoginVerifyCode?' + stringify({phoneNumber:phone}))

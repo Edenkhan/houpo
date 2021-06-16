@@ -119,6 +119,18 @@ public class BasicActivityService implements ActivityService {
         }
     }
 
+    @Override
+    public void updateNumberOfEntries(Long activityId) {
+        Activity activity = activityMapper.get(activityId);
+        Assert.notNull(activity,"必须提供活动");
+        if(activity.getNumberOfEntries()==null) {
+            activity.setNumberOfEntries(1);
+        }else{
+            activity.setNumberOfEntries(activity.getNumberOfEntries()+1);
+        }
+        activityMapper.updateNumberOfEntries(activity);
+    }
+
     private void update(Activity activity) {
         int affected = activityMapper.update(activity);
         if (affected == 0) {

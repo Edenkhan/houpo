@@ -14,8 +14,8 @@
       </div>
     </div>
     <div class="button">
-      <div v-if="state == 0" @click="toPay(id)" class="sign">待支付</div>
-      <div v-else-if="state == 1" class="sign finshed">已报名</div>
+      <div v-if="orderStatus == 0" @click="toPay(id)" class="sign">待支付</div>
+      <div v-else-if="orderStatus == 1" class="sign finshed">已报名</div>
       <div @click="showPopup()" v-else class="sign">原价5999元，现在购买，尊享超值 100元/人</div>
     </div>
 
@@ -67,7 +67,7 @@
             tip: ["目标管理", "时间管理", "职业化修为"]
           }
         ],
-        state: null,
+        orderStatus: null,
         id: null
 
       };
@@ -79,7 +79,7 @@
     methods: {
       toPay(id) {
         pay({id}).then((data) => {
-          this.payHaddle(id,data,this)
+          this.payHandle(id,data,this)
         }).catch((res) => {
           Toast({message: "支付失败，请稍后再试", duration: 1000});
         })
@@ -93,7 +93,7 @@
             if(check.check){
               handIn({type: 0}).then((data) => {
 
-                this.payHaddle(data.id,data,this);
+                this.payHandle(data.id,data,this);
 
               }).catch((res) => {
                 Toast({message: "支付失败，请稍后再试", duration: 1000});
@@ -115,11 +115,11 @@
       init:function () {
         profile();
         queryStatus({type: 0}).then(res => {
-          this.state = res.state;
+          this.orderStatus = res.orderStatus;
           this.id = res.id;
         })
       },
-      payHaddle:function (id,data,_this) {
+      payHandle:function (id,data,_this) {
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest',
           {

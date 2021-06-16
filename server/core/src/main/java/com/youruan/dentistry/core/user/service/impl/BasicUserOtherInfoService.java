@@ -44,6 +44,21 @@ public class BasicUserOtherInfoService
         }
         userOtherInfo.setVersion((userOtherInfo.getVersion()+ 1));
     }
-    
+
+    @Override
+    public void add(UserOtherInfo other) {
+        userOtherInfoMapper.add(other);
+    }
+
+    @Override
+    public boolean checkOtherInfo(Long userId) {
+        UserOtherInfo other = userOtherInfoMapper.get(userId);
+        return other!=null && other.getJob()!=null
+                && other.getArea()!=null
+                && other.getSchool()!=null
+                && other.getMajor()!=null
+                && other.getEducation()!=null;
+    }
+
 
 }
