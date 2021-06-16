@@ -7,6 +7,7 @@ import com.youruan.dentistry.core.enroll.domain.pay.PayParam;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,15 @@ public class EnrollController {
                 .put("result",BeanMapUtils.pick(param,
                         "appId","timeStamp","signType","nonceStr","packageValue","paySign"))
                 .build());
+    }
+
+    /**
+     * 微信支付回调地址
+     */
+    @GetMapping("/notify")
+    public ResponseEntity<?> notify_() {
+
+        return ResponseEntity.ok().build();
     }
 
 }

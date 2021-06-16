@@ -10,4 +10,8 @@ public class WxPayConstant {
      */
     public static final String PLACE_ORDER_URL = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
 
+    /**
+     * 微信支付回调地址
+     */
+    public static final String NOTIFY_URI = "/api/enroll/notify";
 }

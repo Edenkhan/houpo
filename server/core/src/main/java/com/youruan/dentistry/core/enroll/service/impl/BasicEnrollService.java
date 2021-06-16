@@ -45,6 +45,8 @@ public class BasicEnrollService implements EnrollService {
     private String mchId;
     @Value("${wx.pay.privateKey}")
     private String privateKey;
+    @Value("${wx.domain}")
+    private String domain;
 
     @Override
     public Pagination<ExtendedEnroll> query(EnrollQuery qo) {
@@ -87,7 +89,7 @@ public class BasicEnrollService implements EnrollService {
         param.setDescription("职场百分百");
         param.setMchid(mchId);
         param.setOut_trade_no(orderNo);
-        param.setNotify_url("");
+        param.setNotify_url(domain + WxPayConstant.NOTIFY_URI);
         param.setAmount(new Amount(1));
         param.setPayer(new Payer(openid));
         return HttpClientUtils.doPostJson(WxPayConstant.PLACE_ORDER_URL, JSON.toJSONString(param));
