@@ -198,7 +198,7 @@
         this.loading = true
         listUsers(this.userListForm).then(({data, rows}) => {
 
-          data.map((item) =>{
+          data.forEach((item) =>{
             this.data.push(
               {
                 id:item.id,

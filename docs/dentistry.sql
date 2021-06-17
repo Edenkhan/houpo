@@ -11,7 +11,7 @@
  Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 15/06/2021 18:34:35
+ Date: 17/06/2021 18:48:42
 */
 
 SET NAMES utf8mb4;
@@ -123,13 +123,14 @@ CREATE TABLE `enroll`  (
   `userId` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   `activityId` bigint(20) NULL DEFAULT NULL COMMENT '活动id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of enroll
 -- ----------------------------
 INSERT INTO `enroll` VALUES (3, '2021-06-15 18:26:06', NULL, 00000000000, '854426558817894400', 2, 0, 8, 1);
 INSERT INTO `enroll` VALUES (4, '2021-06-15 18:31:55', NULL, 00000000000, '854428022072147968', 2, 0, 8, 3);
+INSERT INTO `enroll` VALUES (5, '2021-06-17 09:59:41', NULL, 00000000000, '855023889518952451', 0, 0, 8, NULL);
 
 -- ----------------------------
 -- Table structure for permission
@@ -193,7 +194,7 @@ CREATE TABLE `registereduser`  (
   `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信用户昵称',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of registereduser
@@ -203,6 +204,22 @@ INSERT INTO `registereduser` VALUES (2, '2021-06-06 11:50:19', '2021-06-10 17:46
 INSERT INTO `registereduser` VALUES (3, '2021-06-06 12:02:50', '2021-06-06 15:05:50', 73, 'bbb', 15, 0, '15674859685', b'0', NULL, NULL, NULL);
 INSERT INTO `registereduser` VALUES (8, '2021-06-09 16:28:11', '2021-06-15 10:02:33', 2, '阿汤', 16, 1, NULL, NULL, 'o94oc5gI4p4hcPLDBNtflB_w1jKQ', '甘乐', 'https://thirdwx.qlogo.cn/mmopen/vi_32/TMAQqcP5mIFIniagwQ4gxECWiapxvEbibwEQiazIicXpCDiaSGib85NJORIX5vH1we8SufjPOTu9DGicphibrLVhBY8CnibQ/132');
 INSERT INTO `registereduser` VALUES (9, '2021-06-09 16:40:48', '2021-06-15 17:52:38', 4, NULL, NULL, NULL, NULL, b'0', 'o94oc5gq7jxxe8ksCl8YYZ1m7BpM', 'Tomas', 'https://thirdwx.qlogo.cn/mmopen/vi_32/vXOazibrfHXk0YR6IAP7MXPMRUscZr0Iicrv9sV8VK9yCX6W7Z1tTZzNZqbRxnegwSdick8ClPE6KfOkc469dgiaicw/132');
+INSERT INTO `registereduser` VALUES (12, '2021-06-17 14:49:42', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (13, '2021-06-17 14:53:38', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (14, '2021-06-17 14:54:03', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (15, '2021-06-17 15:01:07', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (16, '2021-06-17 15:01:10', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (17, '2021-06-17 15:03:58', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (18, '2021-06-17 15:04:35', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (19, '2021-06-17 15:04:52', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (20, '2021-06-17 15:04:56', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (21, '2021-06-17 15:05:59', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (22, '2021-06-17 15:05:59', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (23, '2021-06-17 15:07:12', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (24, '2021-06-17 15:07:12', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (25, '2021-06-17 15:09:37', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (26, '2021-06-17 15:13:46', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `registereduser` VALUES (27, '2021-06-17 15:14:40', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for role

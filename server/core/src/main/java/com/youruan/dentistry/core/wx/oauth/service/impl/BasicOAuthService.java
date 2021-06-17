@@ -10,6 +10,7 @@ import com.youruan.dentistry.core.wx.oauth.domain.WxUserInfo;
 import com.youruan.dentistry.core.wx.oauth.service.OAuthService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 
@@ -38,6 +39,7 @@ public class BasicOAuthService implements OAuthService {
 
     @Override
     public Long register(WxUserInfo wxUserInfo) {
+        Assert.notNull(wxUserInfo,"微信没获取到用户信息");
         RegisteredUser registeredUser = registeredUserMapper.getByOpenid(wxUserInfo.getOpenid());
         if(registeredUser == null) {
             registeredUser = new RegisteredUser();
@@ -46,7 +48,6 @@ public class BasicOAuthService implements OAuthService {
             registeredUser.setAvatar(wxUserInfo.getHeadimgurl());
             registeredUser.setCreatedDate(new Date());
             registeredUserMapper.add(registeredUser);
-            System.out.println("userid = "+registeredUser.getId());
         }
 
         return registeredUser.getId();

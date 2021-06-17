@@ -30,6 +30,9 @@ wx:
   domain: http://portalx.ymys.usooft.com
   appId: wxfcffb0d00f2da17b
   appSecret: 2fcf880c2503141e09bb0a55623f82f1
+  app_id: wx6ae9aead2a926769
+  app_secret: efc112848c7333b5b75f26345cf2e713
   pay:
     mchid: 1598795591
     privateKey: H8yNsA87UxM9a5jcTbPGJ0KPUuOaHByY
+    notifyUrl: ${wx.domain}/api/enroll/notify

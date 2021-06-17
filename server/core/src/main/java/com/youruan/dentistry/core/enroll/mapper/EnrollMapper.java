@@ -35,4 +35,14 @@ public interface EnrollMapper {
      * 查询用户订单状态
      */
     Enroll queryOne(Long userId, Integer type);
+
+    /**
+     * 检查用户是否报名职业百分百，或就业直通车
+     */
+    int countByUserIdAndType(Long userId, Integer type);
+
+    /**
+     * 查询报名记录
+     */
+    Enroll get(Long id);
 }

@@ -10,9 +10,11 @@
         <result property="orderNo" column="orderNo"/>
         <result property="type" column="type"/>
         <result property="orderStatus" column="orderStatus"/>
+        <result property="userId" column="userId"/>
+        <result property="activityId" column="activityId"/>
     </resultMap>
-    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
-    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus</sql>
+    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus,en.userId,en.activityId</sql>
+    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus,en.userId,en.activityId</sql>
     <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT">
         <result property="realName" column="realName"/>
         <result property="phoneNumber" column="phoneNumber"/>
@@ -76,6 +78,10 @@
     <select id="countByUserIdAndActivityId" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM Enroll AS en
         where userId = #{userId} and activityId = #{activityId}
+    </select>
+    <select id="countByUserIdAndType" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Enroll AS en
+        where userId = #{userId} and `type` = #{type}
     </select>
     <select id="query" parameterType="com.youruan.dentistry.core.enroll.query.EnrollQuery" resultMap="VO_RESULT">
         SELECT
