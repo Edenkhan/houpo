@@ -154,6 +154,11 @@ public class BasicEnrollService implements EnrollService {
         return enrollMapper.getByOrderNo(orderNo);
     }
 
+    @Override
+    public List<ExtendedEnroll> list() {
+        return enrollMapper.list();
+    }
+
     /**
      * 用户报名
      */

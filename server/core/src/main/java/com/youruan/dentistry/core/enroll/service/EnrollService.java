@@ -5,6 +5,7 @@ import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 
+import java.util.List;
 import java.util.Map;
 
 public interface EnrollService {
@@ -53,4 +54,9 @@ public interface EnrollService {
      * 根据订单号查询报名信息
      */
     Enroll getByOrderNo(String orderNo);
+
+    /**
+     * 查询所有报名信息
+     */
+    List<ExtendedEnroll> list();
 }

@@ -11,7 +11,7 @@
       </a-form-model-item>
 
       <a-form-model-item label='名称'>
-        <a-input v-model="bannerListForm.bannerName" style="width: 180px"/>
+        <a-input v-model="bannerListForm.name" style="width: 180px"/>
       </a-form-model-item>
 
       <a-form-model-item label='状态'>
@@ -104,7 +104,7 @@ const columns = [
   },
   {
     title: '轮播图名称',
-    dataIndex: 'bannerName'
+    dataIndex: 'name'
   },
   {
     title: '缩略图',

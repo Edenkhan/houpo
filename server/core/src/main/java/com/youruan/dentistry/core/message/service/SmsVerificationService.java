@@ -24,4 +24,6 @@ public interface SmsVerificationService {
     boolean checkLogin(String phoneNumber, String smsCode);
 
     SmsVerification sendLogin(String phoneNumber, String requestIp);
+
+    SmsVerification getByPhoneLastCode(String phone);
 }

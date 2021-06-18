@@ -6,6 +6,7 @@ import com.youruan.dentistry.core.base.utils.StreamUtils;
 import com.youruan.dentistry.core.base.wxpay.sdk.WXPayUtil;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
+import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,6 +26,14 @@ public class EnrollController {
 
     public EnrollController(EnrollService enrollService) {
         this.enrollService = enrollService;
+    }
+
+    @PostMapping("/list")
+    @RequiresAuthentication
+    public ResponseEntity<?> list() {
+        List<ExtendedEnroll> enrollList = enrollService.list();
+        return ResponseEntity.ok(ImmutableMap.builder()
+        .put("data",enrollList).build());
     }
 
     @PostMapping("/query")

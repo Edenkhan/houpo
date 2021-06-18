@@ -2,12 +2,16 @@ package com.youruan.dentistry.portal.wx.user;
 
 import com.google.common.collect.ImmutableMap;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
+import com.youruan.dentistry.core.message.SmsVerificationProperties;
+import com.youruan.dentistry.core.message.domain.SmsVerification;
+import com.youruan.dentistry.core.message.service.SmsVerificationService;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.domain.UserOtherInfo;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
 import com.youruan.dentistry.core.user.service.UserOtherInfoService;
 import com.youruan.dentistry.core.user.vo.UserAllInfoVo;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
+import com.youruan.dentistry.portal.wx.user.form.BindPhoneForm;
 import com.youruan.dentistry.portal.wx.user.form.UserEditForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/user")
@@ -24,10 +30,14 @@ public class UserController {
 
     private final RegisteredUserService registeredUserService;
     private final UserOtherInfoService userOtherInfoService;
+    private final SmsVerificationService verificationService;
+    private final SmsVerificationProperties verificationProperties;
 
-    public UserController(RegisteredUserService registeredUserService, UserOtherInfoService userOtherInfoService) {
+    public UserController(RegisteredUserService registeredUserService, UserOtherInfoService userOtherInfoService, SmsVerificationService verificationService, SmsVerificationProperties verificationProperties) {
         this.registeredUserService = registeredUserService;
         this.userOtherInfoService = userOtherInfoService;
+        this.verificationService = verificationService;
+        this.verificationProperties = verificationProperties;
     }
 
     @GetMapping("/get")
@@ -36,7 +46,9 @@ public class UserController {
         RegisteredUser userBasicInfo = registeredUserService.get(user.getId());
         UserOtherInfo userOtherInfo = userOtherInfoService.get(user.getId());
         UserAllInfoVo userAllInfoVo = new UserAllInfoVo();
-        BeanUtils.copyProperties(userOtherInfo,userAllInfoVo);
+        if(userOtherInfo!=null) {
+            BeanUtils.copyProperties(userOtherInfo,userAllInfoVo);
+        }
         BeanUtils.copyProperties(userBasicInfo,userAllInfoVo);
         return ResponseEntity.ok(BeanMapUtils.pick(userAllInfoVo,
                 "id","avatar","nickname","realName","age",
@@ -86,6 +98,31 @@ public class UserController {
         return ResponseEntity.ok(ImmutableMap.builder()
         .put("check",registeredUserService.checkCompleteInfo(user))
         .build());
+    }
+
+    /**
+     * 发送验证码
+     */
+    @PostMapping("/sendLoginVerifyCode")
+    @RequiresAuthentication
+    public ResponseEntity<?> sendLoginVerifyCode(String phoneNumber, HttpServletRequest request) {
+        String requestIp = request.getRemoteAddr();
+        System.out.println("ip = " + requestIp);
+        verificationService.sendLogin(phoneNumber, request.getRemoteAddr());
+        return ResponseEntity.ok(ImmutableMap.builder()
+                .put("intervalSeconds",verificationProperties.getIntervalInSeconds())
+                .build());
+    }
+
+    /**
+     * 绑定手机号
+     */
+    @PostMapping("/bind")
+    @RequiresAuthentication
+    public ResponseEntity<?> bind(BindPhoneForm form,RegisteredUser user) {
+        SmsVerification smsVerification = verificationService.getByPhoneLastCode(form.getPhone());
+        registeredUserService.bindPhone(smsVerification,form.getPhone(),form.getVerificationCode(),user.getId());
+        return ResponseEntity.ok().build();
     }
 
 }

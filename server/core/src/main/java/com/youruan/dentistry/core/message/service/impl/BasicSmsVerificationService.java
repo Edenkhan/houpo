@@ -97,6 +97,12 @@ public class BasicSmsVerificationService
         return sendCode(SmsVerification.TYPE_LOGIN, phoneNumber, requestIp);
     }
 
+    @Override
+    public SmsVerification getByPhoneLastCode(String phone) {
+        Assert.notNull(phone,"请提供手机号");
+        return smsVerificationMapper.getByPhoneLastCode(phone);
+    }
+
     private SmsVerification sendCode(Integer type, String phoneNumber, String requestIp) {
         Assert.isTrue(ValidationUtils.isValidPhoneNumber(phoneNumber), "手机号格式有误");
         Assert.notNull(requestIp, "请求 IP 不能为空");

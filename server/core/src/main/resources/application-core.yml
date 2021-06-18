@@ -22,6 +22,7 @@ dentistry:
           defaultTemplate: message/sms/verification/default.mustache
           types:
             login:
+              templateId: SMS_60680199
               template: message/sms/verification/login.mustache
             borrowRequest:
               template: message/sms/verification/borrowRequest.mustache

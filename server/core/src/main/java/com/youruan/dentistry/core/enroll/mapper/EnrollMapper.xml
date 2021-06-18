@@ -110,4 +110,9 @@
          FROM Enroll AS en
         WHERE userId = #{userId} AND `type` = #{type}
     </select>
+    <select id="list" resultMap="VO_RESULT">
+        SELECT
+        <include refid="QUERY_COLUMNS"/>
+        FROM Enroll AS en
+    </select>
 </mapper>

@@ -24,8 +24,8 @@
   <delete id="delete" parameterType="java.lang.Long">DELETE FROM UserOtherInfo WHERE id = #{id}</delete>
 
   <insert id="add" parameterType="com.youruan.dentistry.core.user.domain.UserOtherInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-    INSERT INTO UserOtherInfo(id,createdDate,version,school,major,education,area,job,userId)
-    VALUES (#{id },#{createdDate},0,#{school},#{major},#{education},#{area},#{job},#{userId})
+    INSERT INTO UserOtherInfo(createdDate,version,school,major,education,area,job,userId)
+    VALUES (#{createdDate},0,#{school},#{major},#{education},#{area},#{job},#{userId})
     </insert>
 
   <update id="update" parameterType="com.youruan.dentistry.core.user.domain.UserOtherInfo">

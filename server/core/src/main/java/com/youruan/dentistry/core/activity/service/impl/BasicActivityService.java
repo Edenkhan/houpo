@@ -88,7 +88,7 @@ public class BasicActivityService implements ActivityService {
     public void update(Activity activity, String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
         checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
         Assert.notNull(activity, "必须提供活动");
-        Assert.isTrue(!checkUpdatetitle(activity,content),"活动标题重复");
+        Assert.isTrue(!checkUpdatetitle(activity,title),"活动标题重复");
         activity.setTitle(title);
         activity.setImageUrl(imageUrl);
         activity.setContent(content);

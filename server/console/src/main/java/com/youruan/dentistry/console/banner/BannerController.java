@@ -77,7 +77,7 @@ public class BannerController {
     public ResponseEntity<?> get(Long id) {
         Banner banner = bannerService.get(id);
         return ResponseEntity.ok(BeanMapUtils.pick(banner,
-                "bannerName","linkUrl","status","imageUrl"));
+                "name","linkUrl","status","imageUrl"));
     }
 
 

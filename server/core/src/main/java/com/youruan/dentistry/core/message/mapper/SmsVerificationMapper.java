@@ -1,12 +1,13 @@
 
 package com.youruan.dentistry.core.message.mapper;
 
-import java.util.List;
 import com.youruan.dentistry.core.message.domain.SmsVerification;
 import com.youruan.dentistry.core.message.query.SmsVerificationQuery;
 import com.youruan.dentistry.core.message.vo.ExtendedSmsVerification;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -25,4 +26,5 @@ public interface SmsVerificationMapper {
 
     public List<ExtendedSmsVerification> query(SmsVerificationQuery qo);
 
+    SmsVerification getByPhoneLastCode(String phone);
 }

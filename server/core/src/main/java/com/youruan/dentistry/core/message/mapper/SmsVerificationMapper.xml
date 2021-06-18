@@ -27,8 +27,15 @@
   <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT 
     <include refid="BASE_COLUMNS"/> FROM SmsVerification smsv WHERE id = #{id }
   </select>
+  <select id="getByPhoneLastCode" resultMap="BASE_RESULT" parameterType="java.lang.String">SELECT
+    <include refid="BASE_COLUMNS"/> FROM SmsVerification smsv WHERE phoneNumber = #{phone }
+    ORDER BY createdDate DESC
+    LIMIT 0,1
+  </select>
   <delete id="delete" parameterType="java.lang.Long">DELETE FROM SmsVerification WHERE id = #{id}</delete>
-  <insert id="add" parameterType="com.youruan.dentistry.core.message.domain.SmsVerification" useGeneratedKeys="true" keyProperty="id" keyColumn="id">INSERT INTO SmsVerification(id, createdDate, version,smsMessageId,phoneNumber,code,requestIp,retryCount,expirationDate,state,type) VALUES(#{id }, #{createdDate}, 0, #{smsMessageId}, #{phoneNumber}, #{code}, #{requestIp}, #{retryCount}, #{expirationDate}, #{state}, #{type})</insert>
+  <insert id="add" parameterType="com.youruan.dentistry.core.message.domain.SmsVerification" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO SmsVerification(id, createdDate, version,smsMessageId,phoneNumber,code,requestIp,retryCount,expirationDate,state,type)
+    VALUES(#{id }, #{createdDate}, 0, #{smsMessageId}, #{phoneNumber}, #{code}, #{requestIp}, #{retryCount}, #{expirationDate}, #{state}, #{type})</insert>
   <update id="update" parameterType="com.youruan.dentistry.core.message.domain.SmsVerification">UPDATE SmsVerification
     <set>lastModifiedDate = now(), version = version + 1, retryCount = #{retryCount}, state = #{state}</set>
     <where>id = #{id} AND version = #{version}</where>

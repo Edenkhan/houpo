@@ -2,6 +2,7 @@
 package com.youruan.dentistry.core.user.service;
 
 import com.youruan.dentistry.core.base.query.Pagination;
+import com.youruan.dentistry.core.message.domain.SmsVerification;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.query.RegisteredUserQuery;
 import com.youruan.dentistry.core.user.vo.ExtendedRegisteredUser;
@@ -41,4 +42,9 @@ public interface RegisteredUserService {
      * 检查用户资料是否完善
      */
     boolean checkCompleteInfo(RegisteredUser user);
+
+    /**
+     * 绑定手机号
+     */
+    void bindPhone(SmsVerification smsVerification, String phone, String verificationCode, Long userId);
 }

@@ -55,4 +55,9 @@ public interface EnrollMapper {
      * 根据订单号查询报名信息
      */
     Enroll getByOrderNo(String orderNo);
+
+    /**
+     * 查询所有报名信息
+     */
+    List<ExtendedEnroll> list();
 }

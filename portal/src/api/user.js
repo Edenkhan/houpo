@@ -31,7 +31,7 @@ export function checkUser(params) {
 }
 
 export function serachOrder(params) {
-  return post('/activity/list?' + stringify(params))
+  return post('/enroll/list?' + stringify(params))
 }
 export function pay(params) {
   return post('/enroll/pay?' + stringify(params))

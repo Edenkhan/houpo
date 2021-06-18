@@ -184,6 +184,7 @@ export default {
     },
     init:function(){
       serachOrder().then(res => {
+        alert(JSON.stringify(res.data))
         const stateMap = res.data.reduce((prev, current) => {
           prev[current.type] = current.state;
           return prev;

@@ -2,7 +2,7 @@
   <div class="edit-container">
     <a-form-model @submit="handleSubmit" :loading="loading" :label-col="{ span: 4 }" :wrapper-col="{ span: 8 }">
       <a-form-model-item autocomplete="off" label="名称" >
-        <a-input autofocus v-model="bannerForm.bannerName" />
+        <a-input autofocus v-model="bannerForm.name" />
       </a-form-model-item>
       <a-form-model-item autocomplete="off" label="链接地址">
         <a-input v-model="bannerForm.linkUrl"/>

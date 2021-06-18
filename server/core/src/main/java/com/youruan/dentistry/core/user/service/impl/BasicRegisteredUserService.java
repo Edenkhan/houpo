@@ -3,6 +3,7 @@ package com.youruan.dentistry.core.user.service.impl;
 
 import com.youruan.dentistry.core.base.exception.OptimismLockingException;
 import com.youruan.dentistry.core.base.query.Pagination;
+import com.youruan.dentistry.core.message.domain.SmsVerification;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.domain.UserOtherInfo;
 import com.youruan.dentistry.core.user.mapper.RegisteredUserMapper;
@@ -100,11 +101,11 @@ public class BasicRegisteredUserService
         if(other == null) {
             other = new UserOtherInfo();
             setProperties(major, school, education, job, area, other);
+            other.setCreatedDate(new Date());
             other.setUserId(user.getId());
             userOtherInfoService.add(other);
         }else{
             setProperties(major, school, education, job, area, other);
-            System.out.println("other.getUserID = "+other.getUserId());
             userOtherInfoService.update(other);
         }
 
@@ -129,6 +130,23 @@ public class BasicRegisteredUserService
     @Override
     public boolean checkCompleteInfo(RegisteredUser user) {
         return user.getRealName()!=null && userOtherInfoService.checkOtherInfo(user.getId());
+    }
+
+    @Override
+    public void bindPhone(SmsVerification smsVerification, String phone, String verificationCode, Long userId) {
+        this.checkParam(smsVerification,phone,verificationCode);
+        Assert.isTrue(smsVerification.getCode().equals(verificationCode),"验证码错误");
+        // 绑定手机号
+        RegisteredUser user = registeredUserMapper.get(userId);
+        Assert.notNull(user,"必须提供用户");
+        user.setPhoneNumber(phone);
+        registeredUserMapper.update(user);
+    }
+
+    private void checkParam(SmsVerification smsVerification, String phone, String verificationCode) {
+        Assert.notNull(smsVerification,"必须提供验证信息");
+        Assert.notNull(phone,"必须提供手机号");
+        Assert.notNull(verificationCode,"必须提供验证码");
     }
 
 }
