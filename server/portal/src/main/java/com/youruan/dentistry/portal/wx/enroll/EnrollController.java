@@ -2,16 +2,18 @@ package com.youruan.dentistry.portal.wx.enroll;
 
 import com.google.common.collect.ImmutableMap;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
+import com.youruan.dentistry.core.base.utils.StreamUtils;
+import com.youruan.dentistry.core.base.wxpay.sdk.WXPayUtil;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -38,7 +40,7 @@ public class EnrollController {
     @RequiresAuthentication
     public ResponseEntity<?> add(RegisteredUser user, Integer type, String ip) {
         Enroll enroll = enrollService.create(user.getId(), null,type);
-        return getResponseEntity(user, ip, enroll);
+        return type==Enroll.TYPE_WORKPLACE?getResponseEntity(user, ip, enroll):ResponseEntity.ok(enroll);
     }
 
     /**
@@ -63,10 +65,23 @@ public class EnrollController {
 
 
     /**
-     * 微信支付回调地址
+     * 微信支付回调地址 修改订单状态
      */
-    @GetMapping("/notify")
-    public ResponseEntity<?> notify_() {
+    @PostMapping("/notify")
+    public ResponseEntity<?> notify_(HttpServletRequest request) {
+        System.out.println("***************** notify *****************");
+        try {
+            String xml = StreamUtils.readStream(request.getInputStream());
+            Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
+            Enroll enroll = enrollService.getByOrderNo(resultMap.get("out_trade_no"));
+            if(enroll!=null && enroll.getOrderStatus()==Enroll.ORDER_STATUS_OK) {
+                return ResponseEntity.ok("订单已支付");
+            }else{
+                enrollService.setOrderStatus(enroll);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity.ok().build();
     }

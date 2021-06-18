@@ -142,6 +142,18 @@ public class BasicEnrollService implements EnrollService {
         return enrollMapper.get(id);
     }
 
+    @Override
+    public void setOrderStatus(Enroll enroll) {
+        Assert.notNull(enroll,"必须提供报名信息");
+        enrollMapper.setOrderStatus(enroll);
+    }
+
+    @Override
+    public Enroll getByOrderNo(String orderNo) {
+        Assert.notNull(orderNo,"必须提供订单号");
+        return enrollMapper.getByOrderNo(orderNo);
+    }
+
     /**
      * 用户报名
      */

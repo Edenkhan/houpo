@@ -43,4 +43,14 @@ public interface EnrollService {
      * 查询单条记录
      */
     Enroll get(Long id);
+
+    /**
+     * 修改订单状态 已支付
+     */
+    void setOrderStatus(Enroll enroll);
+
+    /**
+     * 根据订单号查询报名信息
+     */
+    Enroll getByOrderNo(String orderNo);
 }

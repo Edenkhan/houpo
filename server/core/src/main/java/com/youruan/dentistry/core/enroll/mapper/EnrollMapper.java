@@ -45,4 +45,14 @@ public interface EnrollMapper {
      * 查询报名记录
      */
     Enroll get(Long id);
+
+    /**
+     * 修改订单状态 已支付
+     */
+    void setOrderStatus(Enroll enroll);
+
+    /**
+     * 根据订单号查询报名信息
+     */
+    Enroll getByOrderNo(String orderNo);
 }

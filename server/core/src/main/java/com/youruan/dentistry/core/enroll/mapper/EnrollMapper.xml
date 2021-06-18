@@ -23,6 +23,9 @@
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
         <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE id = #{id }
     </select>
+    <select id="getByOrderNo" resultMap="BASE_RESULT" parameterType="java.lang.String">SELECT
+        <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE orderNo = #{orderNo}
+    </select>
     <delete id="delete" parameterType="java.lang.Long">DELETE FROM Enroll WHERE id = #{id}</delete>
 
     <insert id="add" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
@@ -40,6 +43,15 @@
             orderStatus = #{orderStatus}
         </set>
         <where>id = #{id} AND version = #{version}</where>
+    </update>
+    <update id="setOrderStatus" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll">
+        UPDATE Enroll
+        <set>
+            lastModifiedDate = now(),
+            version = version + 1,
+            orderStatus = 1
+        </set>
+        <where>orderNo = #{orderNo} AND version = #{version}</where>
     </update>
 
     <sql id="QUERY_JOIN">left join registereduser AS ru on en.userId = ru.id</sql>
