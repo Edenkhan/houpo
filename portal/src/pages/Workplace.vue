@@ -120,7 +120,7 @@
         })
       },
       payHandle:function (id,data,_this) {
-        alert(JSON.stringify(data.result))
+        // alert(JSON.stringify(data))
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest',
           {

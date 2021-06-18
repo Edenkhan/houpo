@@ -114,7 +114,7 @@ export default {
     profile();
     queryStatus({type:1}).then(res=>{
       console.log(res);
-      if(res.state==1){
+      if(res.orderStatus==1){
         this.text="已报名";
         this.finshed=true;
       }
