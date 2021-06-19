@@ -9,8 +9,10 @@ import com.youruan.dentistry.core.base.exception.OptimismLockingException;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.DiskFileStorage;
 import com.youruan.dentistry.core.base.storage.UploadFile;
+import com.youruan.dentistry.core.enroll.domain.Enroll;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class BasicActivityService implements ActivityService {
     @Override
     public Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
         checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
-        Assert.isTrue(!checkAddtitle(title),"活动标题重复");
+        Assert.isTrue(!checkAddTitle(title),"活动标题重复");
         Activity activity = new Activity();
         activity.setTitle(title);
         activity.setImageUrl(imageUrl);
@@ -58,7 +60,7 @@ public class BasicActivityService implements ActivityService {
      * 检查添加活动时，活动标题是否重复
      * 重复返回 true
      */
-    private boolean checkAddtitle(String title) {
+    private boolean checkAddTitle(String title) {
         ActivityQuery qo = new ActivityQuery();
         qo.setTitle(title);
         int count = activityMapper.count(qo);
@@ -88,7 +90,7 @@ public class BasicActivityService implements ActivityService {
     public void update(Activity activity, String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
         checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
         Assert.notNull(activity, "必须提供活动");
-        Assert.isTrue(!checkUpdatetitle(activity,title),"活动标题重复");
+        Assert.isTrue(!checkUpdateTitle(activity,title),"活动标题重复");
         activity.setTitle(title);
         activity.setImageUrl(imageUrl);
         activity.setContent(content);
@@ -102,7 +104,7 @@ public class BasicActivityService implements ActivityService {
      * 检查修改活动时，活动标题是否重复
      * 重复返回 true
      */
-    private boolean checkUpdatetitle(Activity activity, String title) {
+    private boolean checkUpdateTitle(Activity activity, String title) {
         ActivityQuery qo = new ActivityQuery();
         qo.setTitle(title);
         int count = activityMapper.count(qo);
@@ -129,6 +131,25 @@ public class BasicActivityService implements ActivityService {
             activity.setNumberOfEntries(activity.getNumberOfEntries()+1);
         }
         activityMapper.updateNumberOfEntries(activity);
+    }
+
+
+    @Override
+    public void pickSet(List<Long> activityIds, List<ExtendedActivity> extendedActivityList) {
+        if(!CollectionUtils.isEmpty(activityIds) && !CollectionUtils.isEmpty(extendedActivityList)) {
+            for (Long activityId : activityIds) {
+                for (ExtendedActivity extendedActivity : extendedActivityList) {
+                    if(activityId.equals(extendedActivity.getId())) {
+                        extendedActivity.setOrderStatus(Enroll.ORDER_STATUS_OK);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<ExtendedActivity> list() {
+        return activityMapper.list();
     }
 
     private void update(Activity activity) {

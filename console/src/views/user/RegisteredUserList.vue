@@ -64,7 +64,8 @@
         <p>期望就业地址：{{userOtherInfo.area}}</p>
       </template>
       <template slot="status" slot-scope="status">
-
+        <p>职场百分百:</p>
+        <p>就业直通车:</p>
       </template>
       <template slot="locked" slot-scope="locked">
         <a-tag color="#f5222d" v-if="locked">已锁定</a-tag>

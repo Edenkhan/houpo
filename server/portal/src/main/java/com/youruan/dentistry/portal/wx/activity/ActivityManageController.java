@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/activityManage")
 public class ActivityManageController {
@@ -31,12 +33,14 @@ public class ActivityManageController {
 
     @GetMapping("/list")
     @RequiresAuthentication
-    public ResponseEntity<?> list() {
-        ActivityQuery query = new ActivityQuery();
-        query.setReleaseStatus(Activity.RELEASE_STATUS_OPEN);
-        Pagination<ExtendedActivity> pagination = activityService.query(query);
+    public ResponseEntity<?> list(RegisteredUser user) {
+        List<Long> activityIds = enrollService.getActivityIdsByUserId(user.getId());
+        ActivityQuery qo = new ActivityQuery();
+        qo.setReleaseStatus(Activity.RELEASE_STATUS_OPEN);
+        Pagination<ExtendedActivity> pagination = activityService.query(qo);
+        activityService.pickSet(activityIds,pagination.getData());
         return ResponseEntity.ok(ImmutableMap.builder().put("data", BeanMapUtils.pick(pagination.getData(),
-                "id","title","imageUrl","releaseStatus","enrollStatus"))
+                "id","title","imageUrl","releaseStatus","orderStatus"))
                 .put("rows",pagination.getRows())
                 .build());
     }

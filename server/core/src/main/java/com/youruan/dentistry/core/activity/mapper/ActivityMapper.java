@@ -40,4 +40,9 @@ public interface ActivityMapper {
      */
     int updateNumberOfEntries(Activity activity);
 
+    /**
+     * 获取所有活动信息
+     */
+    List<ExtendedActivity> list();
+
 }

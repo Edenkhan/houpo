@@ -4,6 +4,8 @@ import com.youruan.dentistry.core.base.domain.BasicDomain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * 报表
  */
@@ -15,6 +17,10 @@ public class Enroll extends BasicDomain {
      * 订单号
      */
     private String orderNo;
+    /**
+     * 价格
+     */
+    private BigDecimal price;
     /**
      * 类型
      */

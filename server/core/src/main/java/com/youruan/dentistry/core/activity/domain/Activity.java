@@ -4,6 +4,8 @@ import com.youruan.dentistry.core.base.domain.BasicDomain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * 活动
  */
@@ -15,9 +17,17 @@ public class Activity extends BasicDomain {
      */
     private String title;
     /**
+     * 链接地址
+     */
+    private String linkUrl;
+    /**
      * 活动图片
      */
     private String imageUrl;
+    /**
+     * 活动价格
+     */
+    private BigDecimal price;
     /**
      * 活动内容
      */

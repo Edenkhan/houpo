@@ -28,12 +28,12 @@ dentistry:
               template: message/sms/verification/borrowRequest.mustache
 
 wx:
-  domain: http://tanghuaxiong.ymys.usooft.com
+  domain: http://z65vt4.natappfree.cc
   appId: wxfcffb0d00f2da17b
   appSecret: 2fcf880c2503141e09bb0a55623f82f1
-  app_id: wx6ae9aead2a926769
-  app_secret: efc112848c7333b5b75f26345cf2e713
   pay:
+    appId: wx6ae9aead2a926769
+    appSecret: efc112848c7333b5b75f26345cf2e713
     mchid: 1598795591
     privateKey: H8yNsA87UxM9a5jcTbPGJ0KPUuOaHByY
     notifyUrl: ${wx.domain}/api/enroll/notify

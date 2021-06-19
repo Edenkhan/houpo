@@ -1,12 +1,16 @@
 package com.youruan.dentistry.portal.wx.enroll;
 
 import com.google.common.collect.ImmutableMap;
+import com.youruan.dentistry.core.activity.domain.Activity;
+import com.youruan.dentistry.core.activity.query.ActivityQuery;
+import com.youruan.dentistry.core.activity.service.ActivityService;
+import com.youruan.dentistry.core.activity.vo.ExtendedActivity;
+import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.utils.BeanMapUtils;
 import com.youruan.dentistry.core.base.utils.StreamUtils;
 import com.youruan.dentistry.core.base.wxpay.sdk.WXPayUtil;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
-import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.portal.base.interceptor.RequiresAuthentication;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +27,26 @@ import java.util.Map;
 public class EnrollController {
 
     private final EnrollService enrollService;
+    private final ActivityService activityService;
 
-    public EnrollController(EnrollService enrollService) {
+    public EnrollController(EnrollService enrollService, ActivityService activityService) {
         this.enrollService = enrollService;
+        this.activityService = activityService;
     }
 
     @PostMapping("/list")
     @RequiresAuthentication
-    public ResponseEntity<?> list() {
-        List<ExtendedEnroll> enrollList = enrollService.list();
-        return ResponseEntity.ok(ImmutableMap.builder()
-        .put("data",enrollList).build());
+    public ResponseEntity<?> list(RegisteredUser user) {
+        List<Long> activityIds = enrollService.getActivityIdsByUserId(user.getId());
+        ActivityQuery qo = new ActivityQuery();
+        qo.setReleaseStatus(Activity.RELEASE_STATUS_OPEN);
+        Pagination<ExtendedActivity> pagination = activityService.query(qo);
+        activityService.pickSet(activityIds,pagination.getData());
+        return ResponseEntity.ok(ImmutableMap.builder().put("data", BeanMapUtils.pick(pagination.getData(),
+                "id","createdDate","type","title","linkUrl","imageUrl","content","price","orderStatus"))
+                .build());
     }
+
 
     @PostMapping("/query")
     @RequiresAuthentication
@@ -49,7 +61,7 @@ public class EnrollController {
     @PostMapping("/add")
     @RequiresAuthentication
     public ResponseEntity<?> add(RegisteredUser user, Integer type, String ip) {
-        Enroll enroll = enrollService.create(user.getId(), null,type);
+        Enroll enroll = enrollService.create(user, null,type);
         return type==Enroll.TYPE_WORKPLACE?getResponseEntity(user, ip, enroll):ResponseEntity.ok(enroll);
     }
 
@@ -64,7 +76,7 @@ public class EnrollController {
     }
 
     private ResponseEntity<?> getResponseEntity(RegisteredUser user, String ip, Enroll enroll) {
-        String prepayId = enrollService.placeOrder(enroll.getOrderNo(), user.getOpenid(),ip);
+        String prepayId = enrollService.placeOrder(enroll.getOrderNo(),enroll.getPrice(), user.getOpenid(),ip);
         Map<String,String> resultMap = enrollService.payHandle(prepayId);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id",enroll.getId())

@@ -4,7 +4,9 @@ import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
+import com.youruan.dentistry.core.user.domain.RegisteredUser;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,7 @@ public interface EnrollService {
     /**
      * 用户报名
      */
-    Enroll create(Long userId, Long activityId, Integer type);
+    Enroll create(RegisteredUser user, Long activityId, Integer type);
 
     /**
      * 查询用户订单状态
@@ -28,7 +30,7 @@ public interface EnrollService {
     /**
      * 下单
      */
-    String placeOrder(String orderNo, String openid, String ip);
+    String placeOrder(String orderNo, BigDecimal price, String openid, String ip);
 
     /**
      * 返回JSAPI调起支付所需参数
@@ -59,4 +61,10 @@ public interface EnrollService {
      * 查询所有报名信息
      */
     List<ExtendedEnroll> list();
+
+    /**
+     * 查询用户报名了哪些活动
+     */
+    List<Long> getActivityIdsByUserId(Long userId);
+
 }

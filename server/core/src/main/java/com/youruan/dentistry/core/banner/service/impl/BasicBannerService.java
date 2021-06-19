@@ -42,30 +42,27 @@ public class BasicBannerService implements BannerService {
 
     @Override
     public Banner create(String name, String imageUrl, String linkUrl, Integer status) {
-        checkBanner(name,imageUrl,linkUrl,status);
+        this.checkAddBanner(name,imageUrl,linkUrl,status);
         Banner banner = new Banner();
         banner.setName(name);
         banner.setImageUrl(imageUrl);
         banner.setLinkUrl(linkUrl);
         banner.setStatus(status);
-        if(checkname(name)) {
-            throw new RuntimeException("添加失败,轮播图名称重复");
-        }
         return add(banner);
     }
 
-    private boolean checkname(String name) {
-        BannerQuery qo = new BannerQuery();
-        qo.setName(name);
-        int count = bannerMapper.count(qo);
-        return count > 0;
-    }
-
-    private void checkBanner(String name, String imageUrl, String linkUrl, Integer status) {
+    /**
+     * 检查添加轮播图
+     */
+    private void checkAddBanner(String name, String imageUrl, String linkUrl, Integer status) {
         Assert.notNull(name,"轮播图名称不能为空");
         Assert.notNull(imageUrl,"图片不能为空");
         Assert.notNull(linkUrl,"链接地址不能为空");
         Assert.notNull(status,"轮播图状态不能为空");
+        BannerQuery qo = new BannerQuery();
+        qo.setName(name);
+        int count = bannerMapper.count(qo);
+        Assert.isTrue(count == 0,"轮播图名称重复");
     }
 
     private Banner add(Banner banner) {
@@ -76,12 +73,27 @@ public class BasicBannerService implements BannerService {
 
     @Override
     public void update(Banner banner, String name, String imageUrl, String linkUrl, Integer status) {
-        Assert.notNull(banner, "必须提供轮播图");
+        this.checkUpdateBanner(banner,name);
         banner.setName(name);
         banner.setImageUrl(imageUrl);
         banner.setLinkUrl(linkUrl);
         banner.setStatus(status);
         update(banner);
+    }
+
+    /**
+     * 检查修改轮播图
+     */
+    private void checkUpdateBanner(Banner banner, String name) {
+        if(name == null) {
+            // 可能是修改状态的操作
+            return;
+        }
+        Assert.notNull(banner, "必须提供轮播图");
+        BannerQuery qo = new BannerQuery();
+        qo.setName(name);
+        int count = bannerMapper.count(qo);
+        Assert.isTrue(count==0 || banner.getName().equals(name),"轮播图名称重复");
     }
 
     @Override

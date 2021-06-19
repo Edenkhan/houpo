@@ -1,22 +1,25 @@
 package com.youruan.dentistry.core.enroll.service.impl;
 
+import com.youruan.dentistry.core.activity.domain.Activity;
 import com.youruan.dentistry.core.activity.service.ActivityService;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.utils.HttpClientUtils;
 import com.youruan.dentistry.core.base.utils.SnowflakeIdWorker;
 import com.youruan.dentistry.core.base.wxpay.sdk.WXPayConstants;
 import com.youruan.dentistry.core.base.wxpay.sdk.WXPayUtil;
+import com.youruan.dentistry.core.enroll.WxPayProperties;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.mapper.EnrollMapper;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
+import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -25,23 +28,14 @@ public class BasicEnrollService implements EnrollService {
     private final EnrollMapper enrollMapper;
     private final ActivityService activityService;
     private final RegisteredUserService userService;
+    private final WxPayProperties wxPayProperties;
 
-    public BasicEnrollService(EnrollMapper enrollMapper, ActivityService activityService, RegisteredUserService userService) {
+    public BasicEnrollService(EnrollMapper enrollMapper, ActivityService activityService, RegisteredUserService userService, WxPayProperties wxPayProperties) {
         this.enrollMapper = enrollMapper;
         this.activityService = activityService;
         this.userService = userService;
+        this.wxPayProperties = wxPayProperties;
     }
-
-    @Value("${wx.app_id}")
-    private String appId;
-    @Value("${wx.pay.mchid}")
-    private String mchId;
-    @Value("${wx.pay.privateKey}")
-    private String privateKey;
-    @Value("${wx.pay.notifyUrl}")
-    private String notifyUrl;
-    @Value("${wx.domain}")
-    private String domain;
 
     @Override
     public Pagination<ExtendedEnroll> query(EnrollQuery qo) {
@@ -52,24 +46,39 @@ public class BasicEnrollService implements EnrollService {
 
     @Override
     @Transactional
-    public Enroll create(Long userId, Long activityId, Integer type) {
+    public Enroll create(RegisteredUser user, Long activityId, Integer type) {
+        Assert.isTrue(userService.checkCompleteInfo(user),"请先完善信息");
+        Assert.isTrue(this.checkEnrollStatus(activityId),"该活动暂未开启报名");
+        Enroll enroll = new Enroll();
+        // 除了职业百分百，其他默认已支付
+        enroll.setOrderStatus(Enroll.ORDER_STATUS_OK);
         if(type==Enroll.TYPE_GENERAL) {
             // 普通活动
-            Assert.isTrue(!checkEnroll(userId, activityId),"该用户已经报名此活动");
+            Assert.isTrue(!checkEnroll(user.getId(), activityId),"该用户已经报名此活动");
             // 活动表更新报名人数
             activityService.updateNumberOfEntries(activityId);
         }else{
-            // 特殊活动
-            Assert.isTrue(!checkEnroll(userId,type),"该用户已经报名此活动");
+            // 职业百分百活动 付费
+            if(type==Enroll.TYPE_WORKPLACE) {
+                enroll.setOrderNo(SnowflakeIdWorker.getIdWorker());
+                enroll.setPrice(new BigDecimal(1));
+                enroll.setOrderStatus(Enroll.ORDER_STATUS_NOT);
+            }
+            // 就业直通车
+            Assert.isTrue(!checkEnroll(user.getId(),type),"该用户已经报名此活动");
         }
-        Enroll enroll = new Enroll();
-        String orderNo = SnowflakeIdWorker.getIdWorker();
-        enroll.setOrderNo(orderNo);
         enroll.setType(type);
-        enroll.setOrderStatus(Enroll.ORDER_STATUS_NOT);
-        enroll.setUserId(userId);
+        enroll.setUserId(user.getId());
         enroll.setActivityId(activityId);
         return this.add(enroll);
+    }
+
+    /**
+     * 校验活动是否开启报名
+     */
+    private boolean checkEnrollStatus(Long activityId) {
+        Activity activity = activityService.get(activityId);
+        return activity.getEnrollStatus() == 1;
     }
 
     /**
@@ -90,22 +99,22 @@ public class BasicEnrollService implements EnrollService {
     }
 
     @Override
-    public String placeOrder(String orderNo, String openid, String ip) {
+    public String placeOrder(String orderNo, BigDecimal price, String openid, String ip) {
         try {
             Map<String, String> paramMap = new HashMap<>();
-            paramMap.put("appid",appId);
-            paramMap.put("mch_id",mchId);
+            paramMap.put("appid",wxPayProperties.getAppId());
+            paramMap.put("mch_id",wxPayProperties.getMchid());
             paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
-            paramMap.put("sign",WXPayUtil.generateSignature(paramMap,privateKey));
+            paramMap.put("sign",WXPayUtil.generateSignature(paramMap,wxPayProperties.getPrivateKey()));
             paramMap.put("body","大苏打");
             paramMap.put("out_trade_no",orderNo);
-            paramMap.put("total_fee","1");
+            paramMap.put("total_fee",price.toString());
             paramMap.put("spbill_create_ip",ip);
-            paramMap.put("notify_url",notifyUrl);
+            paramMap.put("notify_url",wxPayProperties.getNotifyUrl());
             paramMap.put("trade_type","JSAPI");
             paramMap.put("openid",openid);
             String xml = HttpClientUtils.doPostXml(WXPayConstants.UNIFIED_ORDER_URL,
-                    WXPayUtil.generateSignedXml(paramMap, privateKey));
+                    WXPayUtil.generateSignedXml(paramMap, wxPayProperties.getPrivateKey()));
             Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
             System.out.println("resultMap:" + resultMap);
             return resultMap.get("prepay_id");
@@ -119,12 +128,12 @@ public class BasicEnrollService implements EnrollService {
     public Map<String,String> payHandle(String prepayId) {
         try {
             Map<String,String> resultMap = new HashMap<>();
-            resultMap.put("appId",appId);
+            resultMap.put("appId",wxPayProperties.getAppId());
             resultMap.put("timeStamp",String.valueOf(System.currentTimeMillis() / 1000));
             resultMap.put("signType","MD5");
             resultMap.put("nonceStr",WXPayUtil.generateNonceStr());
             resultMap.put("package","prepay_id="+prepayId);
-            resultMap.put("paySign",WXPayUtil.generateSignature(resultMap,privateKey));
+            resultMap.put("paySign",WXPayUtil.generateSignature(resultMap,wxPayProperties.getPrivateKey()));
             return resultMap;
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,6 +166,12 @@ public class BasicEnrollService implements EnrollService {
     @Override
     public List<ExtendedEnroll> list() {
         return enrollMapper.list();
+    }
+
+    @Override
+    public List<Long> getActivityIdsByUserId(Long userId) {
+        Assert.notNull(userId,"用户id为空");
+        return enrollMapper.getActivityIdsByUserId(userId);
     }
 
     /**

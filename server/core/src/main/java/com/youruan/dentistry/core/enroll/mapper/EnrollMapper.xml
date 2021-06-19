@@ -29,8 +29,8 @@
     <delete id="delete" parameterType="java.lang.Long">DELETE FROM Enroll WHERE id = #{id}</delete>
 
     <insert id="add" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO Enroll(createdDate,version,orderNo,`type`,orderStatus,userId,activityId)
-        VALUES(#{createdDate},0,#{orderNo},#{type},#{orderStatus},#{userId},#{activityId})
+        INSERT INTO Enroll(createdDate,version,orderNo,price,`type`,orderStatus,userId,activityId)
+        VALUES(#{createdDate},0,#{orderNo},#{price},#{type},#{orderStatus},#{userId},#{activityId})
     </insert>
 
     <update id="update" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll">
@@ -114,5 +114,10 @@
         SELECT
         <include refid="QUERY_COLUMNS"/>
         FROM Enroll AS en
+    </select>
+    <select id="getActivityIdsByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT activityId
+        FROM Enroll AS en
+        WHERE userId = #{userId} and `type` = 2
     </select>
 </mapper>

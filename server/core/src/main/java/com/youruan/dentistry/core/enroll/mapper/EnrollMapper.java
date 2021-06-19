@@ -60,4 +60,9 @@ public interface EnrollMapper {
      * 查询所有报名信息
      */
     List<ExtendedEnroll> list();
+
+    /**
+     * 查询用户报名了哪些活动
+     */
+    List<Long> getActivityIdsByUserId(Long userId);
 }

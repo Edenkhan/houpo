@@ -11,79 +11,79 @@
           <div class="item" v-for="(item,index) in list" :key="index">
             <div class="desc">
               <p>{{item.content.title}}</p>
-              <p v-if="item.state==0?true:false" @click="handleDelete(item.id)">取消</p>
+              <p v-if="item.orderStatus==0?true:false" @click="handleDelete(item.id)">取消</p>
             </div>
             <div class="content">
               <div class="pic">
-                <a :href="item.content.src">
-                <img :src="item.content.img" alt />
+                <a :href="item.content.linkUrl">
+                <img :src="item.content.imageUrl" alt />
                 </a>
               </div>
               <div class="info">
-                <p>{{item.content.desc}}</p>
+                <p>{{item.content.content}}</p>
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
-                <p v-if="item.state==0?true:false">
+                <p v-if="item.orderStatus==0?true:false">
                   ￥
                   <span>{{item.content.price}}元/人</span>
                 </p>
               </div>
             </div>
-            <button v-if="item.state == 0" @click="toPay(item.id)">{{states[item.state].name}}</button>
-            <button v-else :class="item.state==1||item.state==3?'finsh':''">{{states[item.state].name}}</button>
+            <button v-if="item.orderStatus == 0" @click="toPay(item.id)">{{states[item.orderStatus].name}}</button>
+            <button v-else :class="item.orderStatus==1||item.orderStatus==3?'finsh':''">{{states[item.orderStatus].name}}</button>
           </div>
         </div>
       </Tab>
       <Tab title="待支付">
         <div class="order">
 
-          <div class="item" v-for="(item,index) in list" :key="index" v-show="item.state==0?true:false">
+          <div class="item" v-for="(item,index) in list" :key="index" v-show="item.orderStatus==0?true:false">
             <div class="desc">
               <p>{{item.content.title}}</p>
-              <p v-if="item.state==0?true:false" @click="handleDelete(item.id)">取消</p>
+              <p v-if="item.orderStatus==0?true:false" @click="handleDelete(item.id)">取消</p>
             </div>
             <div class="content">
               <div class="pic">
-                <a :href="item.content.src">
-                <img :src="item.content.img" alt />
+                <a :href="item.content.linkUrl">
+                <img :src="item.content.imageUrl" alt />
                 </a>
               </div>
               <div class="info">
-                <p>{{item.content.desc}}</p>
+                <p>{{item.content.content}}</p>
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
-                <p v-if="item.state==0?true:false">
+                <p v-if="item.orderStatus==0?true:false">
                   ￥
                   <span>{{item.content.price}}元/人</span>
                 </p>
               </div>
             </div>
-            <button v-if="item.state == 0" @click="toPay(item.id)">{{states[item.state].name}}</button>
-            <button v-else :class="item.state==1||item.state==3?'finsh':''">{{states[item.state].name}}</button>
+            <button v-if="item.orderStatus == 0" @click="toPay(item.id)">{{states[item.orderStatus].name}}</button>
+            <button v-else :class="item.orderStatus==1||item.orderStatus==3?'finsh':''">{{states[item.orderStatus].name}}</button>
           </div>
         </div>
       </Tab>
       <Tab title="已报名">
         <div class="order">
-          <div class="item" v-for="(item,index) in list" :key="index" v-show="item.state==1?true:false">
+          <div class="item" v-for="(item,index) in list" :key="index" v-show="item.orderStatus==1?true:false">
             <div class="desc">
               <p>{{item.content.title}}</p>
-              <!--<p v-if="item.state==0?true:false"><a href="/user/manager.html">取消</a></p>-->
+              <!--<p v-if="item.orderStatus==0?true:false"><a href="/user/manager.html">取消</a></p>-->
             </div>
             <div class="content">
               <div class="pic">
-                <a :href="item.content.src">
-                <img :src="item.content.img" alt />
+                <a :href="item.content.linkUrl">
+                <img :src="item.content.imageUrl" alt />
                 </a>
               </div>
               <div class="info">
-                <p>{{item.content.desc}}</p>
+                <p>{{item.content.content}}</p>
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
-                <p v-if="item.state==0?true:false">
+                <p v-if="item.orderStatus==0?true:false">
                   ￥
                   <span>{{item.price}}元/人</span>
                 </p>
               </div>
             </div>
-            <button :class="item.state==1||item.state==3?'finsh':''">{{states[item.state].name}}</button>
+            <button :class="item.orderStatus==1||item.orderStatus==3?'finsh':''">{{states[item.orderStatus].name}}</button>
           </div>
         </div>
       </Tab>
@@ -103,26 +103,25 @@ export default {
       active: 0,
       //已报名标志
       order: false,
-      list: [],
       //原始数据
       orderlist: [
         {
           type: 0,
           title: "职场百分百",
-          img: require("../../assets/img/perfect.png"),
-          desc: "职场百分百：提升学员职场综合 胜任力",
+          imageUrl: require("../../assets/img/perfect.png"),
+          content: "职场百分百：提升学员职场综合 胜任力",
           date: "2020-05-21 18:53:15",
-          src:"/workplace.html",
+          linkUrl:"/workplace.html",
           price: "100",
           text:""
         },
         {
           type: 1,
           title: "就业直通车",
-          img: require("../../assets/img/ahead.png"),
-          desc: "就业直通车：一对一深度专属就 业辅导",
+          imageUrl: require("../../assets/img/ahead.png"),
+          content: "就业直通车：一对一深度专属就 业辅导",
           date: "2020-05-21 18:53:15",
-          src: "/employment.html",
+          linkUrl: "/employment.html",
           price: "",
           text:"已报名"
         }
@@ -155,7 +154,7 @@ export default {
             "timeStamp": data.result.timeStamp,
             "signType": data.result.signType,
             "nonceStr": data.result.nonceStr,
-            "package": data.result.packageValue,
+            "package": data.result.package,
             "paySign": data.result.paySign
           },
           function (res) {
@@ -184,26 +183,35 @@ export default {
     },
     init:function(){
       serachOrder().then(res => {
-        alert(JSON.stringify(res.data))
         const stateMap = res.data.reduce((prev, current) => {
-          prev[current.type] = current.state;
+          prev[current.type] = current.orderStatus;
           return prev;
         }, {});
+        // alert(JSON.stringify(stateMap))
         res.data.forEach(item => {
           if(item.type==0){
             this.list.push({
               id:item.id,
               date:item.createdDate,
               content:this.orderlist[0],
-              state:item.state
+              orderStatus:item.orderStatus
             })
-          }else{
+          }else if(item.type==1){
             this.list.push({
               id:item.id,
               date:item.createdDate,
               content:this.orderlist[1],
-              state:1
+              orderStatus:1
             })
+          }else{
+            // alert(JSON.stringify(item))
+            this.list.push({
+              id:item.id,
+              date:item.createdDate,
+              content:item,
+              orderStatus:item.orderStatus
+            })
+            alert(JSON.stringify(this.list))
           }
         });
       });

@@ -6,6 +6,8 @@ import com.youruan.dentistry.core.activity.vo.ExtendedActivity;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.UploadFile;
 
+import java.util.List;
+
 public interface ActivityService {
 
     /**
@@ -36,4 +38,14 @@ public interface ActivityService {
      * 活动表更新报名人数
      */
     void updateNumberOfEntries(Long activityId);
+
+    /**
+     * 选择设置 用户活动报名情况
+     */
+    void pickSet(List<Long> activityIds, List<ExtendedActivity> extendedActivityList);
+
+    /**
+     * 获取所有活动信息
+     */
+    List<ExtendedActivity> list();
 }
