@@ -1,5 +1,6 @@
 package com.youruan.dentistry.core.wx.oauth.service;
 
+import com.youruan.dentistry.core.wx.oauth.domain.UserLogin;
 import com.youruan.dentistry.core.wx.oauth.domain.WxUserInfo;
 
 public interface OAuthService {
@@ -13,5 +14,5 @@ public interface OAuthService {
      * 微信用户注册
      * 返回用户id
      */
-    Long register(WxUserInfo wxUserInfo);
+    UserLogin register(WxUserInfo wxUserInfo);
 }

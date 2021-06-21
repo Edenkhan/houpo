@@ -9,3 +9,7 @@ spring:
   profiles:
     include: core
     active: @spring.profiles.active@
+
+jwt:
+  secret: abcdefg
+  expiration: 60

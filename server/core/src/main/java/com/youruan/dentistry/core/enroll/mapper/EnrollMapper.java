@@ -2,6 +2,7 @@ package com.youruan.dentistry.core.enroll.mapper;
 
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
+import com.youruan.dentistry.core.enroll.vo.EnrollActivityVo;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -65,4 +66,9 @@ public interface EnrollMapper {
      * 查询用户报名了哪些活动
      */
     List<Long> getActivityIdsByUserId(Long userId);
+
+    /**
+     * 查询当前用户所有报名
+     */
+    List<EnrollActivityVo> listByUser(Long userId);
 }

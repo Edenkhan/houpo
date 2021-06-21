@@ -8,10 +8,17 @@
         <result property="lastModifiedDate" column="lastModifiedDate"/>
         <result property="version" column="version"/>
         <result property="orderNo" column="orderNo"/>
+        <result property="price" column="price"/>
         <result property="type" column="type"/>
         <result property="orderStatus" column="orderStatus"/>
         <result property="userId" column="userId"/>
         <result property="activityId" column="activityId"/>
+    </resultMap>
+    <resultMap id="ENROLL_ACTIVITY_RESULT" type="com.youruan.dentistry.core.enroll.vo.EnrollActivityVo" extends="BASE_RESULT">
+        <result property="title" column="title"/>
+        <result property="linkUrl" column="linkUrl"/>
+        <result property="imageUrl" column="imageUrl"/>
+        <result property="content" column="content"/>
     </resultMap>
     <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus,en.userId,en.activityId</sql>
     <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo,en.type,en.orderStatus,en.userId,en.activityId</sql>
@@ -20,6 +27,7 @@
         <result property="phoneNumber" column="phoneNumber"/>
     </resultMap>
     <sql id="JOIN_COLUMNS">,ru.realName,ru.phoneNumber</sql>
+    <sql id="JOIN_COLUMNS_ACTIVITY">,a.title,a.imageUrl,a.linkUrl,a.content</sql>
     <select id="get" resultMap="BASE_RESULT" parameterType="java.lang.Long">SELECT
         <include refid="BASE_COLUMNS"/> FROM Enroll en WHERE id = #{id }
     </select>
@@ -54,7 +62,8 @@
         <where>orderNo = #{orderNo} AND version = #{version}</where>
     </update>
 
-    <sql id="QUERY_JOIN">left join registereduser AS ru on en.userId = ru.id</sql>
+    <sql id="QUERY_JOIN">LEFT JOIN registereduser AS ru ON en.userId = ru.id</sql>
+    <sql id="QUERY_JOIN_ACTIVITY">LEFT JOIN activity AS a ON en.activityId = a.id</sql>
     <sql id="QUERY_WHERE_SQL">
         <if test="ids != null">AND en.id IN
             <foreach collection="ids" item="id" open="(" close=")" separator=", ">#{id }</foreach>
@@ -119,5 +128,12 @@
         SELECT activityId
         FROM Enroll AS en
         WHERE userId = #{userId} and `type` = 2
+    </select>
+    <select id="listByUser" parameterType="java.lang.Long" resultMap="ENROLL_ACTIVITY_RESULT">
+        SELECT
+        <include refid="QUERY_COLUMNS"/>
+        <include refid="JOIN_COLUMNS_ACTIVITY"/> FROM Enroll AS en
+        <include refid="QUERY_JOIN_ACTIVITY"/>
+        WHERE userId = #{userId}
     </select>
 </mapper>

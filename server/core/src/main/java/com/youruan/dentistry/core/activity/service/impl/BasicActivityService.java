@@ -10,6 +10,7 @@ import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.DiskFileStorage;
 import com.youruan.dentistry.core.base.storage.UploadFile;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
+import com.youruan.dentistry.core.platform.domain.Employee;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -43,8 +44,8 @@ public class BasicActivityService implements ActivityService {
     }
 
     @Override
-    public Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId) {
-        checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,recentId);
+    public Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Employee employee) {
+        checkActivity(title,imageUrl,content,enrollStatus,releaseStatus,employee.getId());
         Assert.isTrue(!checkAddTitle(title),"活动标题重复");
         Activity activity = new Activity();
         activity.setTitle(title);
@@ -52,7 +53,7 @@ public class BasicActivityService implements ActivityService {
         activity.setContent(content);
         activity.setEnrollStatus(enrollStatus);
         activity.setReleaseStatus(releaseStatus);
-        activity.setRecentId(recentId);
+        activity.setRecentId(employee.getId());
         return add(activity);
     }
 
@@ -130,7 +131,8 @@ public class BasicActivityService implements ActivityService {
         }else{
             activity.setNumberOfEntries(activity.getNumberOfEntries()+1);
         }
-        activityMapper.updateNumberOfEntries(activity);
+        int count = activityMapper.updateNumberOfEntries(activity);
+        Assert.isTrue(count>0,"更新失败，未作任何修改");
     }
 
 

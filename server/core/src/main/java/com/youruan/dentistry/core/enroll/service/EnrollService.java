@@ -3,6 +3,7 @@ package com.youruan.dentistry.core.enroll.service;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
+import com.youruan.dentistry.core.enroll.vo.EnrollActivityVo;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 
@@ -20,7 +21,7 @@ public interface EnrollService {
     /**
      * 用户报名
      */
-    Enroll create(RegisteredUser user, Long activityId, Integer type);
+    Enroll baseCreate(RegisteredUser user, Long activityId, Integer type, Integer state);
 
     /**
      * 查询用户订单状态
@@ -67,4 +68,23 @@ public interface EnrollService {
      */
     List<Long> getActivityIdsByUserId(Long userId);
 
+    /**
+     * 查询当前用户所有报名
+     */
+    List<EnrollActivityVo> listByUser(Long userId);
+
+    /**
+     * 职场百分百报名
+     */
+    Enroll workplaceEnroll(RegisteredUser user);
+
+    /**
+     * 就业直通车报名
+     */
+    void employmentEnroll(RegisteredUser user);
+
+    /**
+     * 普通活动报名
+     */
+    Enroll activeEnroll(RegisteredUser user, Long activityId);
 }

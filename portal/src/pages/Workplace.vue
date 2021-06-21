@@ -25,7 +25,7 @@
 
   import {Dialog, Toast} from "vant";
 
-  import {checkUser, handIn, queryStatus, profile, baseNotify, pay} from "../api/user";
+  import {checkUser, handInWorkplace, queryStatus, profile, baseNotify, pay} from "../api/user";
 
   export default {
     data() {
@@ -91,7 +91,7 @@
           }
           checkUser().then((check)=>{
             if(check.check){
-              handIn({type: 0,ip:returnCitySN["cip"]}).then((data) => {
+              handInWorkplace({type: 0,ip:returnCitySN["cip"]}).then((data) => {
 
                 this.payHandle(data.id,data,this);
 

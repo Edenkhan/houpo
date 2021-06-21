@@ -40,8 +40,11 @@ export function baseNotify(params) {
   return post('/enroll/baseNotify?' + stringify(params))
 }
 
-export function handIn(params) {
-  return post('/enroll/add?' + stringify(params))
+export function handInWorkplace(params) {
+  return post('/enroll/workplaceAdd?' + stringify(params))
+}
+export function handInEmployment(params) {
+  return post('/enroll/employmentAdd?' + stringify(params))
 }
 export function queryStatus(params) {
   return post('/enroll/query?' + stringify(params))

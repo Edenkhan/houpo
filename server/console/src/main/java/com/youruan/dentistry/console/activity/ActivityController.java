@@ -41,7 +41,7 @@ public class ActivityController {
                 form.getContent(),
                 form.getEnrollStatus(),
                 form.getReleaseStatus(),
-                employee.getId());
+                employee);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id", activity.getId())
                 .build());

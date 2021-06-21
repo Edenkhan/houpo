@@ -23,7 +23,7 @@ public class ActivitySignUpController {
     @PostMapping("/add")
     @RequiresAuthentication
     public ResponseEntity<?> add(RegisteredUser user, Long id) {
-        Enroll enroll = enrollService.create(user, id,Enroll.TYPE_GENERAL);
+        Enroll enroll = enrollService.activeEnroll(user, id);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id", enroll.getId())
                 .build());

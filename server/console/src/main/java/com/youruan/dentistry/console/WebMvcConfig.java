@@ -1,7 +1,9 @@
 package com.youruan.dentistry.console;
 
+import com.youruan.dentistry.console.base.interceptor.AuthenticationInterceptor;
 import com.youruan.dentistry.console.base.interceptor.SessionInterceptor;
 import com.youruan.dentistry.console.base.resolver.HandlerSessionArgumentResolver;
+import com.youruan.dentistry.console.base.utils.JwtTokenUtils;
 import com.youruan.dentistry.core.platform.service.EmployeeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +17,11 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final EmployeeService employeeService;
+    private final JwtTokenUtils jwtTokenUtils;
 
-    public WebMvcConfig(EmployeeService employeeService) {
+    public WebMvcConfig(EmployeeService employeeService, JwtTokenUtils jwtTokenUtils) {
         this.employeeService = employeeService;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     @Bean
@@ -25,9 +29,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new SessionInterceptor(employeeService);
     }
 
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor() {
+        return new AuthenticationInterceptor(jwtTokenUtils,employeeService);
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor());
+        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**");
     }
 
     @Override

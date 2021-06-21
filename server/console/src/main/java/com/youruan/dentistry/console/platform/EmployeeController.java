@@ -5,6 +5,7 @@ import com.youruan.dentistry.console.base.ErrorResponseEntity;
 import com.youruan.dentistry.console.base.interceptor.RequiresAuthentication;
 import com.youruan.dentistry.console.base.interceptor.RequiresGuest;
 import com.youruan.dentistry.console.base.interceptor.RequiresPermission;
+import com.youruan.dentistry.console.base.interceptor.UserLoginToken;
 import com.youruan.dentistry.console.base.utils.SessionUtils;
 import com.youruan.dentistry.console.platform.form.*;
 import com.youruan.dentistry.core.base.query.Pagination;
@@ -17,7 +18,6 @@ import com.youruan.dentistry.core.platform.service.EmployeeRoleService;
 import com.youruan.dentistry.core.platform.service.EmployeeService;
 import com.youruan.dentistry.core.platform.service.RoleService;
 import com.youruan.dentistry.core.platform.vo.ExtendedEmployee;
-import com.youruan.dentistry.core.platform.vo.ExtendedPermission;
 import com.youruan.dentistry.core.platform.vo.ExtendedRole;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.ResponseEntity;
@@ -188,7 +188,7 @@ public class EmployeeController {
                 .build());
     }
 
-    @GetMapping("/checkLogin")
+    /*@GetMapping("/checkLogin")
     public ResponseEntity<?> checkLogin() {
         boolean authenticated = SessionUtils.isAuthenticated();
         ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder();
@@ -196,6 +196,14 @@ public class EmployeeController {
             builder.put("username", SessionUtils.getAuthenticated());
         }
         builder.put("authenticated", authenticated);
+        return ResponseEntity.ok(builder.build());
+    }*/
+
+    @UserLoginToken
+    @GetMapping("/checkLogin")
+    public ResponseEntity<?> checkLogin() {
+        ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder();
+        builder.put("authenticated", true);
         return ResponseEntity.ok(builder.build());
     }
 }

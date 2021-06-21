@@ -12,6 +12,7 @@ import com.youruan.dentistry.core.enroll.domain.Enroll;
 import com.youruan.dentistry.core.enroll.mapper.EnrollMapper;
 import com.youruan.dentistry.core.enroll.query.EnrollQuery;
 import com.youruan.dentistry.core.enroll.service.EnrollService;
+import com.youruan.dentistry.core.enroll.vo.EnrollActivityVo;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 import com.youruan.dentistry.core.user.service.RegisteredUserService;
@@ -45,29 +46,17 @@ public class BasicEnrollService implements EnrollService {
     }
 
     @Override
-    @Transactional
-    public Enroll create(RegisteredUser user, Long activityId, Integer type) {
+    public Enroll baseCreate(RegisteredUser user, Long activityId, Integer type, Integer state) {
         Assert.isTrue(userService.checkCompleteInfo(user),"请先完善信息");
         Assert.isTrue(this.checkEnrollStatus(activityId),"该活动暂未开启报名");
         Enroll enroll = new Enroll();
-        // 除了职业百分百，其他默认已支付
-        enroll.setOrderStatus(Enroll.ORDER_STATUS_OK);
-        if(type==Enroll.TYPE_GENERAL) {
-            // 普通活动
-            Assert.isTrue(!checkEnroll(user.getId(), activityId),"该用户已经报名此活动");
-            // 活动表更新报名人数
-            activityService.updateNumberOfEntries(activityId);
-        }else{
-            // 职业百分百活动 付费
-            if(type==Enroll.TYPE_WORKPLACE) {
-                enroll.setOrderNo(SnowflakeIdWorker.getIdWorker());
-                enroll.setPrice(new BigDecimal(1));
-                enroll.setOrderStatus(Enroll.ORDER_STATUS_NOT);
-            }
-            // 就业直通车
-            Assert.isTrue(!checkEnroll(user.getId(),type),"该用户已经报名此活动");
+        // 职业百分百活动 付费
+        if(type==Enroll.TYPE_WORKPLACE) {
+            enroll.setOrderNo(SnowflakeIdWorker.getIdWorker());
+            enroll.setPrice(new BigDecimal(1));
         }
         enroll.setType(type);
+        enroll.setOrderStatus(state);
         enroll.setUserId(user.getId());
         enroll.setActivityId(activityId);
         return this.add(enroll);
@@ -77,8 +66,12 @@ public class BasicEnrollService implements EnrollService {
      * 校验活动是否开启报名
      */
     private boolean checkEnrollStatus(Long activityId) {
+        if(activityId==null) {
+            // 职场百分百，就业直通车，默认开启报名
+            return true;
+        }
         Activity activity = activityService.get(activityId);
-        return activity.getEnrollStatus() == 1;
+        return activity.getEnrollStatus()==1;
     }
 
     /**
@@ -174,6 +167,32 @@ public class BasicEnrollService implements EnrollService {
         return enrollMapper.getActivityIdsByUserId(userId);
     }
 
+    @Override
+    public List<EnrollActivityVo> listByUser(Long userId) {
+        Assert.notNull(userId,"必须提供用户id");
+        return enrollMapper.listByUser(userId);
+    }
+
+    @Override
+    public Enroll workplaceEnroll(RegisteredUser user) {
+        Assert.isTrue(!checkEnroll(user.getId(),Enroll.TYPE_WORKPLACE),"您已报名职场百分百，请不要重复报名");
+        return baseCreate(user,null,Enroll.TYPE_WORKPLACE,Enroll.ORDER_STATUS_NOT);
+    }
+
+    @Override
+    public void employmentEnroll(RegisteredUser user) {
+        Assert.isTrue(!checkEnroll(user.getId(),Enroll.TYPE_EMPLOYMENT),"您已报名就业直通车，请不要重复报名");
+        baseCreate(user,null,Enroll.TYPE_EMPLOYMENT,Enroll.ORDER_STATUS_OK);
+    }
+
+    @Override
+    @Transactional
+    public Enroll activeEnroll(RegisteredUser user, Long activityId) {
+        Assert.isTrue(!checkEnroll(user.getId(), activityId),"该用户已经报名此活动");
+        activityService.updateNumberOfEntries(activityId);
+        return baseCreate(user,activityId,Enroll.TYPE_GENERAL,Enroll.ORDER_STATUS_OK);
+    }
+
     /**
      * 用户报名
      */
@@ -184,7 +203,7 @@ public class BasicEnrollService implements EnrollService {
     }
 
     /**
-     * 检查用户是否已报过名
+     * 检查用户是否已报名普通活动
      */
     private boolean checkEnroll(Long userId, Long activityId) {
         int count = enrollMapper.countByUserIdAndActivityId(userId, activityId);

@@ -5,6 +5,7 @@ import com.youruan.dentistry.core.activity.query.ActivityQuery;
 import com.youruan.dentistry.core.activity.vo.ExtendedActivity;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.storage.UploadFile;
+import com.youruan.dentistry.core.platform.domain.Employee;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface ActivityService {
     /**
      * 添加活动
      */
-    Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Long recentId);
+    Activity create(String title, String imageUrl, String content, Integer enrollStatus, Integer releaseStatus, Employee employee);
 
     /**
      * 修改活动

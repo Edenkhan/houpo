@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { checkUser,handIn,queryStatus,profile } from "../api/user";
+import { checkUser,handInEmployment,queryStatus,profile } from "../api/user";
 import agreement from "../components/Agreement";
 import {Dialog, Toast}  from "vant";
 
@@ -83,7 +83,7 @@ export default {
         if (status.check) {
 
          // this.proto=true
-         let res=await handIn({type:1})
+         let res=await handInEmployment({type:1})
             console.log(res);
             Toast("报名成功")
             this.finshed=true;

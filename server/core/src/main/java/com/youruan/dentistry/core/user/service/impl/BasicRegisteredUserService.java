@@ -129,7 +129,9 @@ public class BasicRegisteredUserService
 
     @Override
     public boolean checkCompleteInfo(RegisteredUser user) {
-        return user.getRealName()!=null && userOtherInfoService.checkOtherInfo(user.getId());
+        return user.getRealName()!=null
+                && user.getPhoneNumber()!=null
+                && userOtherInfoService.checkOtherInfo(user.getId());
     }
 
     @Override

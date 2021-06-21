@@ -24,7 +24,7 @@
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
                 <p v-if="item.orderStatus==0?true:false">
                   ￥
-                  <span>{{item.content.price}}元/人</span>
+                  <span>{{item.price}}元/人</span>
                 </p>
               </div>
             </div>
@@ -52,7 +52,7 @@
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
                 <p v-if="item.orderStatus==0?true:false">
                   ￥
-                  <span>{{item.content.price}}元/人</span>
+                  <span>{{item.price}}元/人</span>
                 </p>
               </div>
             </div>
@@ -208,10 +208,16 @@ export default {
             this.list.push({
               id:item.id,
               date:item.createdDate,
-              content:item,
-              orderStatus:item.orderStatus
+              content:{
+                title: item.title,
+                linkUrl: item.linkUrl,
+                imageUrl: item.imageUrl,
+                content: item.content,
+              },
+              orderStatus:item.orderStatus,
+              price: item.price,
             })
-            alert(JSON.stringify(this.list))
+            // alert(JSON.stringify(this.list))
           }
         });
       });

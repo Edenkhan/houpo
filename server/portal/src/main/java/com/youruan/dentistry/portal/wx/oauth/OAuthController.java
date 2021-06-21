@@ -1,5 +1,6 @@
 package com.youruan.dentistry.portal.wx.oauth;
 
+import com.youruan.dentistry.core.wx.oauth.domain.UserLogin;
 import com.youruan.dentistry.core.wx.oauth.domain.WxUserInfo;
 import com.youruan.dentistry.core.wx.oauth.service.OAuthService;
 import com.youruan.dentistry.portal.base.utils.SessionUtils;
@@ -32,8 +33,10 @@ public class OAuthController {
     @GetMapping("/callback")
     public void callback(String code, String state) throws IOException {
         WxUserInfo wxUserInfo = oauthService.callback(code, state);
-        Long userId = oauthService.register(wxUserInfo);
-        SessionUtils.login(userId);
+        UserLogin userLogin = oauthService.register(wxUserInfo);
+        if(!userLogin.getLocked()) {
+            SessionUtils.login(userLogin.getId());
+        }
         response.sendRedirect(domain);
     }
 
