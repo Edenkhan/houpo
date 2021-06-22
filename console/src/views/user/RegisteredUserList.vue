@@ -53,8 +53,7 @@
       <template slot="userBasicInfo" slot-scope="userBasicInfo">
         <p>姓名：{{userBasicInfo.realName}}</p>
         <p>年龄：{{userBasicInfo.age}}</p>
-        <p v-if="userBasicInfo.gender==1">性别：男</p>
-        <p v-else>性别：女</p>
+        <p>性别：{{gender[userBasicInfo.gender]}}</p>
         <p>手机号：<PhoneNumber :value="userBasicInfo.phoneNumber"/></p>
       </template>
       <template slot="userOtherInfo" slot-scope="userOtherInfo">
@@ -168,7 +167,7 @@
 
         educations: ['高中及以下','大专','本科','硕士','博士及以上'],
         areaList: Area,
-        areaName: {}
+        gender: ['女','男'],
       }
     },
 

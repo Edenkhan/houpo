@@ -144,6 +144,7 @@
     methods: {
       onUserNavClick(e) {
         if (e.key === 'logout') {
+          localStorage.removeItem('token')
           logout()
             .then(() => {
               window.location.href = '/login';

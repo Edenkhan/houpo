@@ -36,6 +36,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(hasPassToken) return true;
 
         if(hasUserLoginToken) {
+            if (token==null) return true;
             //获取token的username
             String username = jwtTokenUtils.getUserNameFromToken(token);
             // 查询数据库
