@@ -2,7 +2,10 @@ package com.youruan.dentistry.console.platform;
 
 import com.google.common.collect.ImmutableMap;
 import com.youruan.dentistry.console.base.ErrorResponseEntity;
-import com.youruan.dentistry.console.base.interceptor.*;
+import com.youruan.dentistry.console.base.interceptor.RequiresAuthentication;
+import com.youruan.dentistry.console.base.interceptor.RequiresGuest;
+import com.youruan.dentistry.console.base.interceptor.RequiresPermission;
+import com.youruan.dentistry.console.base.interceptor.UserLoginToken;
 import com.youruan.dentistry.console.base.utils.JwtTokenUtils;
 import com.youruan.dentistry.console.base.utils.SessionUtils;
 import com.youruan.dentistry.console.platform.form.*;
@@ -21,7 +24,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,14 +36,12 @@ public class EmployeeController {
     private final RoleService roleService;
     private final EmployeeRoleService employeeRoleService;
     private final JwtTokenUtils jwtTokenUtils;
-    private final HttpServletRequest request;
 
-    public EmployeeController(EmployeeService employeeService, RoleService roleService, EmployeeRoleService employeeRoleService, JwtTokenUtils jwtTokenUtils, HttpServletRequest request) {
+    public EmployeeController(EmployeeService employeeService, RoleService roleService, EmployeeRoleService employeeRoleService, JwtTokenUtils jwtTokenUtils) {
         this.employeeService = employeeService;
         this.roleService = roleService;
         this.employeeRoleService = employeeRoleService;
         this.jwtTokenUtils = jwtTokenUtils;
-        this.request = request;
     }
 
     @GetMapping("/profile")
