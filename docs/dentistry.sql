@@ -11,7 +11,7 @@
  Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 21/06/2021 18:12:53
+ Date: 22/06/2021 16:38:57
 */
 
 SET NAMES utf8mb4;
@@ -41,8 +41,8 @@ CREATE TABLE `activity`  (
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
-INSERT INTO `activity` VALUES (1, '2021-06-07 14:30:30', '2021-06-21 16:57:20', 22, '911活動', '/api/img/activity/f13527b6-da77-4d7f-b7cd-b77f10f38724.png', NULL, NULL, '<p>秒殺全場</p>', 8, 1, 1, 1);
-INSERT INTO `activity` VALUES (3, '2021-06-15 14:30:12', '2021-06-21 10:57:20', 19, '免费送', '/api/img/activity/e62cda6b-c1b6-4153-897c-6bf1dea61c14.png', NULL, NULL, '<p>免费送了，大米小米</p>', 3, 1, 1, 1);
+INSERT INTO `activity` VALUES (1, '2021-06-07 14:30:30', '2021-06-22 14:20:32', 24, '911活動', '/api/img/activity/f13527b6-da77-4d7f-b7cd-b77f10f38724.png', NULL, NULL, '<p>秒殺全場</p>', 10, 1, 1, 1);
+INSERT INTO `activity` VALUES (3, '2021-06-15 14:30:12', '2021-06-22 16:02:19', 20, '免费送', '/api/img/activity/e62cda6b-c1b6-4153-897c-6bf1dea61c14.png', NULL, NULL, '<p>免费送了，大米小米</p>', 4, 1, 1, 1);
 
 -- ----------------------------
 -- Table structure for banner
@@ -120,20 +120,19 @@ CREATE TABLE `enroll`  (
   `lastModifiedDate` datetime NULL DEFAULT NULL,
   `version` int(11) UNSIGNED ZEROFILL NULL DEFAULT NULL,
   `orderNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
+  `prepayId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '预支付id',
   `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格(分)',
   `type` int(11) NULL DEFAULT NULL COMMENT '类型 0-职场百分百 1-就业直通车 2-普通活动',
   `orderStatus` tinyint(1) NULL DEFAULT NULL COMMENT '订单状态 0-待支付 1-已支付',
   `userId` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   `activityId` bigint(20) NULL DEFAULT NULL COMMENT '活动id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of enroll
 -- ----------------------------
-INSERT INTO `enroll` VALUES (19, '2021-06-21 16:56:37', NULL, 00000000000, NULL, NULL, 1, 1, 36, NULL);
-INSERT INTO `enroll` VALUES (20, '2021-06-21 16:56:53', NULL, 00000000000, '856578431863750656', 1.00, 0, 0, 36, NULL);
-INSERT INTO `enroll` VALUES (21, '2021-06-21 16:57:20', NULL, 00000000000, NULL, NULL, 2, 1, 36, 1);
+INSERT INTO `enroll` VALUES (6, '2021-06-22 16:30:39', '2021-06-22 16:30:39', 00000000001, '856934218259759104', 'wx22163039066311e9939d91734de9b30000', 1.00, 0, 0, 1, NULL);
 
 -- ----------------------------
 -- Table structure for permission
@@ -197,12 +196,12 @@ CREATE TABLE `registereduser`  (
   `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信用户昵称',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of registereduser
 -- ----------------------------
-INSERT INTO `registereduser` VALUES (36, '2021-06-21 10:59:08', '2021-06-21 16:46:00', 8, '阿乐', 12, 1, '15228943505', b'0', 'o94oc5gI4p4hcPLDBNtflB_w1jKQ', '甘乐', 'https://thirdwx.qlogo.cn/mmopen/vi_32/TMAQqcP5mIFIniagwQ4gxECWiapxvEbibwEQiazIicXpCDiaSGib85NJORIX5vH1we8SufjPOTu9DGicphibrLVhBY8CnibQ/132');
+INSERT INTO `registereduser` VALUES (1, '2021-06-22 14:10:37', '2021-06-22 14:16:19', 2, '汤姆', 12, 1, '15228943505', NULL, 'o94oc5gI4p4hcPLDBNtflB_w1jKQ', '甘乐', 'https://thirdwx.qlogo.cn/mmopen/vi_32/TMAQqcP5mIFIniagwQ4gxECWiapxvEbibwEQiazIicXpCDiaSGib85NJORIX5vH1we8SufjPOTu9DGicphibrLVhBY8CnibQ/132');
 
 -- ----------------------------
 -- Table structure for role
@@ -261,7 +260,7 @@ CREATE TABLE `smsmessage`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `phoneNumber_index`(`phoneNumber`) USING BTREE,
   INDEX `state_index`(`state`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of smsmessage
@@ -272,6 +271,8 @@ INSERT INTO `smsmessage` VALUES (3, '2021-06-18 17:06:00', NULL, 0, '15228943505
 INSERT INTO `smsmessage` VALUES (4, '2021-06-19 15:28:18', NULL, 0, '18828045466', 'SMS_60680199', '{\"code\":\"9532\"}', NULL, NULL, 0);
 INSERT INTO `smsmessage` VALUES (5, '2021-06-21 10:56:26', NULL, 0, '15228943505', 'SMS_60680199', '{\"code\":\"2190\"}', NULL, NULL, 0);
 INSERT INTO `smsmessage` VALUES (6, '2021-06-21 15:26:34', NULL, 0, '15228943505', 'SMS_60680199', '{\"code\":\"8397\"}', NULL, NULL, 0);
+INSERT INTO `smsmessage` VALUES (7, '2021-06-22 14:12:40', NULL, 0, '15228943505', 'SMS_60680199', '{\"code\":\"2628\"}', NULL, NULL, 0);
+INSERT INTO `smsmessage` VALUES (8, '2021-06-22 14:15:53', NULL, 0, '15228943505', 'SMS_60680199', '{\"code\":\"4600\"}', NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for smsverification
@@ -296,7 +297,7 @@ CREATE TABLE `smsverification`  (
   INDEX `requestIp_index`(`requestIp`) USING BTREE,
   INDEX `state_index`(`state`) USING BTREE,
   INDEX `type_index`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of smsverification
@@ -306,7 +307,9 @@ INSERT INTO `smsverification` VALUES (2, '2021-06-18 16:56:55', '2021-06-18 17:0
 INSERT INTO `smsverification` VALUES (3, '2021-06-18 17:06:00', '2021-06-21 10:56:25', 1, 3, '15228943505', '6297', '127.0.0.1', 0, '2021-06-18 17:11:00', 2, 0);
 INSERT INTO `smsverification` VALUES (4, '2021-06-19 15:28:18', NULL, 0, 4, '18828045466', '9532', '127.0.0.1', 0, '2021-06-19 15:33:18', 0, 0);
 INSERT INTO `smsverification` VALUES (5, '2021-06-21 10:56:26', '2021-06-21 15:26:33', 1, 5, '15228943505', '2190', '127.0.0.1', 0, '2021-06-21 11:01:26', 2, 0);
-INSERT INTO `smsverification` VALUES (6, '2021-06-21 15:26:34', NULL, 0, 6, '15228943505', '8397', '127.0.0.1', 0, '2021-06-21 15:31:33', 0, 0);
+INSERT INTO `smsverification` VALUES (6, '2021-06-21 15:26:34', '2021-06-22 14:12:39', 1, 6, '15228943505', '8397', '127.0.0.1', 0, '2021-06-21 15:31:33', 2, 0);
+INSERT INTO `smsverification` VALUES (7, '2021-06-22 14:12:40', '2021-06-22 14:15:53', 1, 7, '15228943505', '2628', '127.0.0.1', 0, '2021-06-22 14:17:40', 2, 0);
+INSERT INTO `smsverification` VALUES (8, '2021-06-22 14:15:53', NULL, 0, 8, '15228943505', '4600', '127.0.0.1', 0, '2021-06-22 14:20:53', 0, 0);
 
 -- ----------------------------
 -- Table structure for userotherinfo
@@ -324,11 +327,11 @@ CREATE TABLE `userotherinfo`  (
   `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '期望就业地址 行政区划代码',
   `userId` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of userotherinfo
 -- ----------------------------
-INSERT INTO `userotherinfo` VALUES (6, '2021-06-21 11:13:17', NULL, 0, '蓝翔', '挖掘机', 0, '挖掘机', '230100', 36);
+INSERT INTO `userotherinfo` VALUES (1, '2021-06-22 14:11:57', NULL, 0, '蓝翔', '挖掘机', 0, '家里蹲', '410100', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
