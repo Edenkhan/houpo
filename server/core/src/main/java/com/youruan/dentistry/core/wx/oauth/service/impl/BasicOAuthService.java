@@ -41,7 +41,7 @@ public class BasicOAuthService implements OAuthService {
     @Override
     public UserLogin register(WxUserInfo wxUserInfo) {
         Assert.notNull(wxUserInfo,"微信没获取到用户信息");
-        Assert.notNull(wxUserInfo.getOpenid(),"微信重复回调，没有openid");
+        Assert.notNull(wxUserInfo.getOpenid(),"微信重复回调，openid=null");
         RegisteredUser registeredUser = registeredUserMapper.getByOpenid(wxUserInfo.getOpenid());
         if(registeredUser == null) {
             registeredUser = new RegisteredUser();
