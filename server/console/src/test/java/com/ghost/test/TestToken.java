@@ -19,6 +19,7 @@ public class TestToken {
     @Test
     public void test1() {
         Employee employee = new Employee();
+        employee.setId(1l);
         employee.setUsername("admin");
         String token = jwtTokenUtil.generateToken(employee);
         System.out.println("token = "+token);

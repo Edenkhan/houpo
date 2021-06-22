@@ -71,4 +71,6 @@ public interface EnrollMapper {
      * 查询当前用户所有报名
      */
     List<EnrollActivityVo> listByUser(Long userId);
+
+    int update(Enroll enroll);
 }

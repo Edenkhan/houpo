@@ -37,7 +37,7 @@ export function pay(params) {
   return post('/enroll/pay?' + stringify(params))
 }
 export function baseNotify(params) {
-  return post('/enroll/baseNotify?' + stringify(params))
+  return post('/enroll/notify?' + stringify(params))
 }
 
 export function handInWorkplace(params) {

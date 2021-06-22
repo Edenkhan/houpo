@@ -7,6 +7,17 @@ const instance = axios.create({
   timeout: 60000
 });
 
+instance.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  // 判断是否存在token，如果存在的话，则每个http header都加上token
+  if(token) {
+    config.headers.token = token
+  }
+  return config
+  }, error => {
+  console.log(error)
+  })
+
 function handleError(error) {
   if (error.response) {
     if (error.response.status === 401) {

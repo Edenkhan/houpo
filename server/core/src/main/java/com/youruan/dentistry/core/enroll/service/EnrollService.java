@@ -7,7 +7,6 @@ import com.youruan.dentistry.core.enroll.vo.EnrollActivityVo;
 import com.youruan.dentistry.core.enroll.vo.ExtendedEnroll;
 import com.youruan.dentistry.core.user.domain.RegisteredUser;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public interface EnrollService {
     /**
      * 下单
      */
-    String placeOrder(String orderNo, BigDecimal price, String openid, String ip);
+    String placeOrder(RegisteredUser user, Enroll enroll, String ip);
 
     /**
      * 返回JSAPI调起支付所需参数

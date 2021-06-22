@@ -2,10 +2,8 @@ package com.youruan.dentistry.console.platform;
 
 import com.google.common.collect.ImmutableMap;
 import com.youruan.dentistry.console.base.ErrorResponseEntity;
-import com.youruan.dentistry.console.base.interceptor.RequiresAuthentication;
-import com.youruan.dentistry.console.base.interceptor.RequiresGuest;
-import com.youruan.dentistry.console.base.interceptor.RequiresPermission;
-import com.youruan.dentistry.console.base.interceptor.UserLoginToken;
+import com.youruan.dentistry.console.base.interceptor.*;
+import com.youruan.dentistry.console.base.utils.JwtTokenUtils;
 import com.youruan.dentistry.console.base.utils.SessionUtils;
 import com.youruan.dentistry.console.platform.form.*;
 import com.youruan.dentistry.core.base.query.Pagination;
@@ -23,6 +21,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,23 +33,27 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final RoleService roleService;
     private final EmployeeRoleService employeeRoleService;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final HttpServletRequest request;
 
-    public EmployeeController(EmployeeService employeeService, RoleService roleService, EmployeeRoleService employeeRoleService) {
+    public EmployeeController(EmployeeService employeeService, RoleService roleService, EmployeeRoleService employeeRoleService, JwtTokenUtils jwtTokenUtils, HttpServletRequest request) {
         this.employeeService = employeeService;
         this.roleService = roleService;
         this.employeeRoleService = employeeRoleService;
+        this.jwtTokenUtils = jwtTokenUtils;
+        this.request = request;
     }
 
     @GetMapping("/profile")
     @RequiresAuthentication
-    public ResponseEntity<?> profile() {
-        String username = SessionUtils.getAuthenticated();
-        List<String> permissions = employeeService.listPermissionsByUsername(username)
+    public ResponseEntity<?> profile(Employee employee) {
+       // String username = SessionUtils.getAuthenticated();
+        List<String> permissions = employeeService.listPermissionsByUsername(employee.getUsername())
                 .stream()
                 .map(Permission::getName)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("username", username)
+                .put("username", employee.getUsername())
                 .put("permissions", permissions)
                 .build());
     }
@@ -77,9 +80,9 @@ public class EmployeeController {
             return ErrorResponseEntity.badRequest("用户已被锁定");
         }
 
-        SessionUtils.login(employee.getUsername());
+        //SessionUtils.login(employee.getUsername());
         return ResponseEntity.ok(ImmutableMap.builder()
-                .put("id", employee.getId())
+                .put("token", jwtTokenUtils.generateToken(employee))
                 .build());
     }
 
@@ -188,7 +191,8 @@ public class EmployeeController {
                 .build());
     }
 
-    /*@GetMapping("/checkLogin")
+    @UserLoginToken
+    @GetMapping("/checkLogin")
     public ResponseEntity<?> checkLogin() {
         boolean authenticated = SessionUtils.isAuthenticated();
         ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder();
@@ -196,14 +200,6 @@ public class EmployeeController {
             builder.put("username", SessionUtils.getAuthenticated());
         }
         builder.put("authenticated", authenticated);
-        return ResponseEntity.ok(builder.build());
-    }*/
-
-    @UserLoginToken
-    @GetMapping("/checkLogin")
-    public ResponseEntity<?> checkLogin() {
-        ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder();
-        builder.put("authenticated", true);
         return ResponseEntity.ok(builder.build());
     }
 }

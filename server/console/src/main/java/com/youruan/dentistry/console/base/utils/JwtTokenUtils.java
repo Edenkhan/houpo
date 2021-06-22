@@ -30,7 +30,7 @@ import java.util.Map;
 @Component
 public class JwtTokenUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtils.class);
-    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_ID = "id";
     private static final String CLAIM_KEY_CREATED = "created";
     @Value("${jwt.secret}")
     private String secret;
@@ -64,14 +64,10 @@ public class JwtTokenUtils {
      */
     private Claims getClaimsFromToken(String token) {
         Claims claims = null;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(this.getKeyInstance())
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            LOGGER.info("JWT格式验证失败:{}",token);
-        }
+        claims = Jwts.parser()
+                .setSigningKey(this.getKeyInstance())
+                .parseClaimsJws(token)
+                .getBody();
         return claims;
     }
 
@@ -103,8 +99,9 @@ public class JwtTokenUtils {
      * @param employee 从数据库中查询出来的用户信息
      */
     public boolean validateToken(String token, Employee employee) {
+        if (token==null || employee==null) return false;
         String username = getUserNameFromToken(token);
-        return username.equals(employee.getUsername()) && !isTokenExpired(token);
+        return employee.getUsername().equals(username) && !isTokenExpired(token);
     }
 
     /**
@@ -128,7 +125,8 @@ public class JwtTokenUtils {
      */
     public String generateToken(Employee employee) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, employee.getUsername());
+        claims.put(CLAIM_KEY_ID, employee.getId());
+        claims.put(Claims.SUBJECT, employee.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }

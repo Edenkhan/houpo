@@ -18,6 +18,10 @@ public class Enroll extends BasicDomain {
      */
     private String orderNo;
     /**
+     * 预支付id
+     */
+    private String prepayId;
+    /**
      * 价格
      */
     private BigDecimal price;

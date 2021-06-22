@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class SessionInterceptor extends HandlerInterceptorAdapter {
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     public SessionInterceptor(EmployeeService employeeService) {
         this.employeeService = employeeService;

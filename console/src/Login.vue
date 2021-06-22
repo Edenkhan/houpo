@@ -117,7 +117,8 @@
 
           this.loading = true;
           login(values.username, values.password)
-            .then(() => {
+            .then((res) => {
+              localStorage.setItem('token',res.token)
               window.location.replace('/');
             })
             .catch(({message}) => {

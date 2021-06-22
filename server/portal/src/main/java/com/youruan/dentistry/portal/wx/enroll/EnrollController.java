@@ -46,13 +46,13 @@ public class EnrollController {
     }
 
     /**
-     * 职业百分百报名
+     * 职场百分百报名
      */
     @PostMapping("/workplaceAdd")
     @RequiresAuthentication
     public ResponseEntity<?> workplaceAdd(RegisteredUser user, String ip) {
         Enroll enroll = enrollService.workplaceEnroll(user);
-        return wxPay(user, ip, enroll);
+        return wxPay(user,enroll,ip);
     }
 
     /**
@@ -72,14 +72,14 @@ public class EnrollController {
     @RequiresAuthentication
     public ResponseEntity<?> pay(Long id, RegisteredUser user,String ip) {
         Enroll enroll = enrollService.get(id);
-        return wxPay(user, ip, enroll);
+        return wxPay(user,enroll,ip);
     }
 
     /**
      * 微信支付
      */
-    private ResponseEntity<?> wxPay(RegisteredUser user, String ip, Enroll enroll) {
-        String prepayId = enrollService.placeOrder(enroll.getOrderNo(),enroll.getPrice(), user.getOpenid(),ip);
+    private ResponseEntity<?> wxPay(RegisteredUser user, Enroll enroll, String ip) {
+        String prepayId = enrollService.placeOrder(user, enroll,ip);
         Map<String,String> resultMap = enrollService.payHandle(prepayId);
         return ResponseEntity.ok(ImmutableMap.builder()
                 .put("id",enroll.getId())

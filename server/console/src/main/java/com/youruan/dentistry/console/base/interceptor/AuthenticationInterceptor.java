@@ -1,6 +1,7 @@
 package com.youruan.dentistry.console.base.interceptor;
 
 import com.youruan.dentistry.console.base.utils.JwtTokenUtils;
+import com.youruan.dentistry.console.base.utils.SessionUtils;
 import com.youruan.dentistry.core.platform.domain.Employee;
 import com.youruan.dentistry.core.platform.service.EmployeeService;
 import org.springframework.web.method.HandlerMethod;
@@ -8,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
@@ -27,44 +27,22 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         //获取token
         String token  =  request.getHeader("token");
         //如果不是映射到方法直接通过
-        if(!(handler instanceof HandlerMethod))
-        {
+        if(!(handler instanceof HandlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        if(method.isAnnotationPresent(PassToken.class))
-        {
-            PassToken passToken = method.getAnnotation(PassToken.class);
-            if(passToken.required()){
-                return true;
-            }
-        }
-        String username = null;
-        if(method.isAnnotationPresent(UserLoginToken.class))
-        {
-            UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
-            if(userLoginToken.required()){
-                if(token == null){
-                    throw new RuntimeException("无token，请重新登录");
-                }
-                //获取token的username
-                username = jwtTokenUtils.getUserNameFromToken(token);
-                if(username == null) {
-                    throw new RuntimeException("无username，请重新登录");
-                }
-                Employee employee = employeeService.getByUsername(username);
-                if(employee==null){
-                    throw new RuntimeException("用户不存在");
-                }
-                //验证token
-                boolean flag = jwtTokenUtils.validateToken(token, employee);
-                if(!flag) {
-                    throw new RuntimeException("401，验证未通过");
-                }
+        HandlerMethod method = (HandlerMethod) handler;
+        boolean hasPassToken = method.hasMethodAnnotation(PassToken.class);
+        boolean hasUserLoginToken = method.hasMethodAnnotation(UserLoginToken.class);
+        if(hasPassToken) return true;
 
-                return true;
-            }
+        if(hasUserLoginToken) {
+            //获取token的username
+            String username = jwtTokenUtils.getUserNameFromToken(token);
+            // 查询数据库
+            Employee employee = employeeService.getByUsername(username);
+            // 将用户保存到Session
+            if (employee!=null) SessionUtils.login(username);
+            return true;
         }
         return true;
     }

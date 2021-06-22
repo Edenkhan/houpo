@@ -60,7 +60,7 @@
       <template slot="userOtherInfo" slot-scope="userOtherInfo">
         <p>毕业院校：{{userOtherInfo.school}}</p>
         <p>所学专业：{{userOtherInfo.major}}</p>
-        <p>学历水平：{{userOtherInfo.education}}</p>
+        <p>学历水平：{{educations[userOtherInfo.education]}}</p>
         <p>期望从事职业：{{userOtherInfo.job}}</p>
         <p>期望就业地址：{{userOtherInfo.area}}</p>
       </template>
@@ -100,6 +100,8 @@
   import moment from "moment"
   import Gender from "./Gender"
   import PhoneNumber from "./PhoneNumber"
+  import Area from "@/utils/area.js"
+
 
   const columns = [
     {
@@ -162,7 +164,11 @@
         filters: {},
 
         profileUserId: null,
-        profileDrawerVisible: false
+        profileDrawerVisible: false,
+
+        educations: ['高中及以下','大专','本科','硕士','博士及以上'],
+        areaList: Area,
+        areaName: {}
       }
     },
 
@@ -199,8 +205,11 @@
         })
         this.loading = true
         listUsers(this.userListForm).then(({data, rows}) => {
-
           data.forEach((item) =>{
+            if (item.area) {
+              const province = this.areaList.province_list[item.area.substring(0, 2) + "0000"];
+              item.area = province + "-" + this.areaList.city_list[item.area]
+            }
             this.data.push(
               {
                 id:item.id,

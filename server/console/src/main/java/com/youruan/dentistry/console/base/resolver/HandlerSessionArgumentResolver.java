@@ -9,9 +9,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+
 public class HandlerSessionArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     public HandlerSessionArgumentResolver(EmployeeService employeeService) {
         this.employeeService = employeeService;

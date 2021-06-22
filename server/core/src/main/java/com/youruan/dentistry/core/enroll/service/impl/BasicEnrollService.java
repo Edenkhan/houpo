@@ -2,6 +2,7 @@ package com.youruan.dentistry.core.enroll.service.impl;
 
 import com.youruan.dentistry.core.activity.domain.Activity;
 import com.youruan.dentistry.core.activity.service.ActivityService;
+import com.youruan.dentistry.core.base.exception.OptimismLockingException;
 import com.youruan.dentistry.core.base.query.Pagination;
 import com.youruan.dentistry.core.base.utils.HttpClientUtils;
 import com.youruan.dentistry.core.base.utils.SnowflakeIdWorker;
@@ -92,7 +93,11 @@ public class BasicEnrollService implements EnrollService {
     }
 
     @Override
-    public String placeOrder(String orderNo, BigDecimal price, String openid, String ip) {
+    public String placeOrder(RegisteredUser user, Enroll enroll, String ip) {
+        Assert.notNull(user,"必须提供用户");
+        Assert.notNull(enroll,"必须提供报名信息");
+        Assert.notNull(ip,"必须提供用户ip");
+        if(enroll.getPrepayId()!=null) return enroll.getPrepayId();
         try {
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("appid",wxPayProperties.getAppId());
@@ -100,22 +105,34 @@ public class BasicEnrollService implements EnrollService {
             paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
             paramMap.put("sign",WXPayUtil.generateSignature(paramMap,wxPayProperties.getPrivateKey()));
             paramMap.put("body","大苏打");
-            paramMap.put("out_trade_no",orderNo);
-            paramMap.put("total_fee",price.toString());
+            paramMap.put("out_trade_no",enroll.getOrderNo());
+            paramMap.put("total_fee",enroll.getPrice().toString());
             paramMap.put("spbill_create_ip",ip);
             paramMap.put("notify_url",wxPayProperties.getNotifyUrl());
             paramMap.put("trade_type","JSAPI");
-            paramMap.put("openid",openid);
+            paramMap.put("openid",user.getOpenid());
             String xml = HttpClientUtils.doPostXml(WXPayConstants.UNIFIED_ORDER_URL,
                     WXPayUtil.generateSignedXml(paramMap, wxPayProperties.getPrivateKey()));
             Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
             System.out.println("resultMap:" + resultMap);
-            return resultMap.get("prepay_id");
+            //将预支付id保存到数据库
+            enroll.setPrepayId(resultMap.get("prepay_id"));
+            this.update(enroll);
+            return enroll.getPrepayId();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    private void update(Enroll enroll) {
+        int affected = enrollMapper.update(enroll);
+        if (affected == 0) {
+            throw new OptimismLockingException("version!!");
+        }
+        enroll.setVersion((enroll.getVersion()+ 1));
+    }
+
 
     @Override
     public Map<String,String> payHandle(String prepayId) {
