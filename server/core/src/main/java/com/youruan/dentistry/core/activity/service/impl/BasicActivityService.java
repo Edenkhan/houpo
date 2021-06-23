@@ -139,13 +139,9 @@ public class BasicActivityService implements ActivityService {
     @Override
     public void pickSet(List<Long> activityIds, List<ExtendedActivity> extendedActivityList) {
         if(!CollectionUtils.isEmpty(activityIds) && !CollectionUtils.isEmpty(extendedActivityList)) {
-            for (Long activityId : activityIds) {
-                for (ExtendedActivity extendedActivity : extendedActivityList) {
-                    if(activityId.equals(extendedActivity.getId())) {
-                        extendedActivity.setOrderStatus(Enroll.ORDER_STATUS_OK);
-                    }
-                }
-            }
+            extendedActivityList.stream()
+                    .filter(activity -> activityIds.contains(activity.getId()))
+                    .forEach(activity -> activity.setOrderStatus(Enroll.ORDER_STATUS_OK));
         }
     }
 

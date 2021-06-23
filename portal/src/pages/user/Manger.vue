@@ -24,7 +24,7 @@
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
                 <p v-if="item.orderStatus==0?true:false">
                   ￥
-                  <span>{{item.price}}元/人</span>
+                  <span>{{item.content.price}}元/人</span>
                 </p>
               </div>
             </div>
@@ -52,7 +52,7 @@
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
                 <p v-if="item.orderStatus==0?true:false">
                   ￥
-                  <span>{{item.price}}元/人</span>
+                  <span>{{item.content.price}}元/人</span>
                 </p>
               </div>
             </div>
@@ -79,7 +79,7 @@
                 <span>{{item.date| filterDate('YYYY-MM-DD HH:mm:ss')}}</span>
                 <p v-if="item.orderStatus==0?true:false">
                   ￥
-                  <span>{{item.price}}元/人</span>
+                  <span>{{item.content.price}}元/人</span>
                 </p>
               </div>
             </div>
@@ -146,7 +146,7 @@ export default {
   },
   methods:{
     toPay:function(id){
-      pay({id}).then((data)=>{
+      pay({id:id,ip:returnCitySN["cip"]}).then((data)=>{
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest',
           {
@@ -213,11 +213,10 @@ export default {
                 linkUrl: item.linkUrl,
                 imageUrl: item.imageUrl,
                 content: item.content,
+                price: item.price,
               },
               orderStatus:item.orderStatus,
-              price: item.price,
             })
-            // alert(JSON.stringify(this.list))
           }
         });
       });
