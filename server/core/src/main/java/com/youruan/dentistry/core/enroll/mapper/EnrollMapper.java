@@ -73,4 +73,9 @@ public interface EnrollMapper {
     List<EnrollActivityVo> listByUser(Long userId);
 
     int update(Enroll enroll);
+
+    /**
+     * 删除过期的预支付id
+     */
+    int deleteExpiredPrepayId(Enroll enroll);
 }

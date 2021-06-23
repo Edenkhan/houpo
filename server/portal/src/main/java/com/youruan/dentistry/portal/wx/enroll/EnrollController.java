@@ -79,6 +79,7 @@ public class EnrollController {
      * 微信支付
      */
     private ResponseEntity<?> wxPay(RegisteredUser user, Enroll enroll, String ip) {
+        enrollService.deleteExpiredPrepayId(enroll,2);
         String prepayId = enrollService.placeOrder(user, enroll,ip);
         Map<String,String> resultMap = enrollService.payHandle(prepayId);
         return ResponseEntity.ok(ImmutableMap.builder()

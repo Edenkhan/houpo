@@ -210,6 +210,24 @@ public class BasicEnrollService implements EnrollService {
         return baseCreate(user,activityId,Enroll.TYPE_GENERAL,Enroll.ORDER_STATUS_OK);
     }
 
+    @Override
+    public void deleteExpiredPrepayId(Enroll enroll,Integer expiredHours) {
+        Date lastModify = enroll.getLastModifiedDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(lastModify);
+        calendar.add(Calendar.HOUR,expiredHours);
+        Date expiredTime = calendar.getTime();
+        if (new Date().compareTo(expiredTime) < 0) {
+            return;
+        }
+        // prepayId 超过两小时过期，执行删除
+        int effect = enrollMapper.deleteExpiredPrepayId(enroll);
+        if(effect == 0) {
+            throw new OptimismLockingException("version!!");
+        }
+        enroll.setVersion(enroll.getVersion() + 1);
+    }
+
     /**
      * 用户报名
      */

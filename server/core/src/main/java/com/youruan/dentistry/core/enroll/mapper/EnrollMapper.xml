@@ -138,4 +138,16 @@
         <include refid="QUERY_JOIN_ACTIVITY"/>
         WHERE userId = #{userId}
     </select>
+
+    <update id="deleteExpiredPrepayId" parameterType="com.youruan.dentistry.core.enroll.domain.Enroll">
+        UPDATE Enroll
+        <set>
+            prepayId = null
+        </set>
+        <where>
+            id = #{id}
+            AND version = #{version}
+        </where>
+    </update>
+
 </mapper>

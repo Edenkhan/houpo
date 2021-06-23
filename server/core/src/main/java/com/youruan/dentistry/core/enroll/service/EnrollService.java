@@ -86,4 +86,9 @@ public interface EnrollService {
      * 普通活动报名
      */
     Enroll activeEnroll(RegisteredUser user, Long activityId);
+
+    /**
+     * 删除过期的预支付id
+     */
+    void deleteExpiredPrepayId(Enroll enroll,Integer expiredHours);
 }

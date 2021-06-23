@@ -29,9 +29,7 @@ public class HandlerSessionArgumentResolver implements HandlerMethodArgumentReso
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
         String username = SessionUtils.getAuthenticated();
-        if (username == null) {
-            return null;
-        }
+        if (username == null) return null;
         return employeeService.getByUsername(username);
     }
 }
