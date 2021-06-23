@@ -223,6 +223,8 @@ public class BasicEnrollService implements EnrollService {
         int effect = enrollMapper.deleteExpiredPrepayId(enroll);
         if(effect == 0) throw new OptimismLockingException("version!!");
         enroll.setVersion(enroll.getVersion() + 1);
+        // 更新订单号
+        enroll.setOrderNo(SnowflakeIdWorker.getIdWorker());
     }
 
     /**

@@ -21,8 +21,8 @@
         <result property="imageUrl" column="imageUrl"/>
         <result property="content" column="content"/>
     </resultMap>
-    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo, en.prepayId, en.type,en.orderStatus,en.userId,en.activityId</sql>
-    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo, en.prepayId ,en.type,en.orderStatus,en.userId,en.activityId</sql>
+    <sql id="BASE_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo, en.prepayId, en.price, en.type,en.orderStatus,en.userId,en.activityId</sql>
+    <sql id="QUERY_COLUMNS">en.id, en.createdDate, en.lastModifiedDate, en.version,en.orderNo, en.prepayId, en.price, en.type,en.orderStatus,en.userId,en.activityId</sql>
     <resultMap id="VO_RESULT" type="com.youruan.dentistry.core.enroll.vo.ExtendedEnroll" extends="BASE_RESULT">
         <result property="realName" column="realName"/>
         <result property="phoneNumber" column="phoneNumber"/>
