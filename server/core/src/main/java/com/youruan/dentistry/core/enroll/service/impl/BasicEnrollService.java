@@ -105,7 +105,8 @@ public class BasicEnrollService implements EnrollService {
             paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
             paramMap.put("sign",WXPayUtil.generateSignature(paramMap,wxPayProperties.getPrivateKey()));
             paramMap.put("body","大苏打");
-            paramMap.put("out_trade_no",enroll.getOrderNo());
+            String idWorker = SnowflakeIdWorker.getIdWorker();
+            paramMap.put("out_trade_no", idWorker);
             paramMap.put("total_fee",enroll.getPrice().toString());
             paramMap.put("spbill_create_ip",ip);
             paramMap.put("notify_url",wxPayProperties.getNotifyUrl());
@@ -114,9 +115,10 @@ public class BasicEnrollService implements EnrollService {
             String xml = HttpClientUtils.doPostXml(WXPayConstants.UNIFIED_ORDER_URL,
                     WXPayUtil.generateSignedXml(paramMap, wxPayProperties.getPrivateKey()));
             Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
-            System.out.println("resultMap:" + resultMap);
+            System.out.println("微信下单返回结果:" + resultMap);
             //将预支付id保存到数据库
             enroll.setPrepayId(resultMap.get("prepay_id"));
+            enroll.setOrderNo(idWorker);
             this.update(enroll);
             return enroll.getPrepayId();
         } catch (Exception e) {
@@ -223,8 +225,6 @@ public class BasicEnrollService implements EnrollService {
         int effect = enrollMapper.deleteExpiredPrepayId(enroll);
         if(effect == 0) throw new OptimismLockingException("version!!");
         enroll.setVersion(enroll.getVersion() + 1);
-        // 更新订单号
-        enroll.setOrderNo(SnowflakeIdWorker.getIdWorker());
     }
 
     /**

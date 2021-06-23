@@ -10,7 +10,7 @@ dentistry:
     base:
       storage:
         disk:
-          base-directory: C:/image
+          base-directory: E:/image
           base-url: /api/img
     message:
       sms:
@@ -28,7 +28,7 @@ dentistry:
               template: message/sms/verification/borrowRequest.mustache
 
 wx:
-  domain: http://portalx.ymys.usooft.com
+  domain: http://tanghuaxiong.ymys.usooft.com
   appId: wxfcffb0d00f2da17b
   appSecret: 2fcf880c2503141e09bb0a55623f82f1
   pay:

@@ -36,6 +36,8 @@ public class OAuthController {
         UserLogin userLogin = oauthService.register(wxUserInfo);
         if(!userLogin.getLocked()) {
             SessionUtils.login(userLogin.getId());
+        }else{
+            SessionUtils.logout();
         }
         response.sendRedirect(domain);
     }
